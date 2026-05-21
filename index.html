@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Studio — Estudio de diseño & branding</title>
+  <meta name="description" content="Nova Studio es un estudio creativo que diseña marcas, productos digitales y experiencias que la gente recuerda." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #FFFDF5;
+      --ink: #0A0A0A;
+      --red: #FF5A5A;
+      --yellow: #FFD93D;
+      --violet: #8B5CF6;
+      --cyan: #06B6D4;
+      --white: #FFFFFF;
+      --muted: #6B6B6B;
+
+      --border: 3px solid var(--ink);
+      --border-thick: 4px solid var(--ink);
+      --shadow: 6px 6px 0 var(--ink);
+      --shadow-lg: 10px 10px 0 var(--ink);
+      --radius: 14px;
+      --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Archivo', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .display {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 26px;
+      border: var(--border-thick);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform .12s var(--ease), box-shadow .12s var(--ease), background .2s var(--ease);
+      will-change: transform;
+    }
+    .btn:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--ink); }
+    .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--ink); }
+    .btn--primary { background: var(--red); color: var(--white); }
+    .btn--accent { background: var(--yellow); }
+    .btn:focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+
+    /* ---------- Nav ---------- */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: var(--border-thick);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.4rem;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .logo .mark {
+      width: 34px; height: 34px; background: var(--red); border: 3px solid var(--ink);
+      border-radius: 8px; display: grid; place-items: center; color: var(--white);
+      transform: rotate(-6deg); font-size: 1.1rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 30px; }
+    .nav-links a.link { font-weight: 600; font-size: .98rem; position: relative; }
+    .nav-links a.link::after {
+      content: ''; position: absolute; left: 0; bottom: -4px; height: 3px; width: 0;
+      background: var(--red); transition: width .25s var(--ease);
+    }
+    .nav-links a.link:hover::after { width: 100%; }
+    .nav-cta { display: inline-flex; }
+    .burger { display: none; }
+
+    /* ---------- Hero ---------- */
+    .hero { padding: 90px 0 70px; position: relative; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--violet); color: var(--white);
+      border: 3px solid var(--ink); border-radius: 999px;
+      padding: 8px 16px; font-weight: 600; font-size: .9rem;
+      box-shadow: 4px 4px 0 var(--ink); transform: rotate(-2deg);
+    }
+    .pill .dot { width: 9px; height: 9px; background: var(--yellow); border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      margin: 26px 0 22px; max-width: 14ch;
+    }
+    .hero h1 .hl { background: var(--yellow); padding: 0 .12em; border: 3px solid var(--ink); border-radius: 8px; display: inline-block; transform: rotate(-1.5deg); }
+    .hero p.lead { font-size: clamp(1.05rem, 2.3vw, 1.3rem); max-width: 52ch; color: #2b2b2b; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 34px; }
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 40px; margin-top: 54px; }
+    .hero-stats .stat .num { font-family: 'Space Grotesk'; font-weight: 700; font-size: 2.4rem; }
+    .hero-stats .stat .lbl { font-size: .9rem; color: var(--muted); font-weight: 600; }
+
+    .float {
+      position: absolute; border: var(--border-thick); border-radius: 12px;
+      box-shadow: var(--shadow); display: grid; place-items: center;
+      font-family: 'Space Grotesk'; font-weight: 700;
+    }
+    .float--1 { top: 70px; right: 40px; width: 120px; height: 120px; background: var(--cyan); transform: rotate(8deg); color: var(--white); font-size: 2.4rem; }
+    .float--2 { bottom: 30px; right: 150px; width: 96px; height: 96px; background: var(--red); transform: rotate(-10deg); color: var(--white); font-size: 2rem; }
+    @media (max-width: 900px) { .float { display: none; } }
+
+    /* ---------- Marquee ---------- */
+    .marquee {
+      border-top: var(--border-thick); border-bottom: var(--border-thick);
+      background: var(--ink); color: var(--bg); overflow: hidden; padding: 16px 0;
+    }
+    .marquee-track { display: flex; gap: 48px; white-space: nowrap; width: max-content; animation: scrollx 22s linear infinite; }
+    .marquee-track span { font-family: 'Space Grotesk'; font-weight: 600; font-size: 1.2rem; display: inline-flex; align-items: center; gap: 48px; }
+    .marquee-track span::after { content: '★'; color: var(--yellow); }
+    @keyframes scrollx { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+    /* ---------- Section shells ---------- */
+    section.block { padding: 96px 0; }
+    .eyebrow { font-family: 'Space Grotesk'; font-weight: 600; color: var(--red); text-transform: uppercase; letter-spacing: .14em; font-size: .85rem; }
+    .section-title { font-size: clamp(2rem, 5vw, 3.4rem); margin: 12px 0 16px; max-width: 18ch; }
+    .section-intro { color: var(--muted); max-width: 56ch; font-size: 1.05rem; }
+
+    /* ---------- Services ---------- */
+    .grid { display: grid; gap: 22px; }
+    .services-grid { grid-template-columns: repeat(3, 1fr); margin-top: 50px; }
+    .card {
+      background: var(--white); border: var(--border-thick); border-radius: var(--radius);
+      padding: 30px; box-shadow: var(--shadow);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+      will-change: transform;
+    }
+    .card:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-lg); }
+    .card .ico {
+      width: 58px; height: 58px; border: 3px solid var(--ink); border-radius: 12px;
+      display: grid; place-items: center; margin-bottom: 20px;
+    }
+    .card h3 { font-size: 1.4rem; margin-bottom: 10px; }
+    .card p { color: var(--muted); font-size: .98rem; }
+    .card .tags { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-size: .78rem; font-weight: 600; border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; }
+
+    /* ---------- Work ---------- */
+    .work-grid { grid-template-columns: repeat(2, 1fr); margin-top: 50px; }
+    .work {
+      position: relative; border: var(--border-thick); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow); min-height: 320px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 30px; color: var(--white);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+      will-change: transform;
+    }
+    .work:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-lg); }
+    .work::before { content: ''; position: absolute; inset: 0; opacity: .92; z-index: 0; }
+    .work > * { position: relative; z-index: 1; }
+    .work--a::before { background: linear-gradient(135deg, #8B5CF6, #4C1D95); }
+    .work--b::before { background: linear-gradient(135deg, #FF5A5A, #B91C1C); }
+    .work--c::before { background: linear-gradient(135deg, #06B6D4, #0E7490); }
+    .work--d::before { background: linear-gradient(135deg, #0A0A0A, #3F3F46); }
+    .work .cat { font-size: .8rem; font-weight: 600; opacity: .85; text-transform: uppercase; letter-spacing: .1em; }
+    .work h3 { font-size: 1.9rem; margin-top: 8px; }
+    .work .arrow {
+      position: absolute; top: 24px; right: 24px; width: 46px; height: 46px;
+      background: var(--bg); color: var(--ink); border: 3px solid var(--ink);
+      border-radius: 50%; display: grid; place-items: center; font-size: 1.3rem;
+      transform: rotate(-45deg); transition: transform .25s var(--ease);
+    }
+    .work:hover .arrow { transform: rotate(0deg); }
+
+    /* ---------- Process ---------- */
+    .process { background: var(--violet); border-top: var(--border-thick); border-bottom: var(--border-thick); color: var(--white); }
+    .process .eyebrow { color: var(--yellow); }
+    .steps { grid-template-columns: repeat(4, 1fr); margin-top: 50px; }
+    .step { background: var(--bg); color: var(--ink); border: var(--border-thick); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+    .step .n { font-family: 'Space Grotesk'; font-weight: 700; font-size: 2.6rem; color: var(--red); line-height: 1; }
+    .step h3 { font-size: 1.2rem; margin: 12px 0 8px; }
+    .step p { color: var(--muted); font-size: .92rem; }
+
+    /* ---------- Testimonials ---------- */
+    .quotes { grid-template-columns: repeat(3, 1fr); margin-top: 50px; }
+    .quote { background: var(--white); border: var(--border-thick); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .quote.big { background: var(--yellow); }
+    .quote p { font-size: 1.05rem; font-weight: 500; }
+    .quote .who { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
+    .quote .av { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); display: grid; place-items: center; font-family: 'Space Grotesk'; font-weight: 700; }
+    .quote .who .name { font-weight: 700; font-size: .95rem; }
+    .quote .who .role { font-size: .82rem; color: var(--muted); }
+    .stars { color: var(--red); font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 14px; }
+
+    /* ---------- CTA ---------- */
+    .cta-band {
+      background: var(--ink); color: var(--bg); border-radius: 24px;
+      border: var(--border-thick); box-shadow: var(--shadow-lg);
+      padding: 64px 40px; text-align: center; margin: 40px 0;
+    }
+    .cta-band h2 { font-size: clamp(2.2rem, 6vw, 4rem); margin-bottom: 16px; }
+    .cta-band h2 .hl { color: var(--yellow); }
+    .cta-band p { color: #d4d4d4; max-width: 46ch; margin: 0 auto 30px; font-size: 1.1rem; }
+
+    /* ---------- Footer ---------- */
+    footer { border-top: var(--border-thick); padding: 56px 0 40px; }
+    .foot { display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-between; align-items: flex-start; }
+    .foot .col h4 { font-family: 'Space Grotesk'; font-size: .85rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 14px; }
+    .foot .col a { display: block; font-weight: 600; margin-bottom: 8px; }
+    .foot .col a:hover { color: var(--red); }
+    .foot-bottom { margin-top: 44px; padding-top: 22px; border-top: 2px solid var(--ink); display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; color: var(--muted); font-size: .88rem; }
+
+    /* reveal init state (only when JS/motion active) */
+    .js .reveal { opacity: 0; transform: translateY(28px); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .quotes { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .burger { display: inline-flex; }
+    }
+    @media (max-width: 520px) {
+      .steps { grid-template-columns: 1fr; }
+      section.block { padding: 70px 0; }
+      .cta-band { padding: 44px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header>
+    <div class="wrap nav">
+      <a href="#top" class="logo"><span class="mark">N</span> Nova Studio</a>
+      <nav class="nav-links">
+        <a class="link" href="#services">Servicios</a>
+        <a class="link" href="#work">Trabajo</a>
+        <a class="link" href="#process">Proceso</a>
+        <a class="link" href="#testimonials">Clientes</a>
+        <a class="btn btn--primary nav-cta" href="#contact">Hablemos</a>
+      </nav>
+      <a class="btn burger" href="#contact" aria-label="Contacto">Menú</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="pill" data-hero><span class="dot"></span> Estudio creativo · Disponible para nuevos proyectos</span>
+        <h1 data-hero>Diseñamos marcas que la gente <span class="hl">recuerda</span>.</h1>
+        <p class="lead" data-hero>Nova Studio es un estudio de diseño y branding. Convertimos ideas ambiciosas en identidades, productos digitales y experiencias que destacan en un mundo lleno de ruido.</p>
+        <div class="hero-actions" data-hero>
+          <a class="btn btn--primary" href="#contact">Empezar un proyecto →</a>
+          <a class="btn btn--accent" href="#work">Ver nuestro trabajo</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat" data-hero><div class="num" data-count="120">0</div><div class="lbl">Proyectos lanzados</div></div>
+          <div class="stat" data-hero><div class="num" data-count="48">0</div><div class="lbl">Marcas globales</div></div>
+          <div class="stat" data-hero><div class="num" data-count="9">0</div><div class="lbl">Años de oficio</div></div>
+        </div>
+      </div>
+      <div class="float float--1" data-hero>◆</div>
+      <div class="float float--2" data-hero>✷</div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Branding</span><span>Identidad visual</span><span>Diseño web</span><span>Producto digital</span><span>Motion</span><span>Arte dirección</span>
+        <span>Branding</span><span>Identidad visual</span><span>Diseño web</span><span>Producto digital</span><span>Motion</span><span>Arte dirección</span>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section class="block" id="services">
+      <div class="wrap">
+        <p class="eyebrow reveal">Qué hacemos</p>
+        <h2 class="section-title reveal">Servicios completos, de la idea al lanzamiento</h2>
+        <p class="section-intro reveal">Un equipo pequeño y obsesivo que cubre toda la cadena: estrategia, diseño e implementación.</p>
+
+        <div class="grid services-grid">
+          <article class="card reveal">
+            <div class="ico" style="background:var(--yellow)">✦</div>
+            <h3>Branding & Identidad</h3>
+            <p>Naming, logotipo, sistema visual y guías de marca que funcionan en cualquier soporte.</p>
+            <div class="tags"><span class="tag">Logo</span><span class="tag">Guidelines</span><span class="tag">Naming</span></div>
+          </article>
+          <article class="card reveal">
+            <div class="ico" style="background:var(--cyan);color:#fff">◑</div>
+            <h3>Diseño Web & UI</h3>
+            <p>Sitios y productos digitales rápidos, accesibles y memorables, listos para producción.</p>
+            <div class="tags"><span class="tag">UX/UI</span><span class="tag">Webflow</span><span class="tag">Design System</span></div>
+          </article>
+          <article class="card reveal">
+            <div class="ico" style="background:var(--red);color:#fff">⟁</div>
+            <h3>Motion & Dirección</h3>
+            <p>Animación, dirección de arte y contenido que da vida a la marca y enamora a la audiencia.</p>
+            <div class="tags"><span class="tag">Motion</span><span class="tag">3D</span><span class="tag">Campañas</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="block" id="work" style="padding-top:0">
+      <div class="wrap">
+        <p class="eyebrow reveal">Trabajo seleccionado</p>
+        <h2 class="section-title reveal">Proyectos de los que estamos orgullosos</h2>
+
+        <div class="grid work-grid">
+          <a class="work work--a reveal" href="#contact"><span class="arrow">→</span><span class="cat">Branding · SaaS</span><h3>Helio Cloud</h3></a>
+          <a class="work work--b reveal" href="#contact"><span class="arrow">→</span><span class="cat">E-commerce · Web</span><h3>Mantra Coffee</h3></a>
+          <a class="work work--c reveal" href="#contact"><span class="arrow">→</span><span class="cat">Producto · App</span><h3>Finch Banking</h3></a>
+          <a class="work work--d reveal" href="#contact"><span class="arrow">→</span><span class="cat">Motion · Campaña</span><h3>Aurora Festival</h3></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="block process" id="process">
+      <div class="wrap">
+        <p class="eyebrow reveal">Cómo trabajamos</p>
+        <h2 class="section-title reveal" style="color:#fff">Un proceso claro, sin sorpresas</h2>
+        <div class="grid steps">
+          <div class="step reveal"><div class="n">01</div><h3>Descubrir</h3><p>Entendemos tu negocio, audiencia y objetivos antes de tocar un pixel.</p></div>
+          <div class="step reveal"><div class="n">02</div><h3>Definir</h3><p>Estrategia, territorio creativo y dirección visual aprobada contigo.</p></div>
+          <div class="step reveal"><div class="n">03</div><h3>Diseñar</h3><p>Iteramos en abierto: identidad, interfaces y prototipos navegables.</p></div>
+          <div class="step reveal"><div class="n">04</div><h3>Entregar</h3><p>Implementación, guías y acompañamiento para el lanzamiento.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="block" id="testimonials">
+      <div class="wrap">
+        <p class="eyebrow reveal">Clientes</p>
+        <h2 class="section-title reveal">Lo que dicen de trabajar con nosotros</h2>
+        <div class="grid quotes">
+          <div class="quote big reveal">
+            <div class="stars">★★★★★</div>
+            <p>"Nova entendió nuestra marca mejor que nosotros. El rebrand disparó la conversión un 40% en el primer trimestre."</p>
+            <div class="who"><span class="av" style="background:var(--red);color:#fff">L</span><span><span class="name">Laura Méndez</span><br/><span class="role">CMO, Helio Cloud</span></span></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p>"Profesionales, rápidos y con un gusto impecable. Cada entrega superó lo que esperábamos."</p>
+            <div class="who"><span class="av" style="background:var(--cyan);color:#fff">D</span><span><span class="name">Diego Ruiz</span><br/><span class="role">Founder, Mantra</span></span></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p>"Pasamos de una idea vaga a un producto que la gente ama usar. Volveríamos a contratarlos sin dudar."</p>
+            <div class="who"><span class="av" style="background:var(--violet);color:#fff">S</span><span><span class="name">Sara Kim</span><br/><span class="role">PM, Finch</span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="block" id="contact" style="padding-top:0">
+      <div class="wrap">
+        <div class="cta-band reveal">
+          <h2>¿Listos para crear algo <span class="hl">inolvidable</span>?</h2>
+          <p>Cuéntanos tu proyecto. Respondemos en menos de 24 horas con una propuesta de cómo podemos ayudarte.</p>
+          <a class="btn btn--accent" href="mailto:hola@novastudio.com">hola@novastudio.com →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div class="col" style="max-width:280px">
+          <a href="#top" class="logo" style="font-size:1.3rem"><span class="mark">N</span> Nova Studio</a>
+          <p style="margin-top:14px;color:var(--muted)">Estudio de diseño & branding. Construyendo marcas con carácter desde 2017.</p>
+        </div>
+        <div class="col"><h4>Estudio</h4><a href="#work">Trabajo</a><a href="#services">Servicios</a><a href="#process">Proceso</a></div>
+        <div class="col"><h4>Síguenos</h4><a href="#">Instagram</a><a href="#">Dribbble</a><a href="#">LinkedIn</a></div>
+        <div class="col"><h4>Contacto</h4><a href="mailto:hola@novastudio.com">hola@novastudio.com</a><a href="#">+34 600 000 000</a></div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Nova Studio. Todos los derechos reservados.</span>
+        <span>Hecho con cuidado y mucho café.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@12.40.0/+esm";
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add("js");
+
+    if (reduce) {
+      // Skip motion: make everything visible immediately.
+      document.querySelectorAll(".reveal, [data-hero]").forEach(el => {
+        el.style.opacity = 1; el.style.transform = "none";
+      });
+      document.querySelectorAll("[data-count]").forEach(el => el.textContent = el.dataset.count + "+");
+    } else {
+      // Hero entrance, staggered.
+      animate(
+        "[data-hero]",
+        { opacity: [0, 1], transform: ["translateY(24px)", "translateY(0px)"] },
+        { duration: 0.7, delay: stagger(0.09), ease: [0.2, 0.8, 0.2, 1] }
+      );
+
+      // Scroll-reveal for sections.
+      inView(".reveal", (info) => {
+        animate(
+          info.target,
+          { opacity: [0, 1], transform: ["translateY(28px)", "translateY(0px)"] },
+          { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }
+        );
+      }, { amount: 0.2 });
+
+      // Animated counters when the hero stats come into view.
+      inView("[data-count]", (info) => {
+        const el = info.target;
+        const target = parseInt(el.dataset.count, 10);
+        animate(0, target, {
+          duration: 1.4,
+          ease: "easeOut",
+          onUpdate: (v) => { el.textContent = Math.round(v) + "+"; }
+        });
+      }, { amount: 0.6 });
+    }
+  </script>
+</body>
+</html>
