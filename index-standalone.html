@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lowland — whole-lot coffee, roasted to order</title>
+  <meta name="description" content="Lowland is a small-batch roaster. We buy whole lots from farms we have stood on, and roast to order the week your bag ships." />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&display=swap" />
+<style>
+/* Hallmark · tokens · genre: editorial · theme: Atelier-warm (cream paper · clay accent · Fraunces italic display) */
+
+:root {
+  /* ---- Colour (OKLCH, tinted toward the clay anchor — never pure #000/#fff) ---- */
+  --color-paper:      oklch(97.5% 0.012 75);   /* warm cream surface            */
+  --color-paper-2:    oklch(95% 0.016 72);     /* recessed band                 */
+  --color-paper-3:    oklch(91.5% 0.02 70);    /* hover / inset                 */
+  --color-ink:        oklch(24% 0.018 50);     /* warm near-black text          */
+  --color-ink-soft:   oklch(40% 0.02 50);      /* secondary text                */
+  --color-ink-mute:   oklch(46% 0.02 55);      /* captions, meta                */
+  --color-line:       oklch(85% 0.018 65);     /* hairline rules                */
+  --color-accent:     oklch(50% 0.13 42);      /* clay / terracotta             */
+  --color-accent-ink: oklch(44% 0.13 42);      /* accent text on paper          */
+  --color-focus:      oklch(50% 0.13 42);
+  --color-on-accent:  oklch(98% 0.01 75);
+
+  /* product swatches (named so nothing is inlined mid-render) */
+  --color-bean-huila:     oklch(46% 0.07 40);
+  --color-bean-huila-2:   oklch(38% 0.06 40);
+  --color-bean-sidama:    oklch(50% 0.085 18);
+  --color-bean-sidama-2:  oklch(40% 0.07 18);
+  --color-bean-antigua:   oklch(52% 0.06 60);
+  --color-bean-antigua-2: oklch(42% 0.05 60);
+
+  /* ---- Type ---- */
+  --font-display:  "Fraunces", ui-serif, Georgia, serif;
+  --font-body:     "Switzer", ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: "Fraunces", ui-serif, Georgia, serif;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.84rem;
+  --text-base: 1rem;
+  --text-md:   1.25rem;
+  --text-lg:   1.5625rem;
+  --text-xl:   1.9531rem;
+  --text-2xl:  2.4414rem;
+  --text-3xl:  3.0518rem;
+  --text-display:   clamp(2.75rem, 5vw + 1rem, 5rem);
+  --text-display-s: clamp(2.25rem, 3.5vw + 1rem, 3.5rem);
+
+  /* ---- Space (4pt scale) ---- */
+  --space-2xs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6.5rem;
+
+  /* ---- Motion ---- */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long:  420ms;
+
+  /* ---- Rules / radius / elevation ---- */
+  --rule-hair: 1px solid var(--color-line);
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --z-base: 1;
+  --z-nav: 100;
+}
+
+/* Hallmark · genre: editorial · macrostructure: Split Studio · theme: Atelier-warm · tone: editorial · anchor hue: clay (42°)
+ * nav: N9 edge-aligned minimal · footer: Ft1 mast-headed · enrichment: Tier-A pure-CSS bag · H2 split-diptych knobs: ratio=6/6, right=CSS-art, divider=negative-space
+ * F6 product-grid knobs: ratio=3/4 portrait, density=3-up, micro-action=Add
+ * pre-emit critique: P5 H4 E5 S4 R5 V5
+ * contrast: pass (46–50) · nav: N9 · footer: Ft1 · slop: pass (51–55)
+ * honest: pass (56) · chrome: pass (57) · tokens: pass (58) · responsive: pass (59) · icons: pass (60) · mobile: pass (36, 61–69)
+ */
+
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { overflow-x: clip; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: 1.6;
+  font-variant-numeric: oldstyle-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+p { margin: 0; }
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+.shell {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+.lede {
+  font-size: var(--text-md);
+  color: var(--color-ink-soft);
+  max-width: 48ch;
+  line-height: 1.55;
+}
+
+.eyebrow { /* used at most once, vertical-stacked above its heading */
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+  margin-bottom: var(--space-sm);
+}
+
+/* ============ Buttons / links ============ */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 44px;
+  transition: background-color var(--dur-micro) var(--ease-out),
+              color var(--dur-micro) var(--ease-out),
+              transform var(--dur-micro) var(--ease-out);
+}
+.chip:hover, .chip.is-hover { background: var(--color-ink); color: var(--color-on-accent); }
+.chip:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.chip:active, .chip.is-active { transform: translateY(1px); }
+.chip[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+.chip--accent { border-color: var(--color-accent); color: var(--color-accent-ink); }
+.chip--accent:hover, .chip--accent.is-hover { background: var(--color-accent); color: var(--color-on-accent); }
+
+.tlink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 2px;
+  transition: color var(--dur-micro) var(--ease-out),
+              background-size var(--dur-short) var(--ease-out);
+}
+.tlink:hover, .tlink.is-hover { color: var(--color-accent-ink); background-size: 100% 2px; }
+.tlink:active { color: var(--color-accent); }
+.tlink:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 1px; }
+
+/* ============ Nav · N9 edge-aligned minimal ============ */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background: color-mix(in oklch, var(--color-paper) 86%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--rule-hair);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+}
+.wordmark {
+  font-family: var(--font-wordmark);
+  font-style: italic;
+  font-weight: 600;
+  font-size: var(--text-lg);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+.wordmark span { font-style: normal; color: var(--color-accent-ink); }
+.wordmark:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 2px; }
+
+/* ============ Hero · H2 split diptych ============ */
+
+.hero { padding-block: clamp(2.25rem, 5vw, 4.25rem) var(--space-3xl); }
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+.hero__display {
+  font-style: italic;
+  font-size: var(--text-display);
+  letter-spacing: -0.03em;
+}
+.hero__display em { font-style: normal; color: var(--color-accent-ink); }
+.hero__copy > * + * { margin-top: var(--space-lg); }
+.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg); }
+
+/* Tier-A pure-CSS bag illustration (no infinite motion) */
+.bag {
+  --bag-w: min(20rem, 80%);
+  width: var(--bag-w);
+  aspect-ratio: 3 / 4;
+  margin-inline: auto;
+  position: relative;
+  background:
+    linear-gradient(180deg, var(--color-paper-3), var(--color-paper-2));
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 0 var(--color-line);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: var(--space-lg);
+  overflow: hidden;
+}
+.bag::before { /* folded top seam */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1.4rem;
+  background: var(--color-paper-3);
+  border-bottom: 1px dashed var(--color-line);
+}
+.bag__valve {
+  width: 1.5rem; height: 1.5rem;
+  margin: var(--space-xs) auto 0;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+  background: radial-gradient(circle at 50% 45%, var(--color-paper) 35%, var(--color-paper-3) 36%);
+}
+.bag__label {
+  align-self: center;
+  text-align: center;
+  border-block: var(--rule-hair);
+  padding-block: var(--space-md);
+}
+.bag__label .k {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+}
+.bag__label .v {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-2xl);
+  line-height: 1.05;
+  display: block;
+  margin-top: var(--space-2xs);
+}
+.bag__foot {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+  text-align: center;
+}
+
+/* ============ Split Studio rows ============ */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+  padding-block: var(--space-3xl);
+  border-top: var(--rule-hair);
+}
+.split--flip .split__media { order: -1; }
+.split__copy > * + * { margin-top: var(--space-lg); }
+.split__title { font-size: var(--text-2xl); font-style: italic; }
+.split__body { color: var(--color-ink-soft); max-width: 46ch; }
+
+/* lot card (proof half of row 1) */
+.lot { border: var(--rule-hair); border-radius: var(--radius-md); }
+.lot dl { margin: 0; display: grid; }
+.lot__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: var(--rule-hair);
+}
+.lot__row:last-child { border-bottom: 0; }
+.lot dt { color: var(--color-ink-mute); font-size: var(--text-sm); letter-spacing: 0.04em; text-transform: uppercase; }
+.lot dd { margin: 0; font-family: var(--font-display); font-style: italic; font-size: var(--text-md); }
+
+/* roast curve (CSS-art proof for row 2) */
+.curve {
+  aspect-ratio: 5 / 4;
+  border: var(--rule-hair);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(180deg, transparent calc(100% - 1px), var(--color-line) 0) 0 0 / 100% 25% repeat-y,
+    var(--color-paper-2);
+  position: relative;
+  overflow: hidden;
+}
+.curve svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ============ Product grid · F6 ============ */
+
+.shop { padding-block: var(--space-3xl); border-top: var(--rule-hair); }
+.shop__head { max-width: 50ch; margin-bottom: var(--space-2xl); }
+.shop__head h2 { font-size: var(--text-3xl); font-style: italic; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-xl);
+}
+.card { display: flex; flex-direction: column; }
+.card__swatch {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  border: var(--rule-hair);
+  position: relative;
+  overflow: hidden;
+}
+.card__swatch::after {
+  content: attr(data-process);
+  position: absolute;
+  left: var(--space-md); bottom: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-on-accent);
+}
+.card--huila   .card__swatch { background: linear-gradient(160deg, var(--color-bean-huila),   var(--color-bean-huila-2)); }
+.card--sidama  .card__swatch { background: linear-gradient(160deg, var(--color-bean-sidama),  var(--color-bean-sidama-2)); }
+.card--antigua .card__swatch { background: linear-gradient(160deg, var(--color-bean-antigua), var(--color-bean-antigua-2)); }
+
+.card__head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.card__name { font-family: var(--font-display); font-style: italic; font-size: var(--text-md); }
+.card__price { font-variant-numeric: tabular-nums; color: var(--color-ink-soft); }
+.card__note { color: var(--color-ink-soft); font-size: var(--text-sm); margin-top: var(--space-2xs); }
+.card__add { margin-top: var(--space-md); align-self: flex-start; }
+.card__add[data-state="success"] { border-color: var(--color-accent); color: var(--color-accent-ink); }
+
+/* ============ Statement · T3 ============ */
+
+.statement { padding-block: var(--space-3xl); border-top: var(--rule-hair); }
+.statement blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+}
+.statement cite {
+  display: block;
+  margin-top: var(--space-lg);
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+}
+
+/* ============ Final CTA strip ============ */
+
+.cta { padding-block: var(--space-3xl); border-top: var(--rule-hair); }
+.cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+.cta__line { font-family: var(--font-display); font-style: italic; font-size: var(--text-xl); max-width: 24ch; }
+
+/* ============ Footer · Ft1 mast-headed ============ */
+
+.foot { border-top: 2px solid var(--color-ink); padding-block: var(--space-2xl) var(--space-xl); }
+.foot__top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-lg); align-items: baseline; }
+.foot__brand .wordmark { font-size: var(--text-2xl); }
+.foot__tag { color: var(--color-ink-soft); margin-top: var(--space-2xs); max-width: 34ch; }
+.foot__links { display: flex; flex-wrap: wrap; gap: var(--space-lg); }
+.foot__meta {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-ink-mute);
+}
+
+/* ============ Motion · one orchestrated entrance ============ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: reveal var(--dur-long) var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes reveal { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+  .reveal { animation: reveal 150ms linear forwards; }
+}
+
+/* ============ Responsive ============ */
+
+@media (max-width: 60rem) {
+  .hero__grid, .split { grid-template-columns: 1fr; gap: var(--space-2xl); }
+  .hero__grid { gap: var(--space-xl); }
+  .split--flip .split__media { order: 0; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bag { --bag-w: min(18rem, 70%); }
+}
+
+@media (max-width: 40rem) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .hero__display { font-size: var(--text-display-s); }
+  .shop__head h2 { font-size: var(--text-2xl); }
+  .foot__top { flex-direction: column; }
+}
+
+</style>
+</head>
+<body>
+  <!-- Nav · N9 edge-aligned minimal -->
+  <header class="nav">
+    <div class="shell nav__inner">
+      <a class="wordmark" href="#top">Lowland<span>.</span></a>
+      <a class="chip chip--accent" href="#shop">Shop the roast →</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero · H2 split diptych -->
+    <section class="hero">
+      <div class="shell hero__grid">
+        <div class="hero__copy reveal" style="--i:0">
+          <h1 class="hero__display">Whole-lot coffee,<br />roasted <em>to order.</em></h1>
+          <p class="lede">We buy entire lots from a short list of farms, then roast each bag the week it ships. No warehouse, no blends to hide behind — only the coffee we would brew ourselves.</p>
+          <div class="hero__actions">
+            <a class="chip chip--accent" href="#shop">Browse the coffees →</a>
+            <a class="tlink" href="#origin">Read how we source ↗</a>
+          </div>
+        </div>
+        <div class="hero__media reveal" style="--i:1" aria-hidden="true">
+          <div class="bag">
+            <div class="bag__valve"></div>
+            <div class="bag__label">
+              <span class="k">Single origin</span>
+              <span class="v">Huila,<br />Colombia</span>
+            </div>
+            <div class="bag__foot">Roasted 03 · Filter</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="shell">
+      <!-- Split row 1 · Origin (text left / proof right) -->
+      <section class="split" id="origin">
+        <div class="split__copy">
+          <h2 class="split__title">Bought whole, from farms we have stood on.</h2>
+          <p class="split__body">We travel each harvest and commit to full lots rather than picking through a broker’s samples. It costs more and ties up the year’s buying early — but it is the only way to know exactly whose work is in the cup.</p>
+          <a class="tlink" href="#shop">See this season’s lots →</a>
+        </div>
+        <div class="split__media">
+          <div class="lot" aria-label="Featured lot details">
+            <dl>
+              <div class="lot__row"><dt>Farm</dt><dd>Finca El Mirador</dd></div>
+              <div class="lot__row"><dt>Process</dt><dd>Washed</dd></div>
+              <div class="lot__row"><dt>Altitude</dt><dd>1,750&nbsp;m</dd></div>
+              <div class="lot__row"><dt>Harvest</dt><dd>Spring 2026</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- Split row 2 · Roast (media left / text right) -->
+      <section class="split split--flip">
+        <div class="split__copy">
+          <h2 class="split__title">Roasted the Thursday before it ships.</h2>
+          <p class="split__body">Every bag is roasted to order in small drum batches and rested two days — long enough to settle, short enough that it reaches you bright. The roast date is printed on the seam, never the “best by.”</p>
+          <a class="tlink" href="#shop">Choose a roast →</a>
+        </div>
+        <div class="split__media">
+          <div class="curve" role="img" aria-label="A gentle roast curve rising and levelling off">
+            <svg viewBox="0 0 100 80" preserveAspectRatio="none" focusable="false">
+              <path d="M2 74 C 30 72, 46 40, 64 24 S 92 10, 98 8" fill="none"
+                    stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Shop · F6 product card grid -->
+    <section class="shop" id="shop">
+      <div class="shell">
+        <div class="shop__head">
+          <h2>This season, three lots.</h2>
+          <p class="lede">Ground or whole bean, 250&nbsp;g. Each ships within a week of roasting.</p>
+        </div>
+        <div class="grid">
+          <article class="card card--huila reveal" style="--i:0">
+            <div class="card__swatch" aria-hidden="true" data-process="Washed"></div>
+            <div class="card__head">
+              <h3 class="card__name">Huila, Colombia</h3>
+              <span class="card__price">$19</span>
+            </div>
+            <p class="card__note">Red apple · cocoa · brown sugar</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+
+          <article class="card card--sidama reveal" style="--i:1">
+            <div class="card__swatch" aria-hidden="true" data-process="Natural"></div>
+            <div class="card__head">
+              <h3 class="card__name">Sidama, Ethiopia</h3>
+              <span class="card__price">$21</span>
+            </div>
+            <p class="card__note">Blueberry · jasmine · stone fruit</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+
+          <article class="card card--antigua reveal" style="--i:2">
+            <div class="card__swatch" aria-hidden="true" data-process="Washed"></div>
+            <div class="card__head">
+              <h3 class="card__name">Antigua, Guatemala</h3>
+              <span class="card__price">$20</span>
+            </div>
+            <p class="card__note">Toffee · orange peel · almond</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statement · T3 single huge quote (brand voice) -->
+    <section class="statement">
+      <div class="shell">
+        <blockquote>“Freshness isn’t a label. It’s the date on the seam.”</blockquote>
+        <cite>Priya Nair · Head roaster</cite>
+      </div>
+    </section>
+
+    <!-- Final CTA strip -->
+    <section class="cta">
+      <div class="shell cta__inner">
+        <p class="cta__line">Start with a single bag, or let a subscription pick for you.</p>
+        <a class="chip chip--accent" href="#shop">Choose your first roast →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer · Ft1 mast-headed -->
+  <footer class="foot">
+    <div class="shell">
+      <div class="foot__top">
+        <div class="foot__brand">
+          <span class="wordmark">Lowland<span>.</span></span>
+          <p class="foot__tag">A small-batch roaster. Whole lots, roasted to order, shipped the week they’re roasted.</p>
+        </div>
+        <nav class="foot__links" aria-label="Footer">
+          <a class="tlink" href="#shop">Coffees</a>
+          <a class="tlink" href="#">Subscriptions</a>
+          <a class="tlink" href="#origin">Sourcing</a>
+          <a class="tlink" href="#">Account</a>
+        </nav>
+      </div>
+      <div class="foot__meta">
+        <span>Ships Tuesdays &amp; Fridays · free over $40</span>
+        <span>© 2026 Lowland Coffee</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Optimistic "Add to bag" — silent success, no celebratory toast.
+    document.querySelectorAll(".card__add").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.state === "success") return;
+        btn.dataset.state = "success";
+        btn.textContent = "Added ✓";
+        setTimeout(() => {
+          btn.dataset.state = "idle";
+          btn.textContent = "Add to bag";
+        }, 2200);
+      });
+    });
+  </script>
+</body>
+</html>
