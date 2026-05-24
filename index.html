@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lowland — whole-lot coffee, roasted to order</title>
+  <meta name="description" content="Lowland is a small-batch roaster. We buy whole lots from farms we have stood on, and roast to order the week your bag ships." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Nav · N9 edge-aligned minimal -->
+  <header class="nav">
+    <div class="shell nav__inner">
+      <a class="wordmark" href="#top">Lowland<span>.</span></a>
+      <a class="chip chip--accent" href="#shop">Shop the roast →</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero · H2 split diptych -->
+    <section class="hero">
+      <div class="shell hero__grid">
+        <div class="hero__copy reveal" style="--i:0">
+          <h1 class="hero__display">Whole-lot coffee,<br />roasted <em>to order.</em></h1>
+          <p class="lede">We buy entire lots from a short list of farms, then roast each bag the week it ships. No warehouse, no blends to hide behind — only the coffee we would brew ourselves.</p>
+          <div class="hero__actions">
+            <a class="chip chip--accent" href="#shop">Browse the coffees →</a>
+            <a class="tlink" href="#origin">Read how we source ↗</a>
+          </div>
+        </div>
+        <div class="hero__media reveal" style="--i:1" aria-hidden="true">
+          <div class="bag">
+            <div class="bag__valve"></div>
+            <div class="bag__label">
+              <span class="k">Single origin</span>
+              <span class="v">Huila,<br />Colombia</span>
+            </div>
+            <div class="bag__foot">Roasted 03 · Filter</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="shell">
+      <!-- Split row 1 · Origin (text left / proof right) -->
+      <section class="split" id="origin">
+        <div class="split__copy">
+          <h2 class="split__title">Bought whole, from farms we have stood on.</h2>
+          <p class="split__body">We travel each harvest and commit to full lots rather than picking through a broker’s samples. It costs more and ties up the year’s buying early — but it is the only way to know exactly whose work is in the cup.</p>
+          <a class="tlink" href="#shop">See this season’s lots →</a>
+        </div>
+        <div class="split__media">
+          <div class="lot" aria-label="Featured lot details">
+            <dl>
+              <div class="lot__row"><dt>Farm</dt><dd>Finca El Mirador</dd></div>
+              <div class="lot__row"><dt>Process</dt><dd>Washed</dd></div>
+              <div class="lot__row"><dt>Altitude</dt><dd>1,750&nbsp;m</dd></div>
+              <div class="lot__row"><dt>Harvest</dt><dd>Spring 2026</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- Split row 2 · Roast (media left / text right) -->
+      <section class="split split--flip">
+        <div class="split__copy">
+          <h2 class="split__title">Roasted the Thursday before it ships.</h2>
+          <p class="split__body">Every bag is roasted to order in small drum batches and rested two days — long enough to settle, short enough that it reaches you bright. The roast date is printed on the seam, never the “best by.”</p>
+          <a class="tlink" href="#shop">Choose a roast →</a>
+        </div>
+        <div class="split__media">
+          <div class="curve" role="img" aria-label="A gentle roast curve rising and levelling off">
+            <svg viewBox="0 0 100 80" preserveAspectRatio="none" focusable="false">
+              <path d="M2 74 C 30 72, 46 40, 64 24 S 92 10, 98 8" fill="none"
+                    stroke="var(--color-accent)" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Shop · F6 product card grid -->
+    <section class="shop" id="shop">
+      <div class="shell">
+        <div class="shop__head">
+          <h2>This season, three lots.</h2>
+          <p class="lede">Ground or whole bean, 250&nbsp;g. Each ships within a week of roasting.</p>
+        </div>
+        <div class="grid">
+          <article class="card card--huila reveal" style="--i:0">
+            <div class="card__swatch" aria-hidden="true" data-process="Washed"></div>
+            <div class="card__head">
+              <h3 class="card__name">Huila, Colombia</h3>
+              <span class="card__price">$19</span>
+            </div>
+            <p class="card__note">Red apple · cocoa · brown sugar</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+
+          <article class="card card--sidama reveal" style="--i:1">
+            <div class="card__swatch" aria-hidden="true" data-process="Natural"></div>
+            <div class="card__head">
+              <h3 class="card__name">Sidama, Ethiopia</h3>
+              <span class="card__price">$21</span>
+            </div>
+            <p class="card__note">Blueberry · jasmine · stone fruit</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+
+          <article class="card card--antigua reveal" style="--i:2">
+            <div class="card__swatch" aria-hidden="true" data-process="Washed"></div>
+            <div class="card__head">
+              <h3 class="card__name">Antigua, Guatemala</h3>
+              <span class="card__price">$20</span>
+            </div>
+            <p class="card__note">Toffee · orange peel · almond</p>
+            <button class="chip card__add" type="button" data-state="idle">Add to bag</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statement · T3 single huge quote (brand voice) -->
+    <section class="statement">
+      <div class="shell">
+        <blockquote>“Freshness isn’t a label. It’s the date on the seam.”</blockquote>
+        <cite>Priya Nair · Head roaster</cite>
+      </div>
+    </section>
+
+    <!-- Final CTA strip -->
+    <section class="cta">
+      <div class="shell cta__inner">
+        <p class="cta__line">Start with a single bag, or let a subscription pick for you.</p>
+        <a class="chip chip--accent" href="#shop">Choose your first roast →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer · Ft1 mast-headed -->
+  <footer class="foot">
+    <div class="shell">
+      <div class="foot__top">
+        <div class="foot__brand">
+          <span class="wordmark">Lowland<span>.</span></span>
+          <p class="foot__tag">A small-batch roaster. Whole lots, roasted to order, shipped the week they’re roasted.</p>
+        </div>
+        <nav class="foot__links" aria-label="Footer">
+          <a class="tlink" href="#shop">Coffees</a>
+          <a class="tlink" href="#">Subscriptions</a>
+          <a class="tlink" href="#origin">Sourcing</a>
+          <a class="tlink" href="#">Account</a>
+        </nav>
+      </div>
+      <div class="foot__meta">
+        <span>Ships Tuesdays &amp; Fridays · free over $40</span>
+        <span>© 2026 Lowland Coffee</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Optimistic "Add to bag" — silent success, no celebratory toast.
+    document.querySelectorAll(".card__add").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.state === "success") return;
+        btn.dataset.state = "success";
+        btn.textContent = "Added ✓";
+        setTimeout(() => {
+          btn.dataset.state = "idle";
+          btn.textContent = "Add to bag";
+        }, 2200);
+      });
+    });
+  </script>
+</body>
+</html>

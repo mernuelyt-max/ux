@@ -1,0 +1,9 @@
+{
+  "date": "2026-05-24",
+  "framework": "vanilla HTML",
+  "fontStack": null,
+  "palette": null,
+  "motion": "motion-cut (no library)",
+  "spacing": null,
+  "notes": "No pre-flight signals (only an unrelated zip at root). Full Hallmark stack introduced."
+}

@@ -1,0 +1,65 @@
+/* Hallmark · tokens · genre: editorial · theme: Atelier-warm (cream paper · clay accent · Fraunces italic display) */
+
+:root {
+  /* ---- Colour (OKLCH, tinted toward the clay anchor — never pure #000/#fff) ---- */
+  --color-paper:      oklch(97.5% 0.012 75);   /* warm cream surface            */
+  --color-paper-2:    oklch(95% 0.016 72);     /* recessed band                 */
+  --color-paper-3:    oklch(91.5% 0.02 70);    /* hover / inset                 */
+  --color-ink:        oklch(24% 0.018 50);     /* warm near-black text          */
+  --color-ink-soft:   oklch(40% 0.02 50);      /* secondary text                */
+  --color-ink-mute:   oklch(46% 0.02 55);      /* captions, meta                */
+  --color-line:       oklch(85% 0.018 65);     /* hairline rules                */
+  --color-accent:     oklch(50% 0.13 42);      /* clay / terracotta             */
+  --color-accent-ink: oklch(44% 0.13 42);      /* accent text on paper          */
+  --color-focus:      oklch(50% 0.13 42);
+  --color-on-accent:  oklch(98% 0.01 75);
+
+  /* product swatches (named so nothing is inlined mid-render) */
+  --color-bean-huila:     oklch(46% 0.07 40);
+  --color-bean-huila-2:   oklch(38% 0.06 40);
+  --color-bean-sidama:    oklch(50% 0.085 18);
+  --color-bean-sidama-2:  oklch(40% 0.07 18);
+  --color-bean-antigua:   oklch(52% 0.06 60);
+  --color-bean-antigua-2: oklch(42% 0.05 60);
+
+  /* ---- Type ---- */
+  --font-display:  "Fraunces", ui-serif, Georgia, serif;
+  --font-body:     "Switzer", ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: "Fraunces", ui-serif, Georgia, serif;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.84rem;
+  --text-base: 1rem;
+  --text-md:   1.25rem;
+  --text-lg:   1.5625rem;
+  --text-xl:   1.9531rem;
+  --text-2xl:  2.4414rem;
+  --text-3xl:  3.0518rem;
+  --text-display:   clamp(2.75rem, 5vw + 1rem, 5rem);
+  --text-display-s: clamp(2.25rem, 3.5vw + 1rem, 3.5rem);
+
+  /* ---- Space (4pt scale) ---- */
+  --space-2xs: 0.25rem;
+  --space-xs:  0.5rem;
+  --space-sm:  0.75rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6.5rem;
+
+  /* ---- Motion ---- */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long:  420ms;
+
+  /* ---- Rules / radius / elevation ---- */
+  --rule-hair: 1px solid var(--color-line);
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --z-base: 1;
+  --z-nav: 100;
+}
