@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Remote Control</title>
+    <style>
+      :root {
+        --bg: #0f1115;
+        --panel: #181b21;
+        --panel-2: #20242c;
+        --text: #e8eaed;
+        --muted: #9aa0a6;
+        --accent: #4f8cff;
+        --accent-2: #2ecc71;
+        --danger: #ff5b5b;
+        --border: #2a2f38;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+      .dot.online { background: var(--accent-2); }
+      main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 60px); }
+      aside { border-right: 1px solid var(--border); padding: 16px; }
+      .agent {
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        margin-bottom: 6px;
+      }
+      .agent:hover { background: var(--panel); }
+      .agent.active { background: var(--panel); border-color: var(--accent); }
+      .agent .name { font-weight: 600; }
+      .agent .meta { font-size: 12px; color: var(--muted); }
+      section { padding: 24px; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+      button {
+        background: var(--panel-2);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      button:hover { border-color: var(--accent); }
+      button.primary { background: var(--accent); border-color: var(--accent); }
+      input, select, textarea {
+        background: var(--panel);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+      .field { margin-bottom: 12px; }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+      h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 12px; }
+      pre {
+        background: #0b0d11;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px;
+        overflow: auto;
+        max-height: 320px;
+        font-size: 13px;
+      }
+      .log-line { border-bottom: 1px solid var(--border); padding: 6px 0; font-size: 13px; }
+      .log-line .ts { color: var(--muted); margin-right: 8px; }
+      .ok { color: var(--accent-2); }
+      .err { color: var(--danger); }
+      .empty { color: var(--muted); padding: 20px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="dot" id="conn-dot"></span>
+      <h1>Remote Control</h1>
+      <span style="margin-left:auto;color:var(--muted);font-size:13px" id="server-label"></span>
+    </header>
+    <main>
+      <aside>
+        <h2>Agents</h2>
+        <div id="agent-list"><div class="empty">No agents connected.</div></div>
+      </aside>
+      <section id="panel">
+        <div class="empty" id="no-selection">Select an agent on the left to control it.</div>
+        <div id="controls" style="display:none">
+          <div class="card">
+            <h2>Quick actions</h2>
+            <div class="row">
+              <button data-action="ping">Ping</button>
+              <button data-action="system.info">System info</button>
+              <button data-action="state.get">Get state</button>
+              <button data-action="power.toggle">Power toggle</button>
+              <button data-action="volume.adjust" data-params='{"delta":10}'>Vol +10</button>
+              <button data-action="volume.adjust" data-params='{"delta":-10}'>Vol -10</button>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Custom command</h2>
+            <div class="field">
+              <label>Action</label>
+              <input id="action" placeholder="e.g. state.set" style="width:100%" />
+            </div>
+            <div class="field">
+              <label>Params (JSON)</label>
+              <textarea id="params" rows="3" placeholder='{"volume": 70}' style="width:100%"></textarea>
+            </div>
+            <button class="primary" id="send-btn">Send command</button>
+          </div>
+          <div class="card">
+            <h2>Activity</h2>
+            <div id="log"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const qs = new URLSearchParams(location.search);
+      const TOKEN = qs.get('token') || '';
+      let selected = null;
+
+      document.getElementById('server-label').textContent = location.origin;
+
+      function authHeaders(extra = {}) {
+        const h = { ...extra };
+        if (TOKEN) h['Authorization'] = 'Bearer ' + TOKEN;
+        return h;
+      }
+      function withToken(url) {
+        return TOKEN ? url + (url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(TOKEN) : url;
+      }
+
+      function logEntry(text, cls) {
+        const log = document.getElementById('log');
+        const line = document.createElement('div');
+        line.className = 'log-line';
+        const ts = new Date().toLocaleTimeString();
+        line.innerHTML = `<span class="ts">${ts}</span><span class="${cls || ''}">${text}</span>`;
+        log.prepend(line);
+      }
+
+      async function refreshAgents() {
+        let data;
+        try {
+          const res = await fetch(withToken('/api/agents'), { headers: authHeaders() });
+          data = await res.json();
+          document.getElementById('conn-dot').classList.add('online');
+        } catch {
+          document.getElementById('conn-dot').classList.remove('online');
+          return;
+        }
+        const list = document.getElementById('agent-list');
+        if (!data.agents.length) {
+          list.innerHTML = '<div class="empty">No agents connected.</div>';
+        } else {
+          list.innerHTML = '';
+          for (const a of data.agents) {
+            const div = document.createElement('div');
+            div.className = 'agent' + (a.id === selected ? ' active' : '');
+            div.innerHTML = `<div class="name">${a.name}</div><div class="meta">${a.type} · ${a.id}</div>`;
+            div.onclick = () => selectAgent(a.id);
+            list.appendChild(div);
+          }
+        }
+        // Keep selection valid.
+        if (selected && !data.agents.find((a) => a.id === selected)) {
+          selected = null;
+          showControls();
+        }
+      }
+
+      function selectAgent(id) {
+        selected = id;
+        showControls();
+        refreshAgents();
+      }
+
+      function showControls() {
+        document.getElementById('no-selection').style.display = selected ? 'none' : 'block';
+        document.getElementById('controls').style.display = selected ? 'block' : 'none';
+      }
+
+      async function sendCommand(action, params) {
+        if (!selected) return;
+        logEntry(`→ ${action} ${params ? JSON.stringify(params) : ''}`);
+        try {
+          const res = await fetch(withToken(`/api/agents/${encodeURIComponent(selected)}/commands?wait=1`), {
+            method: 'POST',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ action, params: params || {} }),
+          });
+          const body = await res.json();
+          if (body.ok) logEntry('← ' + JSON.stringify(body.result), 'ok');
+          else logEntry('← error: ' + (body.error || res.status), 'err');
+        } catch (e) {
+          logEntry('← request failed: ' + e.message, 'err');
+        }
+      }
+
+      document.querySelectorAll('button[data-action]').forEach((btn) => {
+        btn.onclick = () => {
+          const params = btn.dataset.params ? JSON.parse(btn.dataset.params) : {};
+          sendCommand(btn.dataset.action, params);
+        };
+      });
+
+      document.getElementById('send-btn').onclick = () => {
+        const action = document.getElementById('action').value.trim();
+        if (!action) return;
+        const raw = document.getElementById('params').value.trim();
+        let params = {};
+        if (raw) {
+          try {
+            params = JSON.parse(raw);
+          } catch {
+            logEntry('invalid JSON in params', 'err');
+            return;
+          }
+        }
+        sendCommand(action, params);
+      };
+
+      refreshAgents();
+      setInterval(refreshAgents, 2000);
+    </script>
+  </body>
+</html>

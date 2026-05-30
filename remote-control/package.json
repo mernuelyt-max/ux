@@ -1,0 +1,18 @@
+{
+  "name": "remote-control",
+  "version": "1.0.0",
+  "description": "Dependency-free Node.js remote-control system: relay server, device agent, CLI controller and web control panel.",
+  "type": "module",
+  "bin": {
+    "rc": "./cli.js"
+  },
+  "scripts": {
+    "server": "node server.js",
+    "agent": "node agent.js",
+    "cli": "node cli.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
