@@ -115,11 +115,28 @@ export const DEMO_PRODUCTS: Product[] = [
   },
 ];
 
-/** Parse the pipe-delimited features metafield into a clean list. */
+/**
+ * Parse the `features` metafield into a clean list. Supports both shapes:
+ *  - a Shopify list metafield (JSON array string: `["Uno","Dos"]`)
+ *  - a plain text field delimited by `|` or new lines.
+ */
 export function parseFeatures(product: Product): string[] {
-  const raw = product.metafields?.features ?? "";
+  const raw = (product.metafields?.features ?? "").trim();
+  if (!raw) return [];
+
+  if (raw.startsWith("[")) {
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) {
+        return arr.map((f) => String(f).trim()).filter(Boolean);
+      }
+    } catch {
+      /* fall through to delimiter parsing */
+    }
+  }
+
   return raw
-    .split("|")
+    .split(/[|\n]/)
     .map((f) => f.trim())
     .filter(Boolean);
 }

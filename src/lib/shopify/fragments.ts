@@ -1,5 +1,17 @@
 // Reusable GraphQL fragments.
 
+/**
+ * Metafield namespace + keys the storefront reads to enrich membership cards.
+ * Create these on your products in Shopify (Settings → Custom data → Products)
+ * and enable "Storefront API access" on each definition.
+ *
+ * Change SHOPIFY_METAFIELD_NS to match your own namespace if you use another.
+ */
+export const METAFIELD_NS =
+  process.env.SHOPIFY_METAFIELD_NS || "custom";
+
+export const METAFIELD_KEYS = ["badge", "cta", "features"] as const;
+
 export const IMAGE_FRAGMENT = /* GraphQL */ `
   fragment ImageFields on Image {
     url
@@ -59,6 +71,14 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
           }
         }
       }
+    }
+    metafields(identifiers: [
+      { namespace: "${METAFIELD_NS}", key: "badge" }
+      { namespace: "${METAFIELD_NS}", key: "cta" }
+      { namespace: "${METAFIELD_NS}", key: "features" }
+    ]) {
+      key
+      value
     }
   }
   ${IMAGE_FRAGMENT}

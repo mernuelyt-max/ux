@@ -70,16 +70,32 @@ export async function shopifyFetch<T>({
 
 // ── Normalizers ────────────────────────────────────────────────
 
-type RawProduct = Omit<Product, "images" | "variants"> & {
+type RawMetafield = { key: string; value: string } | null;
+
+type RawProduct = Omit<Product, "images" | "variants" | "metafields"> & {
   images: Connection<Product["images"][number]>;
   variants: Connection<ProductVariant>;
+  metafields?: RawMetafield[];
 };
+
+/** Storefront returns metafields(identifiers:) as a positional array with
+ *  nulls for missing entries. Flatten it into a { key: value } record. */
+function normalizeMetafields(
+  raw: RawMetafield[] | undefined
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const mf of raw ?? []) {
+    if (mf?.key && mf.value != null) out[mf.key] = mf.value;
+  }
+  return out;
+}
 
 function normalizeProduct(node: RawProduct): Product {
   return {
     ...node,
     images: node.images?.edges.map((e) => e.node) ?? [],
     variants: node.variants?.edges.map((e) => e.node) ?? [],
+    metafields: normalizeMetafields(node.metafields),
   };
 }
 

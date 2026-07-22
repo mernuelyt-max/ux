@@ -62,6 +62,7 @@ npm run build && npm run start
 | `SHOPIFY_STORE_DOMAIN`      | `tu-tienda.myshopify.com` (sin `https://`)              |
 | `SHOPIFY_STOREFRONT_TOKEN`  | Storefront API access token (alcance público)           |
 | `SHOPIFY_API_VERSION`       | Versión de la API (por defecto `2024-10`)               |
+| `SHOPIFY_METAFIELD_NS`      | Namespace de los metafields de producto (por defecto `custom`) |
 | `NEXT_PUBLIC_SITE_URL`      | URL pública del sitio (para metadata/canonical)         |
 
 ## Modo demo (fallback automático)
@@ -77,21 +78,40 @@ hasta que exista el producto real en Shopify.
 ### Cómo mapear tus membresías reales
 
 Crea cada membresía como **producto** en Shopify. Para enriquecer las
-tarjetas puedes usar estos campos:
+tarjetas usa estos campos (el storefront ya los lee automáticamente):
 
 - **Tags**: añade `destacado` (o `vip`) al plan que quieres resaltar como
   "Más popular".
 - **Precio de comparación** (`compare-at price`): se muestra tachado como
   precio de lanzamiento.
-- **Metafields** opcionales (namespace libre, mapea en `fragments.ts` si los
-  añades a la query):
-  - `badge` — etiqueta superior (ej. "Más popular", "Cupos limitados")
-  - `cta` — texto del botón (ej. "Quiero ser VIP")
-  - `features` — beneficios separados por `|`
+- **Metafields** (namespace `custom` por defecto, configurable con
+  `SHOPIFY_METAFIELD_NS`):
+  - `badge` — texto de una línea — etiqueta superior (ej. "Más popular").
+  - `cta` — texto de una línea — texto del botón (ej. "Quiero ser VIP").
+  - `features` — beneficios. Acepta **lista** (`list.single_line_text_field`)
+    o **texto** separado por `|` o saltos de línea.
+
+**Importante:** cada definición de metafield debe tener activado el acceso a
+la **Storefront API** (Shopify → *Configuración → Datos personalizados →
+Productos → (tu definición) → "Storefront API access"*), o no llegarán al
+storefront.
 
 > Para cobros recurrentes reales (suscripción mensual), usa una app de
-> subscripciones de Shopify (Shopify Subscriptions, Recharge, etc.). El
+> suscripciones de Shopify (Shopify Subscriptions, Recharge, etc.). El
 > storefront ya lleva al checkout nativo de Shopify vía `checkoutUrl`.
+
+### Verificar la conexión
+
+Con el token en `.env.local`, ejecuta:
+
+```bash
+npm run shopify:check
+```
+
+Confirma que el token funciona e imprime tu tienda, tus productos y qué
+metafields detecta en cada uno — así sabes de inmediato si el diseño ya está
+consumiendo tus datos reales o sigue en modo demo. Un `401/403` significa
+token inválido o sin permisos de Storefront API.
 
 ## Arquitectura
 
@@ -114,6 +134,9 @@ src/
     ├── actions.ts            # Server Actions del carrito (cookie httpOnly)
     ├── constants.ts
     └── utils.ts              # formato de moneda, helpers
+
+scripts/
+└── check-shopify.mjs        # Verificador de conexión (npm run shopify:check)
 ```
 
 **Flujo del carrito:** Server Actions crean/actualizan un carrito Shopify y
