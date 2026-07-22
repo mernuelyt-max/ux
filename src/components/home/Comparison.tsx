@@ -19,10 +19,10 @@ export function Comparison() {
         </h2>
       </Reveal>
 
-      <div className="mx-auto mt-14 max-w-3xl overflow-hidden rounded-xl2 border border-ink-600">
+      <div className="mx-auto mt-14 max-w-3xl overflow-hidden rounded-xl2 border border-paper-300">
         <div className="grid grid-cols-2 text-sm font-bold uppercase tracking-wider">
-          <div className="bg-ink-800 px-6 py-4 text-muted">Sin U del Closer</div>
-          <div className="bg-gold-500/10 px-6 py-4 text-gold-300">
+          <div className="bg-paper-0 px-6 py-4 text-muted">Sin U del Closer</div>
+          <div className="bg-gold-500/10 px-6 py-4 text-gold-700">
             Con U del Closer
           </div>
         </div>
@@ -31,8 +31,8 @@ export function Comparison() {
             key={row.after}
             delay={i * 80}
             from="none"
-            className={`grid grid-cols-2 border-t border-ink-700 ${
-              i % 2 ? "bg-ink-900/40" : ""
+            className={`grid grid-cols-2 border-t border-paper-200 ${
+              i % 2 ? "bg-paper-100" : ""
             }`}
           >
             <div className="flex items-center gap-3 px-6 py-4 text-muted">
@@ -42,8 +42,8 @@ export function Comparison() {
               </span>
             </div>
             <div className="flex items-center gap-3 bg-gold-500/[0.04] px-6 py-4">
-              <span className="text-gold-400">✓</span>
-              <span className="text-cream/90">{row.after}</span>
+              <span className="text-gold-600">✓</span>
+              <span className="text-ink-800">{row.after}</span>
             </div>
           </Reveal>
         ))}

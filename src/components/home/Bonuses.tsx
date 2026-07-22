@@ -29,7 +29,7 @@ const BONUSES = [
 
 export function Bonuses() {
   return (
-    <section className="bg-ink-900/40 py-20 md:py-28">
+    <section className="bg-paper-100 py-20 md:py-28">
       <div className="container-page">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">Bonos incluidos</span>
@@ -39,7 +39,7 @@ export function Bonuses() {
           </h2>
           <p className="mt-4 text-muted">
             Incluidos sin costo adicional en tu membresía. Valor combinado de más
-            de <strong className="text-cream">$690</strong>.
+            de <strong className="text-ink-900">$690</strong>.
           </p>
         </Reveal>
 
@@ -47,7 +47,7 @@ export function Bonuses() {
           {BONUSES.map((bonus, i) => (
             <Reveal key={bonus.title} delay={i * 100}>
               <div className="card group relative h-full overflow-hidden p-7">
-                <div className="absolute right-4 top-4 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-400">
+                <div className="absolute right-4 top-4 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-600">
                   {bonus.value}
                 </div>
                 <div className="text-4xl transition-transform duration-300 group-hover:scale-110">

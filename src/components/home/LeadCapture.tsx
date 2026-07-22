@@ -17,8 +17,7 @@ export function LeadCapture() {
 
   return (
     <section className="container-page py-16">
-      <div className="relative overflow-hidden rounded-xl2 border border-ink-600 bg-ink-800/70 p-8 md:p-12">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-gold-gradient opacity-20 blur-3xl animate-glow-pulse" />
+      <div className="relative overflow-hidden rounded-xl2 border border-paper-300 bg-paper-0 p-8 md:p-12">
         <div className="relative grid items-center gap-8 md:grid-cols-[1.2fr_1fr]">
           <div>
             <span className="eyebrow">Guía gratis</span>
@@ -33,7 +32,7 @@ export function LeadCapture() {
 
           <form onSubmit={handleSubmit} className="w-full">
             {status === "ok" ? (
-              <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-5 text-center text-emerald-400">
+              <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-5 text-center text-emerald-600">
                 <p className="text-2xl">✅</p>
                 <p className="mt-2 font-semibold">¡Listo! Revisa tu correo.</p>
               </div>
@@ -45,7 +44,7 @@ export function LeadCapture() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@correo.com"
-                  className="w-full rounded-full border border-ink-600 bg-ink-900 px-5 py-3 text-sm text-cream placeholder:text-muted focus:border-gold-500/60 focus:outline-none focus:ring-2 focus:ring-gold-400/40"
+                  className="w-full rounded-full border border-paper-300 bg-paper-0 px-5 py-3 text-sm text-ink-900 placeholder:text-muted focus:border-gold-500/60 focus:outline-none focus:ring-2 focus:ring-gold-400/40"
                 />
                 <button type="submit" className="btn-primary whitespace-nowrap">
                   Enviármela

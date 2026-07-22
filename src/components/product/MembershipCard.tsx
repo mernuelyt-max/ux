@@ -22,8 +22,8 @@ export function MembershipCard({
     <div
       className={`relative flex w-full flex-col rounded-xl2 border p-7 transition-transform duration-300 ${
         featured
-          ? "border-gold-500/60 bg-ink-800 shadow-gold md:-translate-y-3 md:scale-[1.02]"
-          : "border-ink-600 bg-ink-800/60 hover:-translate-y-1"
+          ? "border-gold-500/60 bg-paper-0 shadow-gold md:-translate-y-3 md:scale-[1.02]"
+          : "border-paper-300 bg-paper-0 hover:-translate-y-1"
       }`}
     >
       {badge && (
@@ -31,7 +31,7 @@ export function MembershipCard({
           className={`absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-1 text-xs font-bold ${
             featured
               ? "bg-gold-gradient text-ink-950"
-              : "border border-ink-600 bg-ink-900 text-gold-300"
+              : "border border-paper-300 bg-paper-0 text-gold-700"
           }`}
         >
           {badge}
@@ -52,7 +52,7 @@ export function MembershipCard({
       {compareAt && (
         <p className="mt-1 text-sm text-muted">
           <span className="line-through">{formatMoney(compareAt)}</span>{" "}
-          <span className="font-semibold text-emerald-400">
+          <span className="font-semibold text-emerald-600">
             precio de lanzamiento
           </span>
         </p>
@@ -62,7 +62,7 @@ export function MembershipCard({
         {features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
             <svg
-              className="mt-0.5 h-4 w-4 flex-none text-gold-400"
+              className="mt-0.5 h-4 w-4 flex-none text-gold-600"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -72,7 +72,7 @@ export function MembershipCard({
                 clipRule="evenodd"
               />
             </svg>
-            <span className="text-cream/90">{feature}</span>
+            <span className="text-ink-800">{feature}</span>
           </li>
         ))}
       </ul>
@@ -92,7 +92,7 @@ export function MembershipCard({
         )}
         <Link
           href={`/producto/${product.handle}`}
-          className="mt-3 block text-center text-xs text-muted underline hover:text-gold-400"
+          className="mt-3 block text-center text-xs text-muted underline hover:text-gold-600"
         >
           Ver todo lo que incluye
         </Link>

@@ -17,7 +17,7 @@ export default async function MembresiasPage() {
 
   return (
     <>
-      <section className="border-b border-ink-700 bg-ink-radial">
+      <section className="border-b border-paper-200 bg-paper-radial">
         <div className="container-page py-16 text-center md:py-20">
           <span className="eyebrow">Membresías</span>
           <h1 className="mx-auto mt-4 max-w-3xl font-display text-4xl font-extrabold sm:text-5xl">

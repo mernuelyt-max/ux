@@ -52,7 +52,7 @@ export function Benefits() {
         {BENEFITS.map((benefit, i) => (
           <Reveal key={benefit.title} delay={(i % 3) * 100}>
             <div className="card group h-full p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-ink-700 text-2xl transition-transform duration-300 group-hover:scale-110">
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-paper-100 text-2xl transition-transform duration-300 group-hover:scale-110">
                 {benefit.icon}
               </div>
               <h3 className="mt-5 text-lg font-bold">{benefit.title}</h3>

@@ -33,7 +33,7 @@ const TESTIMONIALS = [
 
 export function Testimonials() {
   return (
-    <section id="resultados" className="bg-ink-900/40 py-20 md:py-28">
+    <section id="resultados" className="bg-paper-100 py-20 md:py-28">
       <div className="container-page">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">Resultados reales</span>
@@ -52,11 +52,11 @@ export function Testimonials() {
               from={i % 2 ? "right" : "left"}
               className="card flex flex-col p-7"
             >
-              <div className="text-gold-400">★★★★★</div>
-              <blockquote className="mt-4 flex-1 text-lg text-cream/90">
+              <div className="text-gold-600">★★★★★</div>
+              <blockquote className="mt-4 flex-1 text-lg text-ink-800">
                 “{t.quote}”
               </blockquote>
-              <figcaption className="mt-6 flex items-center justify-between border-t border-ink-700 pt-5">
+              <figcaption className="mt-6 flex items-center justify-between border-t border-paper-200 pt-5">
                 <div className="flex items-center gap-3">
                   <span className="grid h-10 w-10 place-items-center rounded-full bg-gold-gradient font-bold text-ink-950">
                     {t.name.charAt(0)}
@@ -66,7 +66,7 @@ export function Testimonials() {
                     <p className="text-xs text-muted">{t.role}</p>
                   </div>
                 </div>
-                <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-400">
+                <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-600">
                   {t.result}
                 </span>
               </figcaption>

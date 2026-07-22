@@ -14,7 +14,6 @@ export function Mentor() {
         <Reveal from="left">
           <div className="relative mx-auto max-w-sm">
             {/* Animated glow behind the avatar */}
-            <div className="absolute inset-0 -z-10 rounded-full bg-gold-gradient opacity-40 blur-3xl animate-glow-pulse" />
             <div className="card grid aspect-square place-items-center p-0">
               <div className="text-center">
                 <div className="text-7xl animate-float">🎤</div>
@@ -42,7 +41,7 @@ export function Mentor() {
             {CREDS.map((c) => (
               <div
                 key={c.label}
-                className="rounded-xl border border-ink-600 bg-ink-800/60 p-4 text-center"
+                className="rounded-xl border border-paper-300 bg-paper-0 p-4 text-center"
               >
                 <p className="font-display text-2xl font-extrabold gold-text">
                   <Counter value={c.value} prefix={c.prefix} suffix={c.suffix} />

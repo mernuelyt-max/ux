@@ -42,7 +42,7 @@ export function AddToCartButton({
         {isPending ? "Agregando…" : available ? label : "No disponible"}
       </button>
       {error && (
-        <p className="mt-2 text-center text-xs text-gold-300">{error}</p>
+        <p className="mt-2 text-center text-xs text-gold-700">{error}</p>
       )}
     </div>
   );

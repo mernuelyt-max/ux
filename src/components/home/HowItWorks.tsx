@@ -40,7 +40,7 @@ export function HowItWorks() {
         {STEPS.map((step, i) => (
           <Reveal key={step.n} delay={i * 140} className="relative">
             <div className="card h-full p-8 text-center">
-              <div className="mx-auto grid h-20 w-20 place-items-center rounded-full border border-gold-500/40 bg-ink-900 font-display text-2xl font-extrabold gold-text">
+              <div className="mx-auto grid h-20 w-20 place-items-center rounded-full border border-gold-500/40 bg-paper-0 font-display text-2xl font-extrabold gold-text">
                 {step.n}
               </div>
               <h3 className="mt-6 text-lg font-bold">{step.title}</h3>

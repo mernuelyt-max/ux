@@ -1,6 +1,24 @@
 import type { Metadata, Viewport } from "next";
+import { Jost, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/constants";
+
+// Typography (UI/UX Pro Max recommendation): luxury minimalist pairing.
+const sans = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const display = Bodoni_Moda({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
+  adjustFontFallback: false,
+  fallback: ["Georgia", "Times New Roman", "serif"],
+});
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -42,7 +60,7 @@ export default async function RootLayout({
   const initialCart = await getCartAction();
 
   return (
-    <html lang="es">
+    <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>
         <CartProvider initialCart={initialCart}>
           <Header />

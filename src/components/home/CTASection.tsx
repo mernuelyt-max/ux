@@ -4,9 +4,8 @@ import { Reveal } from "@/components/ui/Reveal";
 export function CTASection() {
   return (
     <section className="container-page py-20">
-      <Reveal className="relative overflow-hidden rounded-xl2 border border-gold-500/30 bg-ink-800 p-10 text-center md:p-16">
-        <div className="pointer-events-none absolute inset-0 bg-ink-radial opacity-70" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold-500/20 blur-[90px] animate-glow-pulse" />
+      <Reveal className="relative overflow-hidden rounded-xl2 border border-gold-500/30 bg-paper-0 p-10 text-center md:p-16">
+        <div className="pointer-events-none absolute inset-0 bg-paper-radial opacity-70" />
         <div className="relative">
           <h2 className="mx-auto max-w-2xl font-display text-3xl font-extrabold sm:text-4xl md:text-5xl">
             Tu próximo cierre empieza{" "}

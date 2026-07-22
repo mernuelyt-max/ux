@@ -27,14 +27,14 @@ export function CartDrawer() {
         role="dialog"
         aria-label="Carrito"
         className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col
-          border-l border-ink-600 bg-ink-900 shadow-2xl transition-transform
+          border-l border-paper-300 bg-paper-0 shadow-2xl transition-transform
           duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        <header className="flex items-center justify-between border-b border-ink-700 px-6 py-5">
+        <header className="flex items-center justify-between border-b border-paper-200 px-6 py-5">
           <h2 className="text-lg font-bold">Tu selección</h2>
           <button
             onClick={closeCart}
-            className="rounded-full p-2 text-muted hover:bg-ink-700 hover:text-cream"
+            className="rounded-full p-2 text-muted hover:bg-paper-100 hover:text-ink-900"
             aria-label="Cerrar carrito"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -60,10 +60,10 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
-            <ul className="flex-1 divide-y divide-ink-700 overflow-y-auto px-6">
+            <ul className="flex-1 divide-y divide-paper-200 overflow-y-auto px-6">
               {lines.map((line) => (
                 <li key={line.id} className="flex gap-4 py-5">
-                  <div className="flex h-16 w-16 flex-none items-center justify-center rounded-lg border border-ink-600 bg-ink-800 text-2xl">
+                  <div className="flex h-16 w-16 flex-none items-center justify-center rounded-lg border border-paper-300 bg-paper-0 text-2xl">
                     {line.merchandise.product.featuredImage ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -83,13 +83,13 @@ export function CartDrawer() {
                       {line.merchandise.title}
                     </p>
                     <div className="mt-2 flex items-center gap-3">
-                      <div className="inline-flex items-center rounded-full border border-ink-600">
+                      <div className="inline-flex items-center rounded-full border border-paper-300">
                         <button
                           onClick={() =>
                             updateItem(line.id, line.quantity - 1)
                           }
                           disabled={isPending}
-                          className="px-3 py-1 text-muted hover:text-cream"
+                          className="px-3 py-1 text-muted hover:text-ink-900"
                           aria-label="Reducir cantidad"
                         >
                           −
@@ -102,7 +102,7 @@ export function CartDrawer() {
                             updateItem(line.id, line.quantity + 1)
                           }
                           disabled={isPending}
-                          className="px-3 py-1 text-muted hover:text-cream"
+                          className="px-3 py-1 text-muted hover:text-ink-900"
                           aria-label="Aumentar cantidad"
                         >
                           +
@@ -111,7 +111,7 @@ export function CartDrawer() {
                       <button
                         onClick={() => removeItem(line.id)}
                         disabled={isPending}
-                        className="text-xs text-muted underline hover:text-gold-400"
+                        className="text-xs text-muted underline hover:text-gold-600"
                       >
                         Quitar
                       </button>
@@ -124,7 +124,7 @@ export function CartDrawer() {
               ))}
             </ul>
 
-            <footer className="border-t border-ink-700 px-6 py-5">
+            <footer className="border-t border-paper-200 px-6 py-5">
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-muted">Subtotal</span>
                 <span className="text-lg font-bold">

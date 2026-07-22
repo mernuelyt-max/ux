@@ -45,7 +45,7 @@ export function FAQ() {
             >
               <summary className="flex list-none items-center justify-between gap-4 p-6 font-semibold">
                 {faq.q}
-                <span className="grid h-7 w-7 flex-none place-items-center rounded-full border border-ink-600 text-gold-400 transition-transform group-open:rotate-45">
+                <span className="grid h-7 w-7 flex-none place-items-center rounded-full border border-paper-300 text-gold-600 transition-transform group-open:rotate-45">
                   +
                 </span>
               </summary>

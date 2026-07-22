@@ -15,7 +15,7 @@ const NICHES = [
 
 export function LogosMarquee() {
   return (
-    <section className="border-b border-ink-700 bg-ink-950 py-10">
+    <section className="border-b border-paper-200 bg-paper-50 py-10">
       <p className="container-page mb-6 text-center text-xs uppercase tracking-[0.2em] text-muted">
         Nuestros closers cierran en todo tipo de industrias
       </p>
@@ -23,9 +23,9 @@ export function LogosMarquee() {
         {NICHES.map((niche) => (
           <span
             key={niche}
-            className="flex items-center gap-3 text-lg font-semibold text-cream/40"
+            className="flex items-center gap-3 text-lg font-semibold text-ink-600/40"
           >
-            <span className="text-gold-500">◆</span>
+            <span className="text-gold-600">◆</span>
             {niche}
           </span>
         ))}

@@ -4,7 +4,7 @@ import { NAV_LINKS, SITE } from "@/lib/constants";
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-ink-700 bg-ink-950">
+    <footer className="border-t border-paper-200 bg-paper-50">
       <div className="container-page py-14">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
@@ -29,7 +29,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-cream/80 hover:text-gold-400"
+                    className="text-ink-700 hover:text-gold-600"
                   >
                     {link.label}
                   </Link>
@@ -44,12 +44,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/terminos" className="text-cream/80 hover:text-gold-400">
+                <Link href="/terminos" className="text-ink-700 hover:text-gold-600">
                   Términos
                 </Link>
               </li>
               <li>
-                <Link href="/privacidad" className="text-cream/80 hover:text-gold-400">
+                <Link href="/privacidad" className="text-ink-700 hover:text-gold-600">
                   Privacidad
                 </Link>
               </li>
@@ -57,7 +57,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-ink-800 pt-6 text-xs text-muted sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-paper-200 pt-6 text-xs text-muted sm:flex-row">
           <p>
             © {year} {SITE.name}. Todos los derechos reservados.
           </p>

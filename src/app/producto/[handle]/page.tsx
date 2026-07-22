@@ -30,7 +30,7 @@ export default async function ProductPage({ params }: Params) {
 
   return (
     <>
-      <section className="border-b border-ink-700 bg-ink-radial">
+      <section className="border-b border-paper-200 bg-paper-radial">
         <div className="container-page grid gap-12 py-14 md:grid-cols-2 md:py-20">
           {/* Media */}
           <div className="card grid aspect-square place-items-center overflow-hidden p-0">
@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: Params) {
           <div>
             <Link
               href="/membresias"
-              className="text-sm text-muted hover:text-gold-400"
+              className="text-sm text-muted hover:text-gold-600"
             >
               ← Todas las membresías
             </Link>
@@ -82,7 +82,7 @@ export default async function ProductPage({ params }: Params) {
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-3">
                     <svg
-                      className="mt-0.5 h-5 w-5 flex-none text-gold-400"
+                      className="mt-0.5 h-5 w-5 flex-none text-gold-600"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -118,7 +118,7 @@ export default async function ProductPage({ params }: Params) {
       {product.descriptionHtml && (
         <section className="container-page py-16">
           <div
-            className="prose prose-invert mx-auto max-w-3xl text-cream/90"
+            className="prose prose-invert mx-auto max-w-3xl text-ink-800"
             dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
           />
         </section>

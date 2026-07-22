@@ -10,7 +10,7 @@ const STATS = [
 
 export function TrustBar() {
   return (
-    <section className="border-y border-ink-700 bg-ink-900/50">
+    <section className="border-y border-paper-200 bg-paper-100">
       <div className="container-page grid grid-cols-2 gap-6 py-10 md:grid-cols-4">
         {STATS.map((stat, i) => (
           <Reveal key={stat.label} delay={i * 90} className="text-center">

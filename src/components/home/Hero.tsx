@@ -2,10 +2,8 @@ import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink-radial">
+    <section className="relative overflow-hidden bg-paper-radial">
       {/* Animated ambient glows */}
-      <div className="pointer-events-none absolute -left-24 top-10 -z-0 h-72 w-72 rounded-full bg-gold-500/20 blur-[100px] animate-glow-pulse" />
-      <div className="pointer-events-none absolute -right-16 bottom-0 -z-0 h-64 w-64 rounded-full bg-emerald-500/10 blur-[100px] animate-float" />
       <div className="container-page relative grid gap-12 py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-28">
         <div className="animate-fade-up">
           <span className="eyebrow">
@@ -20,7 +18,7 @@ export function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-lg text-muted">
-            Únete a la comunidad de <strong className="text-cream">U del Closer</strong> y
+            Únete a la comunidad de <strong className="text-ink-900">U del Closer</strong> y
             accede al sistema, la mentoría y los scripts que usan los closers que
             facturan de verdad. Sin humo. Puro cierre.
           </p>
@@ -49,19 +47,19 @@ export function Hero() {
                 {["#FFC93C", "#10B981", "#F5B301", "#A66F00"].map((c) => (
                   <span
                     key={c}
-                    className="h-7 w-7 rounded-full border-2 border-ink-950"
+                    className="h-7 w-7 rounded-full border-2 border-paper-0"
                     style={{ background: c }}
                   />
                 ))}
               </div>
               <span>
-                <strong className="text-cream">+2.400</strong> miembros activos
+                <strong className="text-ink-900">+2.400</strong> miembros activos
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-gold-400">★★★★★</span>
+              <span className="text-gold-600">★★★★★</span>
               <span>
-                <strong className="text-cream">4.9</strong> / 5 valoración
+                <strong className="text-ink-900">4.9</strong> / 5 valoración
               </span>
             </div>
           </div>
@@ -92,9 +90,9 @@ export function Hero() {
                 <div key={row.label}>
                   <div className="mb-1 flex justify-between text-xs text-muted">
                     <span>{row.label}</span>
-                    <span className="text-cream">{row.value}</span>
+                    <span className="text-ink-900">{row.value}</span>
                   </div>
-                  <div className="h-2 rounded-full bg-ink-700">
+                  <div className="h-2 rounded-full bg-paper-100">
                     <div
                       className="h-2 rounded-full bg-gold-gradient"
                       style={{ width: row.w }}

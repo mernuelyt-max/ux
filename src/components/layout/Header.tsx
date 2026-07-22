@@ -11,7 +11,7 @@ export function Header() {
   const count = cart?.totalQuantity ?? 0;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-700/70 bg-ink-950/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 border-b border-paper-200 bg-paper-50/80 backdrop-blur-lg">
       <div className="container-page flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display font-extrabold">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold-gradient text-ink-950">
@@ -28,7 +28,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-cream"
+              className="text-sm font-medium text-muted transition-colors hover:text-ink-900"
             >
               {link.label}
             </Link>
@@ -38,7 +38,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <button
             onClick={openCart}
-            className="relative rounded-full border border-ink-600 bg-ink-800 p-2.5 hover:border-gold-500/60"
+            className="relative rounded-full border border-paper-300 bg-paper-0 p-2.5 hover:border-gold-500/60"
             aria-label="Abrir carrito"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -63,7 +63,7 @@ export function Header() {
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="rounded-full border border-ink-600 bg-ink-800 p-2.5 md:hidden"
+            className="rounded-full border border-paper-300 bg-paper-0 p-2.5 md:hidden"
             aria-label="Abrir menú"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -79,14 +79,14 @@ export function Header() {
       </div>
 
       {mobileOpen && (
-        <nav className="border-t border-ink-700 bg-ink-900 md:hidden">
+        <nav className="border-t border-paper-200 bg-paper-0 md:hidden">
           <div className="container-page flex flex-col py-3">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="py-2.5 text-sm font-medium text-muted hover:text-cream"
+                className="py-2.5 text-sm font-medium text-muted hover:text-ink-900"
               >
                 {link.label}
               </Link>
