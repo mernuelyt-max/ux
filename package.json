@@ -1,0 +1,30 @@
+{
+  "name": "u-del-closer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "U del Closer — headless VIP membership storefront (Next.js 14 + Shopify Storefront API)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.2.33",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.19",
+    "postcss": "^8.5.10",
+    "tailwindcss": "3.4.10",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

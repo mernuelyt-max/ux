@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* System-first font stacks — no external font fetch, zero layout shift. */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ink-950 text-cream antialiased;
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    @apply bg-gold-500 text-ink-950;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+      text-sm font-bold transition-all duration-200 focus:outline-none
+      focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2
+      focus-visible:ring-offset-ink-950 disabled:cursor-not-allowed
+      disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-gold-gradient text-ink-950 shadow-gold hover:brightness-105
+      hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply btn border border-ink-600 bg-ink-800/60 text-cream
+      hover:border-gold-500/60 hover:bg-ink-700;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-gold-500/30
+      bg-gold-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest
+      text-gold-300;
+  }
+
+  .card {
+    @apply rounded-xl2 border border-ink-600 bg-ink-800/70 shadow-card
+      backdrop-blur;
+  }
+
+  .gold-text {
+    @apply bg-gold-gradient bg-clip-text text-transparent;
+  }
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
