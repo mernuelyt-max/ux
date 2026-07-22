@@ -1,8 +1,10 @@
+import { Reveal } from "@/components/ui/Reveal";
+
 export function Guarantee() {
   return (
     <section className="container-page py-16">
-      <div className="card flex flex-col items-center gap-6 p-8 text-center md:flex-row md:p-10 md:text-left">
-        <div className="grid h-20 w-20 flex-none place-items-center rounded-full border-2 border-emerald-500/40 bg-emerald-500/10 text-4xl">
+      <Reveal className="card flex flex-col items-center gap-6 p-8 text-center md:flex-row md:p-10 md:text-left">
+        <div className="grid h-20 w-20 flex-none place-items-center rounded-full border-2 border-emerald-500/40 bg-emerald-500/10 text-4xl animate-float">
           🛡️
         </div>
         <div className="flex-1">
@@ -15,7 +17,7 @@ export function Guarantee() {
             preguntas incómodas.
           </p>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

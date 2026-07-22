@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/ui/Reveal";
+
 const TESTIMONIALS = [
   {
     name: "Marcos R.",
@@ -33,17 +35,23 @@ export function Testimonials() {
   return (
     <section id="resultados" className="bg-ink-900/40 py-20 md:py-28">
       <div className="container-page">
-        <div className="mx-auto max-w-2xl text-center">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">Resultados reales</span>
           <h2 className="mt-4 font-display text-3xl font-extrabold sm:text-4xl">
             Los números hablan.{" "}
             <span className="gold-text">Los cierres, más</span>
           </h2>
-        </div>
+        </Reveal>
 
         <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="card flex flex-col p-7">
+          {TESTIMONIALS.map((t, i) => (
+            <Reveal
+              as="figure"
+              key={t.name}
+              delay={(i % 2) * 120}
+              from={i % 2 ? "right" : "left"}
+              className="card flex flex-col p-7"
+            >
               <div className="text-gold-400">★★★★★</div>
               <blockquote className="mt-4 flex-1 text-lg text-cream/90">
                 “{t.quote}”
@@ -62,7 +70,7 @@ export function Testimonials() {
                   {t.result}
                 </span>
               </figcaption>
-            </figure>
+            </Reveal>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { Product } from "@/lib/shopify/types";
 import { MembershipCard } from "./MembershipCard";
+import { Reveal } from "@/components/ui/Reveal";
 
 /** Heuristic: the "featured" tier is the one tagged destacado/vip, else the middle one. */
 function pickFeaturedIndex(products: Product[]): number {
@@ -22,11 +23,12 @@ export function MembershipGrid({ products }: { products: Product[] }) {
   return (
     <div className="grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
       {products.map((product, i) => (
-        <MembershipCard
-          key={product.id}
-          product={product}
-          featured={i === featuredIndex}
-        />
+        <Reveal key={product.id} delay={i * 120} from="up" className="flex">
+          <MembershipCard
+            product={product}
+            featured={i === featuredIndex}
+          />
+        </Reveal>
       ))}
     </div>
   );

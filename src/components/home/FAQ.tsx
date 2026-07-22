@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/ui/Reveal";
+
 const FAQS = [
   {
     q: "¿Necesito experiencia previa en ventas?",
@@ -25,17 +27,20 @@ export function FAQ() {
   return (
     <section id="faq" className="container-page py-20 md:py-28">
       <div className="mx-auto max-w-3xl">
-        <div className="text-center">
+        <Reveal className="text-center">
           <span className="eyebrow">Preguntas frecuentes</span>
           <h2 className="mt-4 font-display text-3xl font-extrabold sm:text-4xl">
             Resolvemos tus <span className="gold-text">dudas</span>
           </h2>
-        </div>
+        </Reveal>
 
         <div className="mt-12 space-y-4">
-          {FAQS.map((faq) => (
-            <details
+          {FAQS.map((faq, i) => (
+            <Reveal
+              as="details"
               key={faq.q}
+              delay={i * 70}
+              from="up"
               className="group card overflow-hidden p-0 [&_summary]:cursor-pointer"
             >
               <summary className="flex list-none items-center justify-between gap-4 p-6 font-semibold">
@@ -45,7 +50,7 @@ export function FAQ() {
                 </span>
               </summary>
               <div className="px-6 pb-6 text-muted">{faq.a}</div>
-            </details>
+            </Reveal>
           ))}
         </div>
       </div>

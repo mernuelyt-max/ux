@@ -3,7 +3,10 @@ import Link from "next/link";
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-ink-radial">
-      <div className="container-page grid gap-12 py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-28">
+      {/* Animated ambient glows */}
+      <div className="pointer-events-none absolute -left-24 top-10 -z-0 h-72 w-72 rounded-full bg-gold-500/20 blur-[100px] animate-glow-pulse" />
+      <div className="pointer-events-none absolute -right-16 bottom-0 -z-0 h-64 w-64 rounded-full bg-emerald-500/10 blur-[100px] animate-float" />
+      <div className="container-page relative grid gap-12 py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center md:py-28">
         <div className="animate-fade-up">
           <span className="eyebrow">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold-400" />
@@ -66,7 +69,7 @@ export function Hero() {
 
         {/* Visual card */}
         <div className="animate-fade-up [animation-delay:120ms]">
-          <div className="card relative mx-auto max-w-sm p-6">
+          <div className="card relative mx-auto max-w-sm p-6 md:animate-float">
             <div className="absolute -right-3 -top-3 rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-ink-950">
               EN VIVO
             </div>

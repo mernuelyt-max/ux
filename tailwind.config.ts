@@ -67,9 +67,34 @@ const config: Config = {
         shimmer: {
           "100%": { transform: "translateX(100%)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
+          "50%": { opacity: "0.85", transform: "scale(1.06)" },
+        },
+        "gradient-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "spin-slow": {
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out both",
+        marquee: "marquee 28s linear infinite",
+        "marquee-slow": "marquee 45s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 5s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 6s ease infinite",
+        "spin-slow": "spin-slow 22s linear infinite",
       },
     },
   },

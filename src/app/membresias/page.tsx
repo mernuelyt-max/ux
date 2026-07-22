@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getProducts } from "@/lib/shopify";
 import { MembershipGrid } from "@/components/product/MembershipGrid";
+import { Comparison } from "@/components/home/Comparison";
+import { Bonuses } from "@/components/home/Bonuses";
 import { Guarantee } from "@/components/home/Guarantee";
 import { FAQ } from "@/components/home/FAQ";
 
@@ -33,6 +35,8 @@ export default async function MembresiasPage() {
         <MembershipGrid products={products} />
       </section>
 
+      <Bonuses />
+      <Comparison />
       <Guarantee />
       <FAQ />
     </>

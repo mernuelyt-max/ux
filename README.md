@@ -120,6 +120,46 @@ src/
 guardan el `cartId` en una cookie `httpOnly`. El checkout redirige al
 `checkoutUrl` nativo de Shopify (pago seguro, PCI a cargo de Shopify).
 
+## Secciones de la landing
+
+Flujo pensado para conversión, de arriba a abajo:
+
+1. **Barra de urgencia** — oferta de lanzamiento.
+2. **Hero** — promesa + prueba social + glows animados.
+3. **Marquee de nichos** — industrias donde cierran los miembros (loop infinito).
+4. **Barra de métricas** — contadores animados al hacer scroll.
+5. **Beneficios** — 6 pilares de la membresía.
+6. **Cómo funciona** — 3 pasos.
+7. **Antes / después** — tabla comparativa de transformación.
+8. **Membresías** — grid de precios con plan destacado.
+9. **Bonos incluidos** — extras con valor percibido.
+10. **Conoce a tu mentor** — autoridad + credenciales animadas.
+11. **¿Es para ti?** — cualificación (sí / no).
+12. **Testimonios** — resultados cuantificados.
+13. **Garantía** — reversión de riesgo (7 días).
+14. **FAQ** — manejo de objeciones (acordeón nativo).
+15. **Captura de leads** — imán de correo (guía gratis).
+16. **CTA final** — cierre.
+
+## Animaciones
+
+Todo respeta `prefers-reduced-motion`.
+
+- **`Reveal`** (`components/ui/Reveal.tsx`) — revelado al hacer scroll con
+  `IntersectionObserver`; soporta dirección (`up/down/left/right`), `delay`
+  para stagger y render como cualquier etiqueta (`as`).
+- **`Counter`** (`components/ui/Counter.tsx`) — números que cuentan hacia
+  arriba con easing cuando entran en viewport.
+- **`Marquee`** (`components/ui/Marquee.tsx`) — cinta infinita CSS con
+  duplicado sin costura, máscara de degradado y pausa al hover.
+- Keyframes en Tailwind: `marquee`, `float`, `glow-pulse`, `gradient-shift`,
+  `spin-slow`, `fade-up` (ver `tailwind.config.ts`). Glows ambientales
+  animados en Hero, CTA, Mentor y captura de leads; micro-interacciones de
+  hover (elevación + escala) en tarjetas.
+
+> La **captura de leads** es solo frontend (demo). Conéctala a tu ESP
+> (Klaviyo, Mailchimp…) o a una Server Action que cree un customer en Shopify.
+
 ## Decisiones de diseño (CRO + psicología del color)
 
 - **Fondo casi negro (`ink`)** → exclusividad, lujo, foco; el lienzo premium

@@ -20,7 +20,7 @@ export function MembershipCard({
 
   return (
     <div
-      className={`relative flex flex-col rounded-xl2 border p-7 transition-transform duration-300 ${
+      className={`relative flex w-full flex-col rounded-xl2 border p-7 transition-transform duration-300 ${
         featured
           ? "border-gold-500/60 bg-ink-800 shadow-gold md:-translate-y-3 md:scale-[1.02]"
           : "border-ink-600 bg-ink-800/60 hover:-translate-y-1"
