@@ -203,12 +203,53 @@ en un rango cuyo "fix" apunta a la línea 15/16; los aplicables a la 14.x ya
 están backporteados en `14.2.35`. Migrar a Next 16 (breaking) los cerraría
 todos si en el futuro se desea actualizar de major.
 
-## Deploy
+## Deploy en Vercel
 
-Recomendado: **Vercel**. Importa el repo, define las variables de entorno del
-cuadro de arriba y despliega. Recuerda: solo el **Storefront token** va en las
-env vars del frontend.
+El proyecto ya está preparado para Vercel: `vercel.json` (framework + región),
+Node fijado en `.nvmrc`, cabeceras de seguridad en `next.config.mjs`, y
+`robots.ts` + `sitemap.ts` para SEO.
+
+### Opción A — Importar el repo (recomendada)
+
+1. Entra en [vercel.com/new](https://vercel.com/new) e importa
+   `mernuelyt-max/ux`.
+2. Vercel detecta **Next.js** automáticamente (no toques Build/Output).
+3. En **Settings → Git → Production Branch**, elige la rama que quieras
+   publicar (p. ej. `main` tras hacer merge, o la rama de trabajo).
+4. En **Environment Variables** añade (Production + Preview):
+
+   | Variable | Valor |
+   | --- | --- |
+   | `SHOPIFY_STORE_DOMAIN` | `2bv9n7-uv.myshopify.com` |
+   | `SHOPIFY_STOREFRONT_TOKEN` | tu Storefront token |
+   | `SHOPIFY_API_VERSION` | `2024-10` |
+   | `SHOPIFY_METAFIELD_NS` | `custom` |
+   | `NEXT_PUBLIC_SITE_URL` | `https://TU-DOMINIO.vercel.app` |
+
+5. **Deploy**. En cada `git push` a la rama de producción, Vercel redespliega.
+
+> Pon `NEXT_PUBLIC_SITE_URL` con tu dominio final (afecta metadata, `robots` y
+> `sitemap`). Nunca pongas el **Admin token** aquí — solo el Storefront.
+
+### Opción B — Botón de deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmernuelyt-max%2Fux&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_TOKEN,SHOPIFY_API_VERSION,SHOPIFY_METAFIELD_NS,NEXT_PUBLIC_SITE_URL&envDescription=Credenciales%20de%20la%20Storefront%20API%20de%20Shopify&project-name=u-del-closer&repository-name=u-del-closer)
+
+> El botón clona la **rama por defecto** del repo (`main`). Si tu trabajo está
+> en otra rama, haz merge a `main` primero o usa la Opción A y selecciona la
+> rama.
+
+### Opción C — CLI
+
+```bash
+npm i -g vercel
+vercel            # primer deploy (preview)
+vercel --prod     # a producción
 ```
 
-npm run build
+### Verificación local antes del deploy
+
+```bash
+npm run shopify:check   # confirma el token y el catálogo
+npm run build           # build de producción
 ```
