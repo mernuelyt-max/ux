@@ -1,122 +1,149 @@
 <!-- ============================================================
-BLOQUE 2 — U DEL CLOSER · Landing "Guía para convertirte en Closer de Ventas"
-Secciones: 5) Cómo usarlo · 6) Testimonios · 7) CTA Final
+BLOQUE 2 — U DEL CLOSER · Landing estilo Voltra
+Secciones: 6) Cómo usarlo · 7) Reseñas de clientes · 8) CTA Final + barra sticky
 Pegar completo en un SEGUNDO bloque "Liquid personalizado", debajo del Bloque 1.
-PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
+PERSONALIZAR: colores en las variables CSS de .uc2 | URL-IMAGEN-PRODUCTO | VARIANT_ID
 ============================================================ -->
 <style>
 .uc2{
   /* ===== VARIABLES DE COLOR — EDITAR ACÁ (igual que Bloque 1) ===== */
-  --v:#0E3B2E;        /* verde oscuro principal */
-  --v2:#0A2C22;       /* verde más profundo (fondos) */
-  --v3:#1A5A45;       /* verde medio (hovers, detalles) */
-  --cr:#F6F3EC;       /* crema de fondo */
-  --bl:#FFFFFF;       /* blanco */
-  --tx:#1C2B26;       /* texto principal */
-  --tx2:#5A6B64;      /* texto secundario */
-  --au:#C9A227;       /* dorado acento */
-  --au2:#E8B54A;      /* dorado claro */
-  --ok:#2E7D5B;       /* verde éxito */
+  --pt:#2E4B51;      /* verde petróleo (botones, banners oscuros) */
+  --pt2:#223B40;     /* petróleo profundo (hover) */
+  --az:#3F7FB5;      /* azul */
+  --az2:#6FAAD6;     /* azul claro */
+  --sg:#CFE4DE;      /* verde salvia claro */
+  --sg2:#9DBFB4;     /* salvia medio */
+  --tl:#3E8E87;      /* teal (palabras destacadas) */
+  --rd:#D62B4B;      /* rojo (precio tachado) */
+  --gd:#E8B33A;      /* dorado (estrellas) */
+  --bg:#FFFFFF;      /* fondo blanco */
+  --bg2:#F3F6F5;     /* gris verdoso claro */
+  --tx:#17282C;      /* texto principal */
+  --tx2:#5C6B6F;     /* texto secundario */
+  --ln:#E2E8E8;      /* bordes */
   /* ================================================================ */
   font-family:'Helvetica Neue',Arial,sans-serif;
-  color:var(--tx);
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
+  color:var(--tx);line-height:1.5;-webkit-font-smoothing:antialiased;
 }
 .uc2 *,.uc2 *:before,.uc2 *:after{box-sizing:border-box;margin:0;padding:0}
 .uc2 img{max-width:100%;display:block}
 .uc2 .cw{width:100vw;position:relative;left:50%;margin-left:-50vw;overflow-x:hidden}
 .uc2 .uc-in{max-width:1140px;margin:0 auto;padding:0 24px}
-.uc2 h2,.uc2 h3{font-weight:700;line-height:1.15;letter-spacing:-.02em}
-.uc2 .uc-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.12);color:var(--au);border:1px solid rgba(201,162,39,.35);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:100px}
-.uc2 .uc-hd{text-align:center;max-width:640px;margin:0 auto 52px}
-.uc2 .uc-hd h2{font-size:35px;margin:16px 0 12px}
-.uc2 .uc-hd p{color:var(--tx2);font-size:17px}
+.uc2 h2,.uc2 h3{font-weight:700;line-height:1.18;letter-spacing:-.01em}
+.uc2 h2 em{font-style:normal;color:var(--tl)}
+.uc2 .uc-hd{text-align:center;max-width:660px;margin:0 auto 48px}
+.uc2 .uc-hd h2{font-size:33px;margin-bottom:12px}
+.uc2 .uc-hd>p{color:var(--tx2);font-size:16.5px}
+.uc2 .uc-tg{display:inline-flex;align-items:center;gap:8px;background:#E9F1F8;color:var(--az);font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:7px 15px;border-radius:100px;margin-bottom:14px}
 
-/* ============ 5. CÓMO USARLO ============ */
-.uc2 .uc-st{background:var(--bl);padding:88px 0}
-.uc2 .uc-stg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;margin-bottom:44px}
+/* ===== 6. COMO USARLO ===== */
+.uc2 .uc-st{background:var(--bg);padding:84px 0}
+.uc2 .uc-stg{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:42px}
 .uc2 .uc-stc{padding:0 26px;text-align:center;position:relative}
-.uc2 .uc-stc:not(:last-child):after{content:"";position:absolute;top:34px;right:-10%;width:20%;height:2px;background:repeating-linear-gradient(90deg,var(--au) 0 8px,transparent 8px 16px)}
-.uc2 .uc-stn{width:68px;height:68px;border-radius:50%;background:var(--cr);border:2px solid var(--v);color:var(--v);font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1}
-.uc2 .uc-stc h3{font-size:19px;margin-bottom:10px}
+.uc2 .uc-stc:not(:last-child):after{content:"";position:absolute;top:33px;right:-10%;width:20%;height:2px;background:repeating-linear-gradient(90deg,var(--az) 0 8px,transparent 8px 16px)}
+.uc2 .uc-stn{width:66px;height:66px;border-radius:50%;background:var(--pt);color:#fff;font-size:23px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;box-shadow:0 10px 22px rgba(34,59,64,.25)}
+.uc2 .uc-stc h3{font-size:18.5px;margin-bottom:9px}
 .uc2 .uc-stc p{font-size:14.5px;color:var(--tx2)}
-.uc2 .uc-tip{background:rgba(201,162,39,.1);border:1px solid rgba(201,162,39,.4);border-radius:16px;padding:24px 30px;display:flex;gap:16px;align-items:flex-start;max-width:760px;margin:0 auto}
-.uc2 .uc-tip svg{width:26px;height:26px;stroke:var(--au);flex-shrink:0;margin-top:2px}
-.uc2 .uc-tip h3{font-size:16px;margin-bottom:5px}
-.uc2 .uc-tip p{font-size:14.5px;color:var(--tx2)}
+.uc2 .uc-tip{background:var(--sg);border-radius:16px;padding:24px 30px;display:flex;gap:16px;align-items:flex-start;max-width:760px;margin:0 auto}
+.uc2 .uc-tip svg{width:25px;height:25px;stroke:var(--pt);flex-shrink:0;margin-top:2px}
+.uc2 .uc-tip h3{font-size:16px;margin-bottom:5px;color:var(--pt)}
+.uc2 .uc-tip p{font-size:14.5px;color:var(--pt);opacity:.85}
 
-/* ============ 6. TESTIMONIOS ============ */
-.uc2 .uc-ts{background:var(--cr);padding:88px 0}
-.uc2 .uc-tsg{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
-.uc2 .uc-tc{background:var(--bl);border:1px solid #E7E1D4;border-radius:18px;padding:30px 26px;display:flex;flex-direction:column;position:relative}
-.uc2 .uc-tcp{border:2px solid var(--v);box-shadow:0 18px 40px rgba(14,59,46,.16);transform:scale(1.03)}
-.uc2 .uc-tcb{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--v);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:100px;white-space:nowrap}
-.uc2 .uc-str{display:flex;gap:3px;margin-bottom:14px}
-.uc2 .uc-str svg{width:17px;height:17px;fill:var(--au2);stroke:var(--au2)}
-.uc2 .uc-tc p{font-size:14.5px;color:var(--tx);flex:1;margin-bottom:18px}
-.uc2 .uc-ta{display:flex;align-items:center;gap:12px;border-top:1px solid #EFEAE0;padding-top:16px}
-.uc2 .uc-tav{width:42px;height:42px;border-radius:50%;background:var(--v);color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* ===== 7. RESEÑAS ===== */
+.uc2 .uc-ts{background:var(--bg2);padding:84px 0}
+.uc2 .uc-sm{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:28px 32px;max-width:460px;margin:0 auto 46px;text-align:center}
+.uc2 .uc-str{display:inline-flex;gap:3px}
+.uc2 .uc-str svg{width:19px;height:19px;fill:var(--gd);stroke:var(--gd)}
+.uc2 .uc-smn{font-size:17px;font-weight:700;margin:8px 0 3px}
+.uc2 .uc-smb{font-size:13.5px;color:var(--tx2);display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:18px}
+.uc2 .uc-smb svg{width:15px;height:15px;stroke:var(--tl)}
+.uc2 .uc-br{display:grid;gap:7px}
+.uc2 .uc-bri{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--tx2)}
+.uc2 .uc-brs{display:flex;gap:2px;flex-shrink:0}
+.uc2 .uc-brs svg{width:12px;height:12px}
+.uc2 .uc-brs .uc-sf{fill:var(--gd);stroke:var(--gd)}
+.uc2 .uc-brs .uc-se{fill:#D9DFDF;stroke:#D9DFDF}
+.uc2 .uc-brt{flex:1;height:8px;background:#E7ECEB;border-radius:100px;overflow:hidden}
+.uc2 .uc-brf{height:100%;background:var(--pt);border-radius:100px}
+.uc2 .uc-brn{width:34px;text-align:right;font-weight:700;color:var(--tx)}
+.uc2 .uc-tsg{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.uc2 .uc-tc{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:30px 26px;display:flex;flex-direction:column;position:relative}
+.uc2 .uc-tcp{border:2px solid var(--pt);box-shadow:0 18px 40px rgba(34,59,64,.14);transform:scale(1.03)}
+.uc2 .uc-tcb{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--pt);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:100px;white-space:nowrap}
+.uc2 .uc-tc .uc-str{margin-bottom:14px}
+.uc2 .uc-tc .uc-str svg{width:16px;height:16px}
+.uc2 .uc-tc>p{font-size:14.5px;flex:1;margin-bottom:18px}
+.uc2 .uc-ta{display:flex;align-items:center;gap:12px;border-top:1px solid var(--ln);padding-top:16px}
+.uc2 .uc-tav{width:42px;height:42px;border-radius:50%;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uc2 .uc-v1{background:var(--az)}.uc2 .uc-v2{background:var(--pt)}.uc2 .uc-v3{background:var(--tl)}
 .uc2 .uc-ta strong{display:block;font-size:14px}
 .uc2 .uc-ta span{font-size:12.5px;color:var(--tx2);display:flex;align-items:center;gap:5px}
-.uc2 .uc-ta span svg{width:13px;height:13px;stroke:var(--ok)}
+.uc2 .uc-ta span svg{width:13px;height:13px;stroke:var(--tl)}
 
-/* ============ 7. CTA FINAL ============ */
-.uc2 .uc-gr{background:var(--bl);padding:26px 0;border-top:1px solid #EFEAE0}
-.uc2 .uc-grg{display:flex;justify-content:center;gap:44px;flex-wrap:wrap}
-.uc2 .uc-gri{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--tx)}
-.uc2 .uc-gri svg{width:19px;height:19px;stroke:var(--ok);flex-shrink:0}
-.uc2 .uc-fc{background:linear-gradient(160deg,var(--v) 0%,var(--v2) 100%);padding:88px 0}
-.uc2 .uc-fcg{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
-.uc2 .uc-fci{display:flex;justify-content:center}
-.uc2 .uc-fcim{width:min(360px,100%);border-radius:20px;box-shadow:0 26px 56px rgba(0,0,0,.4);animation:ucfl2 5s ease-in-out infinite}
-@keyframes ucfl2{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+/* ===== 8. CTA FINAL ===== */
+.uc2 .uc-gr{background:var(--bg);padding:24px 0;border-top:1px solid var(--ln)}
+.uc2 .uc-grg{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.uc2 .uc-gri{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--ln);border-radius:100px;padding:10px 18px;font-size:13.5px;font-weight:700}
+.uc2 .uc-gri svg{width:17px;height:17px;stroke:var(--tx);flex-shrink:0}
+.uc2 .uc-fc{background:linear-gradient(165deg,var(--pt) 0%,var(--pt2) 100%);padding:84px 0}
+.uc2 .uc-fcg{display:grid;grid-template-columns:.85fr 1.15fr;gap:54px;align-items:center}
+.uc2 .uc-fcim{width:min(360px,100%);border-radius:18px;box-shadow:0 26px 56px rgba(0,0,0,.4);animation:ucfl2 5s ease-in-out infinite;margin:0 auto}
+@keyframes ucfl2{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
 .uc2 .uc-fct{color:#fff}
-.uc2 .uc-fct .uc-tag{background:rgba(232,181,74,.15);border-color:rgba(232,181,74,.4);color:var(--au2)}
-.uc2 .uc-fct h2{font-size:36px;margin:16px 0 14px;color:#fff}
-.uc2 .uc-fct>p{color:#BFD4CB;font-size:16.5px;margin-bottom:24px;max-width:520px}
-.uc2 .uc-pl{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-.uc2 .uc-pli{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#E9F1ED;font-size:13px;font-weight:600;padding:8px 15px;border-radius:100px}
-.uc2 .uc-pli svg{width:15px;height:15px;stroke:var(--au2)}
-.uc2 .uc-fpr{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
-.uc2 .uc-fprn{font-size:42px;font-weight:800;color:#fff}
-.uc2 .uc-fpro{font-size:20px;color:#8FA89E;text-decoration:line-through}
-.uc2 .uc-fprd{background:var(--au);color:var(--v2);font-size:12.5px;font-weight:800;padding:5px 10px;border-radius:6px}
-.uc2 .uc-cta2{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--au);color:var(--v2);font-size:17.5px;font-weight:800;padding:19px 42px;border-radius:100px;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
-.uc2 .uc-cta2:hover{background:var(--au2);transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.uc2 .uc-cta2 svg{width:20px;height:20px;stroke:var(--v2)}
-.uc2 .uc-fn{margin-top:14px;font-size:13px;color:#9FB6AC;display:flex;align-items:center;gap:7px}
-.uc2 .uc-fn svg{width:15px;height:15px;stroke:var(--au2)}
+.uc2 .uc-fct .uc-tg{background:rgba(255,255,255,.12);color:var(--sg)}
+.uc2 .uc-fct h2{font-size:34px;margin-bottom:14px;color:#fff}
+.uc2 .uc-fct h2 em{color:var(--sg)}
+.uc2 .uc-fct>p{color:#B9CDC9;font-size:16px;margin-bottom:22px;max-width:520px}
+.uc2 .uc-fpl{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.uc2 .uc-fpli{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#E7EFEC;font-size:13px;font-weight:600;padding:8px 15px;border-radius:100px}
+.uc2 .uc-fpli svg{width:15px;height:15px;stroke:var(--sg)}
+.uc2 .uc-fpr{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+.uc2 .uc-fpro{font-size:20px;font-weight:700;color:#FF8CA1;text-decoration:line-through}
+.uc2 .uc-fprn{font-size:40px;font-weight:800;color:#fff}
+.uc2 .uc-fprl{width:26px;height:3px;background:var(--sg);border-radius:2px}
+.uc2 .uc-cta{display:inline-flex;position:relative;overflow:hidden;align-items:center;justify-content:center;gap:10px;background:linear-gradient(100deg,var(--az2) 0%,var(--az) 100%);color:#fff;font-size:18px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:20px 44px;border-radius:14px;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:transform .18s ease,box-shadow .18s ease}
+.uc2 .uc-cta:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.uc2 .uc-cta:before,.uc2 .uc-cta:after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:var(--pt)}
+.uc2 .uc-cta:before{top:-11px;left:-11px}
+.uc2 .uc-cta:after{bottom:-11px;right:-11px}
+.uc2 .uc-fn{margin-top:16px;font-size:13px;color:#9FB6B0;display:flex;align-items:center;gap:7px}
+.uc2 .uc-fn svg{width:15px;height:15px;stroke:var(--sg);flex-shrink:0}
 
-/* ============ RESPONSIVE ============ */
+/* ===== BARRA STICKY (solo mobile) ===== */
+.uc2 .uc-sk{display:none}
+
+/* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .uc2 .uc-in{padding:0 18px}
-  .uc2 .uc-st,.uc2 .uc-ts,.uc2 .uc-fc{padding:60px 0}
-  .uc2 .uc-hd h2{font-size:26px}
-  .uc2 .uc-stg{grid-template-columns:1fr;gap:36px;margin-bottom:36px}
-  .uc2 .uc-stc:not(:last-child):after{content:"";position:absolute;top:auto;bottom:-26px;left:50%;right:auto;width:2px;height:18px;background:repeating-linear-gradient(180deg,var(--au) 0 5px,transparent 5px 10px)}
-  .uc2 .uc-tip{padding:20px;flex-direction:column;text-align:center;align-items:center}
+  .uc2 .uc-in{padding:0 16px}
+  .uc2 .uc-st,.uc2 .uc-ts,.uc2 .uc-fc{padding:58px 0}
+  .uc2 .uc-hd h2{font-size:25px}
+  .uc2 .uc-stg{grid-template-columns:1fr;gap:34px;margin-bottom:34px}
+  .uc2 .uc-stc:not(:last-child):after{top:auto;bottom:-25px;left:50%;right:auto;width:2px;height:16px;background:repeating-linear-gradient(180deg,var(--az) 0 5px,transparent 5px 10px)}
+  .uc2 .uc-tip{padding:20px;flex-direction:column;align-items:center;text-align:center}
+  .uc2 .uc-sm{padding:22px 18px}
   .uc2 .uc-tsg{grid-template-columns:1fr;gap:26px}
   .uc2 .uc-tcp{transform:none}
-  .uc2 .uc-grg{gap:12px 20px;justify-content:flex-start}
-  .uc2 .uc-gri{font-size:12.5px}
-  .uc2 .uc-fcg{grid-template-columns:1fr;gap:40px}
-  .uc2 .uc-fci{order:-1}
+  .uc2 .uc-grg{gap:8px}
+  .uc2 .uc-gri{font-size:12px;padding:9px 14px}
+  .uc2 .uc-fcg{grid-template-columns:1fr;gap:38px}
   .uc2 .uc-fcim{width:min(280px,84%)}
-  .uc2 .uc-fct h2{font-size:28px}
-  .uc2 .uc-fprn{font-size:34px}
-  .uc2 .uc-cta2{width:100%;padding:18px 22px}
+  .uc2 .uc-fct h2{font-size:26px}
+  .uc2 .uc-fprn{font-size:33px}
+  .uc2 .uc-cta{width:100%;padding:19px 20px}
+  .uc2 .uc-fc{padding-bottom:120px}
+  .uc2 .uc-sk{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;align-items:center;justify-content:center;gap:9px;background:var(--pt);color:#fff;font-size:16px;font-weight:800;padding:16px 18px;border-radius:14px;text-decoration:none;box-shadow:0 0 0 3px rgba(255,255,255,.85),0 14px 30px rgba(0,0,0,.35)}
+  .uc2 .uc-sk i{width:5px;height:5px;background:rgba(255,255,255,.8);border-radius:50%;flex-shrink:0}
 }
 </style>
 
 <div class="uc2">
 
-<!-- ===== 5. CÓMO USARLO ===== -->
+<!-- ===== 6. COMO USARLO ===== -->
 <div class="cw uc-st">
   <div class="uc-in">
     <div class="uc-hd">
-      <span class="uc-tag">Así de simple</span>
-      <h2>De la compra a tu primera llamada en 3 pasos</h2>
+      <span class="uc-tg">Así de simple</span>
+      <h2>De la compra a tu <em>primera llamada</em> en 3 pasos</h2>
       <p>Sin vueltas ni tecnicismos. Comprás, descargás y empezás a aplicar hoy mismo.</p>
     </div>
     <div class="uc-stg">
@@ -146,26 +173,59 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
   </div>
 </div>
 
-<!-- ===== 6. TESTIMONIOS ===== -->
+<!-- ===== 7. RESEÑAS ===== -->
 <div class="cw uc-ts">
   <div class="uc-in">
     <div class="uc-hd">
-      <span class="uc-tag">Prueba real</span>
-      <h2>Más de 500 personas ya empezaron su camino como closers</h2>
-      <p>Esto es lo que cuentan después de aplicar la guía.</p>
+      <span class="uc-tg">Prueba real</span>
+      <h2>Reseñas de nuestros clientes</h2>
+      <p>Más de 500 personas ya empezaron su camino como closers con esta guía.</p>
     </div>
+
+    <div class="uc-sm">
+      <span class="uc-str">
+        <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </span>
+      <p class="uc-smn">4.9 de 5 estrellas</p>
+      <p class="uc-smb">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        Basado en +500 opiniones reales
+      </p>
+      <div class="uc-br">
+        <div class="uc-bri">
+          <span class="uc-brs"><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span class="uc-brt"><span class="uc-brf" style="width:94%"></span></span>
+          <span class="uc-brn">471</span>
+        </div>
+        <div class="uc-bri">
+          <span class="uc-brs"><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-se"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span class="uc-brt"><span class="uc-brf" style="width:5%"></span></span>
+          <span class="uc-brn">26</span>
+        </div>
+        <div class="uc-bri">
+          <span class="uc-brs"><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-sf"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-se"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" class="uc-se"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span class="uc-brt"><span class="uc-brf" style="width:1%"></span></span>
+          <span class="uc-brn">3</span>
+        </div>
+      </div>
+    </div>
+
     <div class="uc-tsg">
       <div class="uc-tc">
-        <div class="uc-str">
+        <span class="uc-str">
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
+        </span>
         <p>"Yo venía de atención al cliente y no sabía nada de ventas. Con los guiones de la guía cerré mi primer cliente a las tres semanas. Se explica todo tan claro que es imposible perderse."</p>
         <div class="uc-ta">
-          <div class="uc-tav">M</div>
+          <div class="uc-tav uc-v1">M</div>
           <div>
             <strong>[Nombre del cliente 1]</strong>
             <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Compra verificada</span>
@@ -174,16 +234,16 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
       </div>
       <div class="uc-tc uc-tcp">
         <span class="uc-tcb">La más popular</span>
-        <div class="uc-str">
+        <span class="uc-str">
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
+        </span>
         <p>"Lo que más me sirvió fue la parte de objeciones. Antes me quedaba muda cuando me decían 'está caro'. Hoy trabajo como closer para un infoproductor y gano en comisiones más que en mi antiguo trabajo fijo."</p>
         <div class="uc-ta">
-          <div class="uc-tav">L</div>
+          <div class="uc-tav uc-v2">L</div>
           <div>
             <strong>[Nombre del cliente 2]</strong>
             <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Compra verificada</span>
@@ -191,16 +251,16 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
         </div>
       </div>
       <div class="uc-tc">
-        <div class="uc-str">
+        <span class="uc-str">
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <svg viewBox="0 0 24 24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
+        </span>
         <p>"Compré mil cursos que nunca terminé. Esta guía es distinta: directa, sin relleno y con ejemplos reales de llamadas. La leí en dos días y la sigo consultando antes de cada llamada importante."</p>
         <div class="uc-ta">
-          <div class="uc-tav">J</div>
+          <div class="uc-tav uc-v3">J</div>
           <div>
             <strong>[Nombre del cliente 3]</strong>
             <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Compra verificada</span>
@@ -211,26 +271,26 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
   </div>
 </div>
 
-<!-- ===== 7. CTA FINAL ===== -->
+<!-- ===== 8. CTA FINAL ===== -->
 <div class="cw uc-gr">
   <div class="uc-in">
     <div class="uc-grg">
-      <div class="uc-gri">
+      <span class="uc-gri">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-        Compra 100% protegida
-      </div>
-      <div class="uc-gri">
+        Pago 100% seguro
+      </span>
+      <span class="uc-gri">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-        Acceso inmediato tras el pago
-      </div>
-      <div class="uc-gri">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
-        Actualizaciones de por vida
-      </div>
-      <div class="uc-gri">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
-        Mercado Pago · PayPal · Whop
-      </div>
+        Entrega inmediata
+      </span>
+      <span class="uc-gri">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        Soporte 24/7
+      </span>
+      <span class="uc-gri">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+        Garantía 30 días
+      </span>
     </div>
   </div>
 </div>
@@ -238,28 +298,25 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
 <div class="cw uc-fc">
   <div class="uc-in">
     <div class="uc-fcg">
-      <div class="uc-fci">
-        <img class="uc-fcim" src="URL-IMAGEN-PRODUCTO" alt="Guía para convertirte en Closer de Ventas — descarga digital">
+      <div>
+        <img class="uc-fcim" src="URL-IMAGEN-PRODUCTO" alt="Guía Closer de Ventas — descarga digital">
       </div>
       <div class="uc-fct">
-        <span class="uc-tag">Último paso</span>
-        <h2>Tu primera venta de alto valor está más cerca de lo que pensás</h2>
+        <span class="uc-tg">Último paso</span>
+        <h2>Tu primera venta de alto valor está <em>más cerca</em> de lo que pensás</h2>
         <p>Empezá hoy con el método que más de 500 personas ya están aplicando. Descarga inmediata, acceso de por vida.</p>
-        <div class="uc-pl">
-          <span class="uc-pli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Método paso a paso</span>
-          <span class="uc-pli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Guiones y objeciones</span>
-          <span class="uc-pli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Cómo conseguir clientes</span>
-          <span class="uc-pli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Descarga inmediata</span>
+        <div class="uc-fpl">
+          <span class="uc-fpli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Método paso a paso</span>
+          <span class="uc-fpli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Guiones y objeciones</span>
+          <span class="uc-fpli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Cómo conseguir clientes</span>
+          <span class="uc-fpli"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Bonus de guiones incluido</span>
         </div>
         <div class="uc-fpr">
-          <span class="uc-fprn">$85.000</span>
-          <span class="uc-fpro">$120.000</span>
-          <span class="uc-fprd">OFERTA DE LANZAMIENTO</span>
+          <s class="uc-fpro">$120.000,00</s>
+          <span class="uc-fprn">$85.000,00</span>
+          <span class="uc-fprl"></span>
         </div>
-        <a class="uc-cta2" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">
-          Quiero convertirme en closer
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
+        <a class="uc-cta" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">Agregar al carrito</a>
         <div class="uc-fn">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg>
           Pago seguro con Mercado Pago, PayPal o Whop · Recibís todo por email al instante
@@ -268,6 +325,9 @@ PERSONALIZAR: colores en las variables CSS de .uc2 | URLs de imagen | VARIANT_ID
     </div>
   </div>
 </div>
+
+<!-- ===== BARRA STICKY (solo mobile) ===== -->
+<a class="uc-sk" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">$85.000,00 <i></i> Añadir al carrito</a>
 
 </div>
 <!-- ============ FIN BLOQUE 2 ============ -->

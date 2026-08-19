@@ -1,202 +1,349 @@
 <!-- ============================================================
-BLOQUE 1 — U DEL CLOSER · Landing "Guía para convertirte en Closer de Ventas"
-Secciones: 1) Trust Bar · 2) Hero · 3) El Problema · 4) La Solución
+BLOQUE 1 — U DEL CLOSER · Landing estilo Voltra
+Secciones: 1) Barra anuncio marquee · 2) Hero producto + oferta con countdown
+3) Marquee características · 4) El Problema · 5) La Solución
 Pegar completo en un bloque "Liquid personalizado" del editor de tema.
-PERSONALIZAR: colores en las variables CSS de .uc1 | URLs de imagen | VARIANT_ID
+PERSONALIZAR: colores en las variables CSS de .uc1 | URL-IMAGEN-PRODUCTO | VARIANT_ID
 ============================================================ -->
 <style>
+@property --ucm{syntax:'<integer>';initial-value:43;inherits:false}
+@property --ucs{syntax:'<integer>';initial-value:59;inherits:false}
 .uc1{
   /* ===== VARIABLES DE COLOR — EDITAR ACÁ ===== */
-  --v:#0E3B2E;        /* verde oscuro principal */
-  --v2:#0A2C22;       /* verde más profundo (fondos) */
-  --v3:#1A5A45;       /* verde medio (hovers, detalles) */
-  --cr:#F6F3EC;       /* crema de fondo */
-  --bl:#FFFFFF;       /* blanco */
-  --tx:#1C2B26;       /* texto principal */
-  --tx2:#5A6B64;      /* texto secundario */
-  --au:#C9A227;       /* dorado acento */
-  --au2:#E8B54A;      /* dorado claro */
-  --ok:#2E7D5B;       /* verde éxito */
+  --pt:#2E4B51;      /* verde petróleo (botones, banners oscuros) */
+  --pt2:#223B40;     /* petróleo profundo (hover) */
+  --az:#3F7FB5;      /* azul barra de anuncio / countdown */
+  --az2:#6FAAD6;     /* azul claro (gradientes) */
+  --sg:#CFE4DE;      /* verde salvia claro (fondos suaves) */
+  --sg2:#9DBFB4;     /* salvia medio (fila bonus) */
+  --tl:#3E8E87;      /* teal (palabras destacadas, detalles) */
+  --rd:#D62B4B;      /* rojo (precio tachado) */
+  --gd:#E8B33A;      /* dorado (estrellas) */
+  --bg:#FFFFFF;      /* fondo blanco */
+  --bg2:#F3F6F5;     /* gris verdoso claro (secciones alternas) */
+  --tx:#17282C;      /* texto principal */
+  --tx2:#5C6B6F;     /* texto secundario */
+  --ln:#E2E8E8;      /* bordes */
   /* =========================================== */
   font-family:'Helvetica Neue',Arial,sans-serif;
-  color:var(--tx);
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
+  color:var(--tx);line-height:1.5;-webkit-font-smoothing:antialiased;
 }
 .uc1 *,.uc1 *:before,.uc1 *:after{box-sizing:border-box;margin:0;padding:0}
 .uc1 img{max-width:100%;display:block}
 .uc1 .cw{width:100vw;position:relative;left:50%;margin-left:-50vw;overflow-x:hidden}
 .uc1 .uc-in{max-width:1140px;margin:0 auto;padding:0 24px}
-.uc1 h1,.uc1 h2,.uc1 h3{font-weight:700;line-height:1.15;letter-spacing:-.02em}
-.uc1 .uc-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.12);color:var(--au);border:1px solid rgba(201,162,39,.35);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:100px}
+.uc1 h1,.uc1 h2,.uc1 h3{font-weight:700;line-height:1.18;letter-spacing:-.01em}
+.uc1 h2 em,.uc1 h1 em{font-style:normal;color:var(--tl)}
 
-/* ============ 1. TRUST BAR ============ */
-.uc1 .uc-tb{background:var(--v2);padding:14px 0}
-.uc1 .uc-tbg{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
-.uc1 .uc-tbi{display:flex;align-items:center;gap:10px;color:#DCE7E2;font-size:13.5px;font-weight:600}
-.uc1 .uc-tbi svg{width:18px;height:18px;stroke:var(--au2);flex-shrink:0}
+/* ===== 1. BARRA ANUNCIO (marquee azul) ===== */
+.uc1 .uc-an{background:linear-gradient(100deg,var(--az2) 0%,var(--az) 55%,#356C9B 100%);padding:11px 0;overflow:hidden}
+.uc1 .uc-ant{display:flex;width:max-content;animation:ucmq 22s linear infinite}
+.uc1 .uc-ant span{display:flex;align-items:center;gap:34px;padding-right:34px;color:#fff;font-size:13.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+.uc1 .uc-ant i{width:6px;height:6px;background:rgba(255,255,255,.7);border-radius:50%;flex-shrink:0}
+@keyframes ucmq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ============ 2. HERO ============ */
-.uc1 .uc-hero{background:linear-gradient(180deg,var(--cr) 0%,#EFEAE0 100%);padding:72px 0 88px;overflow:hidden}
-.uc1 .uc-hg{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.uc1 .uc-ht{font-size:46px;margin:18px 0 16px}
-.uc1 .uc-ht em{font-style:normal;color:var(--v);position:relative}
-.uc1 .uc-ht em:after{content:"";position:absolute;left:0;bottom:2px;width:100%;height:10px;background:rgba(201,162,39,.35);z-index:-1;border-radius:3px}
-.uc1 .uc-hs{font-size:18px;color:var(--tx2);margin-bottom:26px;max-width:520px}
-.uc1 .uc-hb{list-style:none;display:grid;gap:12px;margin-bottom:30px}
-.uc1 .uc-hb li{display:flex;align-items:flex-start;gap:11px;font-size:15.5px;font-weight:500}
-.uc1 .uc-hb svg{width:20px;height:20px;stroke:var(--ok);flex-shrink:0;margin-top:1px}
-.uc1 .uc-pr{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
-.uc1 .uc-prn{font-size:38px;font-weight:800;color:var(--v)}
-.uc1 .uc-pro{font-size:19px;color:var(--tx2);text-decoration:line-through}
-.uc1 .uc-prd{background:var(--au);color:var(--v2);font-size:12.5px;font-weight:800;padding:5px 10px;border-radius:6px;letter-spacing:.03em}
-.uc1 .uc-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--v);color:#fff;font-size:17px;font-weight:700;padding:18px 38px;border-radius:100px;text-decoration:none;box-shadow:0 10px 26px rgba(14,59,46,.32);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
-.uc1 .uc-cta:hover{background:var(--v3);transform:translateY(-2px);box-shadow:0 14px 32px rgba(14,59,46,.4)}
-.uc1 .uc-cta svg{width:20px;height:20px;stroke:#fff}
-.uc1 .uc-ctan{margin-top:12px;font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:7px}
-.uc1 .uc-ctan svg{width:15px;height:15px;stroke:var(--ok)}
-.uc1 .uc-hi{position:relative;display:flex;justify-content:center}
-.uc1 .uc-hi:before{content:"";position:absolute;inset:8% 6%;background:radial-gradient(closest-side,rgba(14,59,46,.16),transparent 70%);border-radius:50%}
-.uc1 .uc-him{width:min(430px,100%);position:relative;z-index:1;animation:ucfl 5s ease-in-out infinite;filter:drop-shadow(0 30px 40px rgba(14,59,46,.25))}
-@keyframes ucfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-.uc1 .uc-bd{position:absolute;z-index:2;background:var(--bl);border-radius:14px;box-shadow:0 12px 30px rgba(20,40,33,.18);padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+/* ===== 2. HERO PRODUCTO ===== */
+.uc1 .uc-hero{background:var(--bg);padding:52px 0 72px}
+.uc1 .uc-hg{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+.uc1 .uc-hi{position:sticky;top:24px}
+.uc1 .uc-him-w{position:relative}
+.uc1 .uc-him{width:100%;border-radius:18px;box-shadow:0 22px 46px rgba(23,40,44,.18);animation:ucfl 5s ease-in-out infinite}
+@keyframes ucfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.uc1 .uc-bd{position:absolute;z-index:2;background:#fff;border-radius:13px;box-shadow:0 10px 26px rgba(23,40,44,.18);padding:11px 15px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
 .uc1 .uc-bd small{display:block;font-size:11px;font-weight:500;color:var(--tx2)}
-.uc1 .uc-bd svg{width:22px;height:22px;stroke:var(--v);flex-shrink:0}
-.uc1 .uc-bd1{top:9%;left:0;animation:ucfl 5s ease-in-out .8s infinite}
-.uc1 .uc-bd2{bottom:11%;right:0;animation:ucfl 5s ease-in-out 1.6s infinite}
+.uc1 .uc-bd svg{width:21px;height:21px;stroke:var(--tl);flex-shrink:0}
+.uc1 .uc-bd1{top:6%;left:-14px;animation:ucfl 5s ease-in-out .9s infinite}
+.uc1 .uc-bd2{bottom:8%;right:-14px;animation:ucfl 5s ease-in-out 1.7s infinite}
+.uc1 .uc-th{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.uc1 .uc-thi img{border-radius:12px;border:1px solid var(--ln)}
+.uc1 .uc-thi figcaption{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2);margin-top:7px}
+/* rating */
+.uc1 .uc-rt{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.uc1 .uc-avs{display:flex}
+.uc1 .uc-av{width:34px;height:34px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+.uc1 .uc-av+.uc-av{margin-left:-10px}
+.uc1 .uc-av1{background:var(--pt)}.uc1 .uc-av2{background:var(--az)}.uc1 .uc-av3{background:var(--tl)}
+.uc1 .uc-rt p{font-size:14px;color:var(--tx2)}
+.uc1 .uc-rt b{color:var(--tx)}
+.uc1 .uc-ht{font-size:37px;margin-bottom:12px}
+.uc1 .uc-pr{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.uc1 .uc-pro{font-size:21px;font-weight:700;color:var(--rd);text-decoration:line-through}
+.uc1 .uc-prn{font-size:34px;font-weight:800}
+.uc1 .uc-prl{width:26px;height:3px;background:var(--tl);border-radius:2px}
+.uc1 .uc-ds{font-size:16.5px;color:var(--tx);margin-bottom:22px;max-width:520px}
+.uc1 .uc-ds b{font-weight:700}
+.uc1 .uc-ft{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:30px}
+.uc1 .uc-fti{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600}
+.uc1 .uc-fti svg{width:20px;height:20px;stroke:var(--tl);flex-shrink:0}
+/* titulo oferta */
+.uc1 .uc-ot{display:flex;align-items:center;gap:16px;font-size:20px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center;justify-content:center;margin-bottom:16px}
+.uc1 .uc-ot:before,.uc1 .uc-ot:after{content:"";height:2px;flex:1;background:var(--ln);border-radius:2px;max-width:90px}
+/* countdown */
+.uc1 .uc-cdb{background:linear-gradient(100deg,var(--az) 0%,#356C9B 100%);color:#fff;border-radius:12px;padding:13px 18px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-align:center;margin-bottom:14px;flex-wrap:wrap}
+.uc1 .uc-cdb svg{width:17px;height:17px;stroke:#fff;flex-shrink:0}
+.uc1 .uc-cdb b{font-weight:800;font-variant-numeric:tabular-nums}
+.uc1 .uc-m:after{counter-reset:ucm var(--ucm);content:counter(ucm,decimal-leading-zero);animation:uckm 2580s steps(43) forwards}
+@keyframes uckm{from{--ucm:43}to{--ucm:0}}
+.uc1 .uc-s:after{counter-reset:ucs var(--ucs);content:counter(ucs,decimal-leading-zero);animation:ucks 59s steps(59) infinite}
+@keyframes ucks{from{--ucs:59}to{--ucs:0}}
+/* widget de oferta */
+.uc1 .uc-of{position:relative}
+.uc1 .uc-of>input{position:absolute;opacity:0;pointer-events:none}
+.uc1 .uc-op{display:block;background:#fff;border:1.5px solid var(--ln);border-radius:16px;padding:18px;cursor:pointer;margin-bottom:12px;transition:border-color .15s ease,background .15s ease}
+.uc1 .uc-oph{display:flex;align-items:center;gap:12px}
+.uc1 .uc-rdo{width:22px;height:22px;border:2px solid #B9C4C6;border-radius:50%;flex-shrink:0;position:relative}
+.uc1 .uc-rdo:after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--pt);opacity:0;transition:opacity .15s ease}
+.uc1 .uc-opt{font-size:17px;font-weight:700}
+.uc1 .uc-opg{background:#E9F1F8;color:var(--az);font-size:11px;font-weight:800;letter-spacing:.05em;padding:5px 10px;border-radius:100px;text-transform:uppercase;white-space:nowrap}
+.uc1 .uc-opp{margin-left:auto;text-align:right}
+.uc1 .uc-opn{font-size:19px;font-weight:800;display:block}
+.uc1 .uc-opo{font-size:13.5px;color:#9AA6A9;text-decoration:line-through}
+.uc1 .uc-opa{font-size:13.5px;color:var(--tx2);margin:4px 0 0 34px}
+.uc1 .uc-sel{display:flex;gap:10px;margin:14px 0 0 34px;flex-wrap:wrap}
+.uc1 .uc-sli{display:inline-flex;align-items:center;gap:9px;border:1px solid #C8D2D4;border-radius:9px;padding:9px 13px;font-size:13.5px;font-weight:600;background:#fff}
+.uc1 .uc-sli svg{width:13px;height:13px;stroke:var(--tx2)}
+.uc1 .uc-bo{display:flex;align-items:center;gap:11px;background:var(--sg2);border-radius:11px;padding:12px 15px;margin:14px 0 0;color:#fff}
+.uc1 .uc-boc{width:21px;height:21px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uc1 .uc-boc svg{width:13px;height:13px;stroke:var(--pt)}
+.uc1 .uc-bo p{font-size:13.5px;font-weight:700;flex:1}
+.uc1 .uc-bop{text-align:right;font-size:13.5px;font-weight:800;white-space:nowrap}
+.uc1 .uc-bop s{display:block;font-size:11.5px;font-weight:600;color:rgba(255,255,255,.75)}
+.uc1 #uco1:checked~.uc-op1,.uc1 #uco2:checked~.uc-op2{border:2px solid var(--pt);background:#EDF3F2;padding:17.5px}
+.uc1 #uco1:checked~.uc-op1 .uc-rdo,.uc1 #uco2:checked~.uc-op2 .uc-rdo{border-color:var(--pt)}
+.uc1 #uco1:checked~.uc-op1 .uc-rdo:after,.uc1 #uco2:checked~.uc-op2 .uc-rdo:after{opacity:1}
+.uc1 .uc-gift{display:flex;align-items:center;justify-content:center;gap:9px;font-size:14.5px;font-weight:600;color:var(--tx);text-align:center;margin:6px 0 16px}
+.uc1 .uc-gift svg{width:18px;height:18px;stroke:var(--tl);flex-shrink:0}
+/* CTA petroleo con esquinas mordidas */
+.uc1 .uc-cta{display:none;position:relative;overflow:hidden;align-items:center;justify-content:center;gap:10px;background:var(--pt);color:#fff;font-size:19px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:20px 30px;border-radius:14px;text-decoration:none;box-shadow:0 12px 26px rgba(34,59,64,.3);transition:background .18s ease,transform .18s ease;width:100%}
+.uc1 .uc-cta:hover{background:var(--pt2);transform:translateY(-2px)}
+.uc1 .uc-cta:before,.uc1 .uc-cta:after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:var(--bg)}
+.uc1 .uc-cta:before{top:-11px;left:-11px}
+.uc1 .uc-cta:after{bottom:-11px;right:-11px}
+.uc1 #uco1:checked~.uc-cta1{display:flex}
+.uc1 #uco2:checked~.uc-cta2{display:flex}
+/* pago seguro + pills */
+.uc1 .uc-ps{text-align:center;margin-top:18px}
+.uc1 .uc-ps>p{font-size:15px;margin-bottom:10px}
+.uc1 .uc-ps>p b{font-weight:700}
+.uc1 .uc-pay{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.uc1 .uc-pc1{display:inline-flex;align-items:center;border:1px solid var(--ln);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;background:#fff}
+.uc1 .uc-mp{color:#2D9CDB}.uc1 .uc-pp{color:#1B3D92}.uc1 .uc-wh{color:var(--tx)}.uc1 .uc-vi{color:#1A1F71;font-style:italic}.uc1 .uc-mc{gap:5px}
+.uc1 .uc-mcc{display:flex}
+.uc1 .uc-mcc i{width:14px;height:14px;border-radius:50%}
+.uc1 .uc-mcc i:first-child{background:#EB001B}
+.uc1 .uc-mcc i:last-child{background:#F79E1B;margin-left:-6px;opacity:.9}
+.uc1 .uc-pls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.uc1 .uc-pl{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--ln);border-radius:100px;padding:9px 16px;font-size:13px;font-weight:700}
+.uc1 .uc-pl svg{width:16px;height:16px;stroke:var(--tx);flex-shrink:0}
 
-/* ============ 3. EL PROBLEMA ============ */
-.uc1 .uc-pb{background:var(--bl);padding:88px 0}
-.uc1 .uc-hd{text-align:center;max-width:640px;margin:0 auto 52px}
-.uc1 .uc-hd h2{font-size:35px;margin:16px 0 12px}
-.uc1 .uc-hd p{color:var(--tx2);font-size:17px}
-.uc1 .uc-pg{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:44px}
-.uc1 .uc-pc{background:var(--cr);border:1px solid #E7E1D4;border-radius:18px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease}
-.uc1 .uc-pc:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(20,40,33,.1)}
-.uc1 .uc-pci{width:52px;height:52px;border-radius:14px;background:rgba(14,59,46,.08);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-.uc1 .uc-pci svg{width:26px;height:26px;stroke:var(--v)}
-.uc1 .uc-pc h3{font-size:19px;margin-bottom:10px}
+/* ===== 3. MARQUEE CARACTERISTICAS (salvia) ===== */
+.uc1 .uc-mq{background:var(--sg);padding:13px 0;overflow:hidden}
+.uc1 .uc-mqt{display:flex;width:max-content;animation:ucmq 26s linear infinite}
+.uc1 .uc-mqt span{display:flex;align-items:center;gap:38px;padding-right:38px;color:var(--pt);font-size:14px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+.uc1 .uc-mqt i{width:7px;height:7px;background:var(--pt);border-radius:2px;transform:rotate(45deg);flex-shrink:0;opacity:.55}
+
+/* ===== 4. EL PROBLEMA ===== */
+.uc1 .uc-pb{background:var(--bg2);padding:84px 0}
+.uc1 .uc-hd{text-align:center;max-width:660px;margin:0 auto 48px}
+.uc1 .uc-hd h2{font-size:33px;margin-bottom:12px}
+.uc1 .uc-hd>p{color:var(--tx2);font-size:16.5px}
+.uc1 .uc-tg{display:inline-flex;align-items:center;gap:8px;background:#E9F1F8;color:var(--az);font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:7px 15px;border-radius:100px;margin-bottom:14px}
+.uc1 .uc-pg{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:40px}
+.uc1 .uc-pc{background:#fff;border:1px solid var(--ln);border-radius:18px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease}
+.uc1 .uc-pc:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(23,40,44,.1)}
+.uc1 .uc-pci{width:52px;height:52px;border-radius:14px;background:var(--sg);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.uc1 .uc-pci svg{width:25px;height:25px;stroke:var(--pt)}
+.uc1 .uc-pc h3{font-size:18.5px;margin-bottom:9px}
 .uc1 .uc-pc p{font-size:14.5px;color:var(--tx2)}
-.uc1 .uc-pbn{background:var(--v);color:#fff;border-radius:18px;padding:34px 40px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.uc1 .uc-pbn{position:relative;overflow:hidden;background:var(--pt);color:#fff;border-radius:18px;padding:34px 40px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.uc1 .uc-pbn:before,.uc1 .uc-pbn:after{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:var(--bg2)}
+.uc1 .uc-pbn:before{top:-13px;left:-13px}
+.uc1 .uc-pbn:after{bottom:-13px;right:-13px}
 .uc1 .uc-pbn h3{font-size:22px;margin-bottom:6px}
-.uc1 .uc-pbn p{color:#BFD4CB;font-size:15px}
-.uc1 .uc-pbn svg{width:44px;height:44px;stroke:var(--au2);flex-shrink:0}
+.uc1 .uc-pbn p{color:#B9CDC9;font-size:15px}
+.uc1 .uc-pbn>svg{width:42px;height:42px;stroke:var(--sg);flex-shrink:0}
 
-/* ============ 4. LA SOLUCIÓN ============ */
-.uc1 .uc-sl{background:var(--cr);padding:88px 0}
-.uc1 .uc-sg{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}
-.uc1 .uc-si{position:relative;display:flex;justify-content:center}
-.uc1 .uc-sim{width:min(400px,100%);border-radius:20px;box-shadow:0 24px 50px rgba(14,59,46,.22)}
-.uc1 .uc-sst{position:absolute;top:-16px;right:6%;background:var(--au);color:var(--v2);font-size:12.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:9px 16px;border-radius:100px;box-shadow:0 8px 20px rgba(201,162,39,.4)}
-.uc1 .uc-sc h2{font-size:33px;margin:16px 0 26px}
-.uc1 .uc-bl{display:grid;gap:20px}
-.uc1 .uc-bli{display:flex;gap:16px;align-items:flex-start}
-.uc1 .uc-blic{width:44px;height:44px;border-radius:12px;background:var(--bl);border:1px solid #E7E1D4;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(20,40,33,.06)}
-.uc1 .uc-blic svg{width:22px;height:22px;stroke:var(--v)}
-.uc1 .uc-bli h3{font-size:16.5px;margin-bottom:4px}
+/* ===== 5. LA SOLUCION ===== */
+.uc1 .uc-sl{background:var(--bg);padding:84px 0}
+.uc1 .uc-ms{background:var(--sg);border-radius:20px;padding:34px 38px;max-width:760px;margin:0 auto 56px;text-align:center}
+.uc1 .uc-ms h3{font-size:20px;margin-bottom:10px;color:var(--pt)}
+.uc1 .uc-ms p{font-size:15.5px;color:var(--pt);opacity:.85}
+.uc1 .uc-sg{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.uc1 .uc-si{position:relative}
+.uc1 .uc-sim{width:100%;border-radius:18px;box-shadow:0 22px 46px rgba(23,40,44,.18)}
+.uc1 .uc-sst{position:absolute;top:-15px;right:6%;background:var(--az);color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;border-radius:100px;box-shadow:0 8px 20px rgba(63,127,181,.4)}
+.uc1 .uc-sc h2{font-size:31px;margin-bottom:26px}
+.uc1 .uc-bl{display:grid;gap:18px}
+.uc1 .uc-bli{display:flex;gap:15px;align-items:flex-start}
+.uc1 .uc-blic{width:44px;height:44px;border-radius:12px;background:var(--bg2);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uc1 .uc-blic svg{width:21px;height:21px;stroke:var(--pt)}
+.uc1 .uc-bli h3{font-size:16.5px;margin-bottom:3px}
 .uc1 .uc-bli p{font-size:14.5px;color:var(--tx2)}
 
-/* ============ RESPONSIVE ============ */
+/* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .uc1 .uc-in{padding:0 18px}
-  .uc1 .uc-tbg{gap:14px 22px;justify-content:flex-start}
-  .uc1 .uc-tbi{font-size:12px}
-  .uc1 .uc-hero{padding:48px 0 60px}
-  .uc1 .uc-hg{grid-template-columns:1fr;gap:44px}
-  .uc1 .uc-ht{font-size:31px}
-  .uc1 .uc-hs{font-size:16px}
-  .uc1 .uc-prn{font-size:31px}
-  .uc1 .uc-cta{width:100%;padding:17px 20px}
-  .uc1 .uc-hi{order:-1}
-  .uc1 .uc-him{width:min(300px,86%)}
-  .uc1 .uc-bd{padding:10px 12px;font-size:12px}
-  .uc1 .uc-pb,.uc1 .uc-sl{padding:60px 0}
-  .uc1 .uc-hd h2{font-size:26px}
+  .uc1 .uc-in{padding:0 16px}
+  .uc1 .uc-hero{padding:30px 0 56px}
+  .uc1 .uc-hg{grid-template-columns:1fr;gap:34px}
+  .uc1 .uc-hi{position:static}
+  .uc1 .uc-bd1{left:-4px}.uc1 .uc-bd2{right:-4px}
+  .uc1 .uc-ht{font-size:29px}
+  .uc1 .uc-prn{font-size:29px}.uc1 .uc-pro{font-size:18px}
+  .uc1 .uc-ds{font-size:15.5px}
+  .uc1 .uc-ft{grid-template-columns:1fr 1fr;gap:11px 12px}
+  .uc1 .uc-fti{font-size:13px}
+  .uc1 .uc-ot{font-size:17px}
+  .uc1 .uc-cdb{font-size:12.5px;padding:12px 14px}
+  .uc1 .uc-opt{font-size:15.5px}
+  .uc1 .uc-opn{font-size:17px}
+  .uc1 .uc-sel{margin-left:0}
+  .uc1 .uc-opa{margin-left:34px}
+  .uc1 .uc-cta{font-size:16.5px;padding:19px 18px}
+  .uc1 .uc-pb,.uc1 .uc-sl{padding:58px 0}
+  .uc1 .uc-hd h2{font-size:25px}
   .uc1 .uc-pg{grid-template-columns:1fr;gap:16px}
   .uc1 .uc-pbn{flex-direction:column;text-align:center;padding:28px 22px}
-  .uc1 .uc-sg{grid-template-columns:1fr;gap:40px}
-  .uc1 .uc-sc h2{font-size:26px}
-  .uc1 .uc-sim{width:min(300px,88%)}
+  .uc1 .uc-ms{padding:26px 22px}
+  .uc1 .uc-sg{grid-template-columns:1fr;gap:38px}
+  .uc1 .uc-sc h2{font-size:25px}
 }
 </style>
 
 <div class="uc1">
 
-<!-- ===== 1. TRUST BAR ===== -->
-<div class="cw uc-tb">
-  <div class="uc-in">
-    <div class="uc-tbg">
-      <div class="uc-tbi">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-        Descarga inmediata
-      </div>
-      <div class="uc-tbi">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg>
-        Pago 100% seguro
-      </div>
-      <div class="uc-tbi">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        +500 clientes ya lo compraron
-      </div>
-      <div class="uc-tbi">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
-        Mercado Pago · PayPal · Whop
-      </div>
-    </div>
+<!-- ===== 1. BARRA ANUNCIO ===== -->
+<div class="cw uc-an">
+  <div class="uc-ant">
+    <span>Descarga inmediata en tu email<i></i>Oferta de lanzamiento 30% OFF<i></i>+500 clientes ya lo compraron<i></i>Acceso de por vida<i></i></span>
+    <span>Descarga inmediata en tu email<i></i>Oferta de lanzamiento 30% OFF<i></i>+500 clientes ya lo compraron<i></i>Acceso de por vida<i></i></span>
   </div>
 </div>
 
-<!-- ===== 2. HERO ===== -->
+<!-- ===== 2. HERO PRODUCTO ===== -->
 <div class="cw uc-hero">
   <div class="uc-in">
     <div class="uc-hg">
-      <div>
-        <span class="uc-tag">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          Guía digital · U del Closer
-        </span>
-        <h1 class="uc-ht">Convertite en <em>Closer de Ventas</em> y cobrá por lo que sabés decir</h1>
-        <p class="uc-hs">La guía paso a paso que te lleva de cero a cerrar ventas de alto valor por llamada, aunque hoy no tengas experiencia ni cartera de clientes.</p>
-        <ul class="uc-hb">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>El método completo para cerrar por teléfono o videollamada, sin sonar vendedor</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Guiones y respuestas exactas para las objeciones más comunes</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Cómo conseguir tus primeros clientes que paguen por tus cierres</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Acceso de por vida + actualizaciones incluidas</li>
-        </ul>
-        <div class="uc-pr">
-          <span class="uc-prn">$85.000</span>
-          <span class="uc-pro">$120.000</span>
-          <span class="uc-prd">OFERTA DE LANZAMIENTO</span>
-        </div>
-        <a class="uc-cta" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">
-          Quiero la guía ahora
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </a>
-        <div class="uc-ctan">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg>
-          Compra protegida · Recibís el acceso al instante en tu email
-        </div>
-      </div>
+
       <div class="uc-hi">
-        <img class="uc-him" src="URL-IMAGEN-PRODUCTO" alt="Guía para convertirte en Closer de Ventas — ebook digital">
-        <div class="uc-bd uc-bd1">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <div>+500 clientes<small>ya empezaron</small></div>
+        <div class="uc-him-w">
+          <img class="uc-him" src="URL-IMAGEN-PRODUCTO" alt="Guía para convertirte en Closer de Ventas — ebook digital">
+          <div class="uc-bd uc-bd1">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div>+500 clientes<small>ya empezaron</small></div>
+          </div>
+          <div class="uc-bd uc-bd2">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+            <div>Descarga inmediata<small>en menos de 1 minuto</small></div>
+          </div>
         </div>
-        <div class="uc-bd uc-bd2">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-          <div>Descarga inmediata<small>en menos de 1 minuto</small></div>
+        <div class="uc-th">
+          <figure class="uc-thi"><img src="URL-IMAGEN-PRODUCTO" alt="Método paso a paso"><figcaption>Método paso a paso</figcaption></figure>
+          <figure class="uc-thi"><img src="URL-IMAGEN-PRODUCTO" alt="Guiones incluidos"><figcaption>Guiones incluidos</figcaption></figure>
+          <figure class="uc-thi"><img src="URL-IMAGEN-PRODUCTO" alt="Acceso de por vida"><figcaption>Acceso de por vida</figcaption></figure>
         </div>
       </div>
+
+      <div>
+        <div class="uc-rt">
+          <div class="uc-avs"><span class="uc-av uc-av1">M</span><span class="uc-av uc-av2">L</span><span class="uc-av uc-av3">J</span></div>
+          <p>Calificado <b>+4.9/5</b> basado en <b>+500 compras</b></p>
+        </div>
+        <h1 class="uc-ht">Guía Closer de Ventas<em>®</em></h1>
+        <div class="uc-pr">
+          <s class="uc-pro">$120.000,00</s>
+          <span class="uc-prn">$85.000,00</span>
+          <span class="uc-prl"></span>
+        </div>
+        <p class="uc-ds">Convertite en <b>closer de ventas</b> y cobrá por lo que sabés decir, con un método <b>paso a paso</b>, <b>guiones listos para usar</b> y la ruta exacta para conseguir <b>clientes que paguen</b>, aunque hoy no tengas experiencia.</p>
+        <div class="uc-ft">
+          <div class="uc-fti"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Descarga inmediata</div>
+          <div class="uc-fti"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>Acceso de por vida</div>
+          <div class="uc-fti"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Guiones incluidos</div>
+          <div class="uc-fti"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Sin experiencia previa</div>
+        </div>
+
+        <h2 class="uc-ot">Empezá hoy &amp; ahorrá</h2>
+        <div class="uc-of">
+          <input type="radio" id="uco1" name="uco" checked>
+          <input type="radio" id="uco2" name="uco">
+
+          <div class="uc-cdb">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Oferta de lanzamiento — Finaliza en: <b>23</b>:<b class="uc-m"></b>:<b class="uc-s"></b>
+          </div>
+
+          <label class="uc-op uc-op1" for="uco1">
+            <div class="uc-oph">
+              <span class="uc-rdo"></span>
+              <span class="uc-opt">Llevando 1</span>
+              <span class="uc-opg">Descarga inmediata</span>
+              <span class="uc-opp"><span class="uc-opn">$85.000</span><s class="uc-opo">$120.000</s></span>
+            </div>
+            <p class="uc-opa">Ahorrá $35.000</p>
+            <div class="uc-sel">
+              <span class="uc-sli">Formato: Ebook PDF <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+              <span class="uc-sli">Idioma: Español <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+            </div>
+            <div class="uc-bo">
+              <span class="uc-boc"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <p>+ Bonus: 5 plantillas de guiones de cierre listas para usar</p>
+              <span class="uc-bop">GRATIS<s>$15.000</s></span>
+            </div>
+          </label>
+
+          <label class="uc-op uc-op2" for="uco2">
+            <div class="uc-oph">
+              <span class="uc-rdo"></span>
+              <span class="uc-opt">Llevando 2</span>
+              <span class="uc-opg">Uno para regalar</span>
+              <span class="uc-opp"><span class="uc-opn">$170.000</span></span>
+            </div>
+            <p class="uc-opa">Dos accesos: para vos y tu socio o socia de práctica</p>
+          </label>
+
+          <p class="uc-gift">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8c-1.5-3-6-3.5-6-1s4 2 6 1z"/><path d="M12 8c1.5-3 6-3.5 6-1s-4 2-6 1z"/></svg>
+            Comprando hoy te llevás todos los bonus de regalo
+          </p>
+
+          <a class="uc-cta uc-cta1" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">Agregar al carrito</a>
+          <a class="uc-cta uc-cta2" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:2">Agregar al carrito</a>
+        </div>
+
+        <div class="uc-ps">
+          <p><b>Pago Seguro</b> En Línea</p>
+          <div class="uc-pay">
+            <span class="uc-pc1 uc-mp">Mercado Pago</span>
+            <span class="uc-pc1 uc-pp">PayPal</span>
+            <span class="uc-pc1 uc-wh">Whop</span>
+            <span class="uc-pc1 uc-vi">VISA</span>
+            <span class="uc-pc1 uc-mc"><span class="uc-mcc"><i></i><i></i></span></span>
+          </div>
+          <div class="uc-pls">
+            <span class="uc-pl"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Entrega Inmediata</span>
+            <span class="uc-pl"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>Soporte 24/7</span>
+            <span class="uc-pl"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>Garantía 30 días</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- ===== 3. EL PROBLEMA ===== -->
+<!-- ===== 3. MARQUEE CARACTERISTICAS ===== -->
+<div class="cw uc-mq">
+  <div class="uc-mqt">
+    <span>Método paso a paso<i></i>Guiones de cierre incluidos<i></i>Manejo de objeciones<i></i>Cómo conseguir clientes<i></i>Acceso de por vida<i></i></span>
+    <span>Método paso a paso<i></i>Guiones de cierre incluidos<i></i>Manejo de objeciones<i></i>Cómo conseguir clientes<i></i>Acceso de por vida<i></i></span>
+  </div>
+</div>
+
+<!-- ===== 4. EL PROBLEMA ===== -->
 <div class="cw uc-pb">
   <div class="uc-in">
     <div class="uc-hd">
-      <span class="uc-tag">¿Te suena familiar?</span>
+      <span class="uc-tg">¿Te suena familiar?</span>
       <h2>Sabés que podrías ganar más, pero algo te frena</h2>
       <p>No es falta de ganas. Es que nadie te enseñó cómo funciona realmente una venta de alto valor.</p>
     </div>
@@ -233,17 +380,20 @@ PERSONALIZAR: colores en las variables CSS de .uc1 | URLs de imagen | VARIANT_ID
   </div>
 </div>
 
-<!-- ===== 4. LA SOLUCIÓN ===== -->
+<!-- ===== 5. LA SOLUCION ===== -->
 <div class="cw uc-sl">
   <div class="uc-in">
+    <div class="uc-ms">
+      <h3>Nuestra misión</h3>
+      <p>Ganar bien no debería depender de un título ni de años de experiencia. Diseñamos una guía pensada para que aprendas la habilidad mejor paga del mercado digital: cerrar ventas.</p>
+    </div>
     <div class="uc-sg">
       <div class="uc-si">
         <span class="uc-sst">Ebook digital</span>
-        <img class="uc-sim" src="URL-IMAGEN-PRODUCTO" alt="Interior de la Guía para convertirte en Closer de Ventas">
+        <img class="uc-sim" src="URL-IMAGEN-PRODUCTO" alt="Interior de la Guía Closer de Ventas">
       </div>
       <div class="uc-sc">
-        <span class="uc-tag">La solución</span>
-        <h2>Todo lo que necesitás para cerrar tu primera venta de alto valor</h2>
+        <h2>La guía <em>más práctica</em>, <em>directa</em> y <em>completa</em> para convertirte en closer</h2>
         <div class="uc-bl">
           <div class="uc-bli">
             <div class="uc-blic">
