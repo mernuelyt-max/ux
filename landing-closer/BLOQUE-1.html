@@ -1,0 +1,300 @@
+<!-- ============================================================
+BLOQUE 1 — U DEL CLOSER · Landing "Guía para convertirte en Closer de Ventas"
+Secciones: 1) Trust Bar · 2) Hero · 3) El Problema · 4) La Solución
+Pegar completo en un bloque "Liquid personalizado" del editor de tema.
+PERSONALIZAR: colores en las variables CSS de .uc1 | URLs de imagen | VARIANT_ID
+============================================================ -->
+<style>
+.uc1{
+  /* ===== VARIABLES DE COLOR — EDITAR ACÁ ===== */
+  --v:#0E3B2E;        /* verde oscuro principal */
+  --v2:#0A2C22;       /* verde más profundo (fondos) */
+  --v3:#1A5A45;       /* verde medio (hovers, detalles) */
+  --cr:#F6F3EC;       /* crema de fondo */
+  --bl:#FFFFFF;       /* blanco */
+  --tx:#1C2B26;       /* texto principal */
+  --tx2:#5A6B64;      /* texto secundario */
+  --au:#C9A227;       /* dorado acento */
+  --au2:#E8B54A;      /* dorado claro */
+  --ok:#2E7D5B;       /* verde éxito */
+  /* =========================================== */
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  color:var(--tx);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.uc1 *,.uc1 *:before,.uc1 *:after{box-sizing:border-box;margin:0;padding:0}
+.uc1 img{max-width:100%;display:block}
+.uc1 .cw{width:100vw;position:relative;left:50%;margin-left:-50vw;overflow-x:hidden}
+.uc1 .uc-in{max-width:1140px;margin:0 auto;padding:0 24px}
+.uc1 h1,.uc1 h2,.uc1 h3{font-weight:700;line-height:1.15;letter-spacing:-.02em}
+.uc1 .uc-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.12);color:var(--au);border:1px solid rgba(201,162,39,.35);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:100px}
+
+/* ============ 1. TRUST BAR ============ */
+.uc1 .uc-tb{background:var(--v2);padding:14px 0}
+.uc1 .uc-tbg{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.uc1 .uc-tbi{display:flex;align-items:center;gap:10px;color:#DCE7E2;font-size:13.5px;font-weight:600}
+.uc1 .uc-tbi svg{width:18px;height:18px;stroke:var(--au2);flex-shrink:0}
+
+/* ============ 2. HERO ============ */
+.uc1 .uc-hero{background:linear-gradient(180deg,var(--cr) 0%,#EFEAE0 100%);padding:72px 0 88px;overflow:hidden}
+.uc1 .uc-hg{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.uc1 .uc-ht{font-size:46px;margin:18px 0 16px}
+.uc1 .uc-ht em{font-style:normal;color:var(--v);position:relative}
+.uc1 .uc-ht em:after{content:"";position:absolute;left:0;bottom:2px;width:100%;height:10px;background:rgba(201,162,39,.35);z-index:-1;border-radius:3px}
+.uc1 .uc-hs{font-size:18px;color:var(--tx2);margin-bottom:26px;max-width:520px}
+.uc1 .uc-hb{list-style:none;display:grid;gap:12px;margin-bottom:30px}
+.uc1 .uc-hb li{display:flex;align-items:flex-start;gap:11px;font-size:15.5px;font-weight:500}
+.uc1 .uc-hb svg{width:20px;height:20px;stroke:var(--ok);flex-shrink:0;margin-top:1px}
+.uc1 .uc-pr{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+.uc1 .uc-prn{font-size:38px;font-weight:800;color:var(--v)}
+.uc1 .uc-pro{font-size:19px;color:var(--tx2);text-decoration:line-through}
+.uc1 .uc-prd{background:var(--au);color:var(--v2);font-size:12.5px;font-weight:800;padding:5px 10px;border-radius:6px;letter-spacing:.03em}
+.uc1 .uc-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--v);color:#fff;font-size:17px;font-weight:700;padding:18px 38px;border-radius:100px;text-decoration:none;box-shadow:0 10px 26px rgba(14,59,46,.32);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.uc1 .uc-cta:hover{background:var(--v3);transform:translateY(-2px);box-shadow:0 14px 32px rgba(14,59,46,.4)}
+.uc1 .uc-cta svg{width:20px;height:20px;stroke:#fff}
+.uc1 .uc-ctan{margin-top:12px;font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:7px}
+.uc1 .uc-ctan svg{width:15px;height:15px;stroke:var(--ok)}
+.uc1 .uc-hi{position:relative;display:flex;justify-content:center}
+.uc1 .uc-hi:before{content:"";position:absolute;inset:8% 6%;background:radial-gradient(closest-side,rgba(14,59,46,.16),transparent 70%);border-radius:50%}
+.uc1 .uc-him{width:min(430px,100%);position:relative;z-index:1;animation:ucfl 5s ease-in-out infinite;filter:drop-shadow(0 30px 40px rgba(14,59,46,.25))}
+@keyframes ucfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.uc1 .uc-bd{position:absolute;z-index:2;background:var(--bl);border-radius:14px;box-shadow:0 12px 30px rgba(20,40,33,.18);padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.uc1 .uc-bd small{display:block;font-size:11px;font-weight:500;color:var(--tx2)}
+.uc1 .uc-bd svg{width:22px;height:22px;stroke:var(--v);flex-shrink:0}
+.uc1 .uc-bd1{top:9%;left:0;animation:ucfl 5s ease-in-out .8s infinite}
+.uc1 .uc-bd2{bottom:11%;right:0;animation:ucfl 5s ease-in-out 1.6s infinite}
+
+/* ============ 3. EL PROBLEMA ============ */
+.uc1 .uc-pb{background:var(--bl);padding:88px 0}
+.uc1 .uc-hd{text-align:center;max-width:640px;margin:0 auto 52px}
+.uc1 .uc-hd h2{font-size:35px;margin:16px 0 12px}
+.uc1 .uc-hd p{color:var(--tx2);font-size:17px}
+.uc1 .uc-pg{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:44px}
+.uc1 .uc-pc{background:var(--cr);border:1px solid #E7E1D4;border-radius:18px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease}
+.uc1 .uc-pc:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(20,40,33,.1)}
+.uc1 .uc-pci{width:52px;height:52px;border-radius:14px;background:rgba(14,59,46,.08);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.uc1 .uc-pci svg{width:26px;height:26px;stroke:var(--v)}
+.uc1 .uc-pc h3{font-size:19px;margin-bottom:10px}
+.uc1 .uc-pc p{font-size:14.5px;color:var(--tx2)}
+.uc1 .uc-pbn{background:var(--v);color:#fff;border-radius:18px;padding:34px 40px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.uc1 .uc-pbn h3{font-size:22px;margin-bottom:6px}
+.uc1 .uc-pbn p{color:#BFD4CB;font-size:15px}
+.uc1 .uc-pbn svg{width:44px;height:44px;stroke:var(--au2);flex-shrink:0}
+
+/* ============ 4. LA SOLUCIÓN ============ */
+.uc1 .uc-sl{background:var(--cr);padding:88px 0}
+.uc1 .uc-sg{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}
+.uc1 .uc-si{position:relative;display:flex;justify-content:center}
+.uc1 .uc-sim{width:min(400px,100%);border-radius:20px;box-shadow:0 24px 50px rgba(14,59,46,.22)}
+.uc1 .uc-sst{position:absolute;top:-16px;right:6%;background:var(--au);color:var(--v2);font-size:12.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:9px 16px;border-radius:100px;box-shadow:0 8px 20px rgba(201,162,39,.4)}
+.uc1 .uc-sc h2{font-size:33px;margin:16px 0 26px}
+.uc1 .uc-bl{display:grid;gap:20px}
+.uc1 .uc-bli{display:flex;gap:16px;align-items:flex-start}
+.uc1 .uc-blic{width:44px;height:44px;border-radius:12px;background:var(--bl);border:1px solid #E7E1D4;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(20,40,33,.06)}
+.uc1 .uc-blic svg{width:22px;height:22px;stroke:var(--v)}
+.uc1 .uc-bli h3{font-size:16.5px;margin-bottom:4px}
+.uc1 .uc-bli p{font-size:14.5px;color:var(--tx2)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:900px){
+  .uc1 .uc-in{padding:0 18px}
+  .uc1 .uc-tbg{gap:14px 22px;justify-content:flex-start}
+  .uc1 .uc-tbi{font-size:12px}
+  .uc1 .uc-hero{padding:48px 0 60px}
+  .uc1 .uc-hg{grid-template-columns:1fr;gap:44px}
+  .uc1 .uc-ht{font-size:31px}
+  .uc1 .uc-hs{font-size:16px}
+  .uc1 .uc-prn{font-size:31px}
+  .uc1 .uc-cta{width:100%;padding:17px 20px}
+  .uc1 .uc-hi{order:-1}
+  .uc1 .uc-him{width:min(300px,86%)}
+  .uc1 .uc-bd{padding:10px 12px;font-size:12px}
+  .uc1 .uc-pb,.uc1 .uc-sl{padding:60px 0}
+  .uc1 .uc-hd h2{font-size:26px}
+  .uc1 .uc-pg{grid-template-columns:1fr;gap:16px}
+  .uc1 .uc-pbn{flex-direction:column;text-align:center;padding:28px 22px}
+  .uc1 .uc-sg{grid-template-columns:1fr;gap:40px}
+  .uc1 .uc-sc h2{font-size:26px}
+  .uc1 .uc-sim{width:min(300px,88%)}
+}
+</style>
+
+<div class="uc1">
+
+<!-- ===== 1. TRUST BAR ===== -->
+<div class="cw uc-tb">
+  <div class="uc-in">
+    <div class="uc-tbg">
+      <div class="uc-tbi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        Descarga inmediata
+      </div>
+      <div class="uc-tbi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg>
+        Pago 100% seguro
+      </div>
+      <div class="uc-tbi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        +500 clientes ya lo compraron
+      </div>
+      <div class="uc-tbi">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+        Mercado Pago · PayPal · Whop
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2. HERO ===== -->
+<div class="cw uc-hero">
+  <div class="uc-in">
+    <div class="uc-hg">
+      <div>
+        <span class="uc-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Guía digital · U del Closer
+        </span>
+        <h1 class="uc-ht">Convertite en <em>Closer de Ventas</em> y cobrá por lo que sabés decir</h1>
+        <p class="uc-hs">La guía paso a paso que te lleva de cero a cerrar ventas de alto valor por llamada, aunque hoy no tengas experiencia ni cartera de clientes.</p>
+        <ul class="uc-hb">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>El método completo para cerrar por teléfono o videollamada, sin sonar vendedor</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Guiones y respuestas exactas para las objeciones más comunes</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Cómo conseguir tus primeros clientes que paguen por tus cierres</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Acceso de por vida + actualizaciones incluidas</li>
+        </ul>
+        <div class="uc-pr">
+          <span class="uc-prn">$85.000</span>
+          <span class="uc-pro">$120.000</span>
+          <span class="uc-prd">OFERTA DE LANZAMIENTO</span>
+        </div>
+        <a class="uc-cta" href="https://[mi-tienda].myshopify.com/cart/VARIANT_ID:1">
+          Quiero la guía ahora
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <div class="uc-ctan">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg>
+          Compra protegida · Recibís el acceso al instante en tu email
+        </div>
+      </div>
+      <div class="uc-hi">
+        <img class="uc-him" src="URL-IMAGEN-PRODUCTO" alt="Guía para convertirte en Closer de Ventas — ebook digital">
+        <div class="uc-bd uc-bd1">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div>+500 clientes<small>ya empezaron</small></div>
+        </div>
+        <div class="uc-bd uc-bd2">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          <div>Descarga inmediata<small>en menos de 1 minuto</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3. EL PROBLEMA ===== -->
+<div class="cw uc-pb">
+  <div class="uc-in">
+    <div class="uc-hd">
+      <span class="uc-tag">¿Te suena familiar?</span>
+      <h2>Sabés que podrías ganar más, pero algo te frena</h2>
+      <p>No es falta de ganas. Es que nadie te enseñó cómo funciona realmente una venta de alto valor.</p>
+    </div>
+    <div class="uc-pg">
+      <div class="uc-pc">
+        <div class="uc-pci">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Trabajás mucho y ganás poco</h3>
+        <p>Cambiás horas por un sueldo que no crece, mientras ves gente sin más talento que vos facturando el triple desde su casa.</p>
+      </div>
+      <div class="uc-pc">
+        <div class="uc-pci">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>
+        </div>
+        <h3>Te bloqueás al momento de vender</h3>
+        <p>Cuando llega el momento de hablar de precio o cerrar, dudás, das vueltas y el cliente se enfría. Y esa venta no vuelve.</p>
+      </div>
+      <div class="uc-pc">
+        <div class="uc-pci">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+        <h3>No sabés por dónde empezar</h3>
+        <p>Videos sueltos, consejos contradictorios, cursos carísimos. Información hay de sobra; lo que falta es un camino claro y ordenado.</p>
+      </div>
+    </div>
+    <div class="uc-pbn">
+      <div>
+        <h3>La buena noticia: cerrar ventas es una habilidad, no un don</h3>
+        <p>Y como toda habilidad, se aprende con el método correcto. Eso es exactamente lo que vas a encontrar en esta guía.</p>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4. LA SOLUCIÓN ===== -->
+<div class="cw uc-sl">
+  <div class="uc-in">
+    <div class="uc-sg">
+      <div class="uc-si">
+        <span class="uc-sst">Ebook digital</span>
+        <img class="uc-sim" src="URL-IMAGEN-PRODUCTO" alt="Interior de la Guía para convertirte en Closer de Ventas">
+      </div>
+      <div class="uc-sc">
+        <span class="uc-tag">La solución</span>
+        <h2>Todo lo que necesitás para cerrar tu primera venta de alto valor</h2>
+        <div class="uc-bl">
+          <div class="uc-bli">
+            <div class="uc-blic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div>
+              <h3>El método de cierre paso a paso</h3>
+              <p>Desde el primer "hola" hasta el pago confirmado: la estructura exacta de una llamada que convierte.</p>
+            </div>
+          </div>
+          <div class="uc-bli">
+            <div class="uc-blic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <h3>Guiones listos para usar</h3>
+              <p>Qué decir palabra por palabra frente a "lo tengo que pensar", "está caro" o "lo hablo con mi pareja".</p>
+            </div>
+          </div>
+          <div class="uc-bli">
+            <div class="uc-blic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+            <div>
+              <h3>Cómo conseguir clientes que te paguen</h3>
+              <p>Dónde están las empresas e infoproductores que buscan closers y cómo presentarte para que te elijan.</p>
+            </div>
+          </div>
+          <div class="uc-bli">
+            <div class="uc-blic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+            </div>
+            <div>
+              <h3>Mentalidad y manejo del rechazo</h3>
+              <p>Cómo sostener la confianza cuando te dicen que no, y usar cada llamada para mejorar la siguiente.</p>
+            </div>
+          </div>
+          <div class="uc-bli">
+            <div class="uc-blic">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <h3>Cuánto cobrar y cómo negociar tu comisión</h3>
+              <p>Los esquemas de pago reales del mercado y cómo asegurarte un porcentaje justo desde el primer acuerdo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- ============ FIN BLOQUE 1 ============ -->
