@@ -22,6 +22,7 @@ const display = Bodoni_Moda({
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { getCartAction } from "@/lib/actions";
 
 export const metadata: Metadata = {
@@ -62,31 +63,14 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>
-        {/* Oculta header y footer en todo el sitio (snippet provisto).
-            Para volver a mostrarlos, elimina este <script>. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-  (function() {
-    function hideChrome() {
-      var header = document.getElementById('header-group');
-      if (header) header.style.display = 'none';
-      var footer = document.querySelector('footer');
-      if (footer) footer.style.display = 'none';
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', hideChrome);
-    } else {
-      hideChrome();
-    }
-  })();
-`,
-          }}
-        />
         <CartProvider initialCart={initialCart}>
-          <Header />
+          <SiteChrome>
+            <Header />
+          </SiteChrome>
           <main>{children}</main>
-          <Footer />
+          <SiteChrome>
+            <Footer />
+          </SiteChrome>
         </CartProvider>
       </body>
     </html>
