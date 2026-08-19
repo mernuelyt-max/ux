@@ -46,7 +46,9 @@ npm install
 
 # 2. Configurar variables de entorno
 cp .env.example .env.local
-#   Edita .env.local con tu dominio y Storefront token.
+#   El dominio (tinomrkt.myshopify.com) ya viene precargado. Solo falta el
+#   token: Shopify admin → Apps y canales de venta → "Mi Tienda Headless" →
+#   Storefront API → copia el "Public access token" en SHOPIFY_STOREFRONT_TOKEN.
 
 # 3. Desarrollo
 npm run dev            # http://localhost:3000
@@ -95,6 +97,12 @@ tarjetas usa estos campos (el storefront ya los lee automáticamente):
 la **Storefront API** (Shopify → *Configuración → Datos personalizados →
 Productos → (tu definición) → "Storefront API access"*), o no llegarán al
 storefront.
+
+> **Estado actual de la tienda:** las tres definiciones (`custom.badge`,
+> `custom.cta`, `custom.features`) ya están creadas con acceso público a la
+> Storefront API, y la **Membresía IRON U del Closer** ya tiene sus valores
+> cargados. El producto está publicado en el canal "Mi Tienda Headless".
+> Puedes editar los textos desde el admin: producto → Metafields.
 
 > Para cobros recurrentes reales (suscripción mensual), usa una app de
 > suscripciones de Shopify (Shopify Subscriptions, Recharge, etc.). El
