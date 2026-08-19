@@ -11,7 +11,10 @@ export function Header() {
   const count = cart?.totalQuantity ?? 0;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-paper-200 bg-paper-50/80 backdrop-blur-lg">
+    <header
+      id="header-group"
+      className="sticky top-0 z-50 border-b border-paper-200 bg-paper-50/80 backdrop-blur-lg"
+    >
       <div className="container-page flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display font-extrabold">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-gold-gradient text-ink-950">

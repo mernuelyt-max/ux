@@ -62,6 +62,27 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${sans.variable} ${display.variable}`}>
       <body>
+        {/* Oculta header y footer en todo el sitio (snippet provisto).
+            Para volver a mostrarlos, elimina este <script>. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  (function() {
+    function hideChrome() {
+      var header = document.getElementById('header-group');
+      if (header) header.style.display = 'none';
+      var footer = document.querySelector('footer');
+      if (footer) footer.style.display = 'none';
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', hideChrome);
+    } else {
+      hideChrome();
+    }
+  })();
+`,
+          }}
+        />
         <CartProvider initialCart={initialCart}>
           <Header />
           <main>{children}</main>
