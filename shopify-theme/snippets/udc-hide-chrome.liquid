@@ -1,0 +1,35 @@
+{%- comment -%}
+  UDC — Ocultar el chrome del tema (header, footer, anuncios) en páginas de
+  landing tipo "sin distracciones", donde la única salida es el botón de
+  WhatsApp o el checkout.
+
+  No hay layout/theme.liquid en este rescate (ver README, "Lo que todavía
+  falta"), así que no se sabe todavía qué selectores usa el header/footer
+  reales del tema. Por eso los selectores de acá abajo son los nombres
+  estándar de Shopify (Dawn y la mayoría de los temas basados en secciones:
+  #shopify-section-header, #shopify-section-footer, .shopify-section
+  header/footer del layout, la announcement-bar) más las clases obvias
+  (header, footer, .site-header, .site-footer). Cuando exista el
+  layout.liquid real, conviene revisar esta lista contra los ids que ese
+  layout genere.
+
+  Uso: {% render 'udc-hide-chrome' %} al principio de la sección que
+  necesita la página limpia (por ejemplo udc-03-hero, si la landing va sin
+  header). No oculta udc-02-nav ni las demás secciones udc-*: esas se
+  controlan activándolas o no desde el editor del tema.
+{%- endcomment -%}
+
+<style>
+  #shopify-section-header,
+  #shopify-section-announcement-bar,
+  #shopify-section-footer,
+  .shopify-section-header,
+  .shopify-section-footer,
+  header.site-header,
+  footer.site-footer,
+  .announcement-bar{
+    display:none !important}
+
+  body{
+    margin-top:0 !important}
+</style>

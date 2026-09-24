@@ -1,0 +1,177 @@
+{%- comment -%}
+  UDC — Facturación de alumnos
+
+  Esta sección no estaba en design-reference/landing-base.html: se agregó
+  después, por chat (ver README, "Rescate 1"). Los 5 alumnos (f1..f5, con
+  image/amount/period/name) y el disclaimer ya estaban grabados en
+  templates/index.json antes de este archivo, con dos modos de layout ya
+  previstos ahí (layout: "carousel", con interval y wall_speed) — acá se
+  implementan los dos: "carousel" (una tarjeta a la vez, avanza sola) y
+  "wall" (marquesina horizontal con todas a la vez).
+
+  No se inventó ni un nombre ni un monto: los 5 casos son los que ya estaban
+  grabados, con la foto vinculada a shopify://shop_images/... como en el
+  resto de las secciones con imágenes.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-fc" id="udc-fc-{{ section.id }}">
+  <div class="udc-fc__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-fc__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    {%- if section.settings.layout == 'wall' -%}
+      <div class="udc-fc__wall" data-udc-reveal>
+        <div class="udc-marquee udc-fc__mq" style="animation-duration:{{ section.settings.wall_speed | default: 7 | times: 6 }}s">
+          {%- for pass in (1..2) -%}
+            <div class="udc-marquee__row udc-fc__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+              {%- for block in section.blocks -%}
+                {%- render 'udc-factu-card', block: block -%}
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="udc-fc__carousel" data-udc-reveal data-interval="{{ section.settings.interval | default: 4 }}">
+        <div class="udc-fc__track">
+          {%- for block in section.blocks -%}
+            <div class="udc-fc__slide{% if forloop.first %} is-active{% endif %}">
+              {%- render 'udc-factu-card', block: block -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if section.blocks.size > 1 -%}
+          <div class="udc-fc__dots" role="tablist">
+            {%- for block in section.blocks -%}
+              <button type="button" class="udc-fc__dot{% if forloop.first %} is-active{% endif %}"
+                      data-udc-fc-dot="{{ forloop.index0 }}" aria-label="Ver caso {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if section.settings.disclaimer != blank -%}
+    <p class="udc-fc__disclaimer">{{ section.settings.disclaimer }}</p>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-fc-{{ section.id }}{position:relative}
+  #udc-fc-{{ section.id }} .udc-fc__head{text-align:center;position:relative}
+  #udc-fc-{{ section.id }} .udc-fc__title{margin-top:14px}
+
+  #udc-fc-{{ section.id }} .udc-fc__card{
+    display:flex;align-items:center;gap:16px;border:1px solid var(--udc-border);
+    border-radius:16px;background:var(--udc-bg2);padding:16px;min-width:260px}
+  #udc-fc-{{ section.id }} .udc-fc__photo{
+    width:56px;height:56px;flex:0 0 auto;border-radius:50%;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg)}
+  #udc-fc-{{ section.id }} .udc-fc__photo img{display:block;width:100%;height:100%;object-fit:cover}
+  #udc-fc-{{ section.id }} .udc-fc__body{display:flex;flex-direction:column;gap:2px}
+  #udc-fc-{{ section.id }} .udc-fc__amount{
+    font-family:var(--udc-anton);font-size:22px;line-height:1;color:var(--udc-accent);
+    text-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+  #udc-fc-{{ section.id }} .udc-fc__name{font-size:13px;color:var(--udc-text)}
+  #udc-fc-{{ section.id }} .udc-fc__period{font-size:11px;color:var(--udc-dim)}
+
+  #udc-fc-{{ section.id }} .udc-fc__wall{overflow:hidden;margin-top:44px;position:relative}
+  #udc-fc-{{ section.id }} .udc-fc__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-fc-{{ section.id }} .udc-fc__row{gap:16px;padding-right:16px}
+
+  #udc-fc-{{ section.id }} .udc-fc__carousel{margin-top:44px;max-width:420px;margin-left:auto;margin-right:auto;position:relative}
+  #udc-fc-{{ section.id }} .udc-fc__track{position:relative;min-height:88px}
+  #udc-fc-{{ section.id }} .udc-fc__slide{
+    position:absolute;inset:0;opacity:0;transform:translateY(8px);pointer-events:none;
+    transition:opacity .5s ease,transform .5s ease}
+  #udc-fc-{{ section.id }} .udc-fc__slide.is-active{opacity:1;transform:none;pointer-events:auto;position:relative}
+  #udc-fc-{{ section.id }} .udc-fc__slide .udc-fc__card{width:100%}
+
+  #udc-fc-{{ section.id }} .udc-fc__dots{display:flex;justify-content:center;gap:8px;margin-top:16px}
+  #udc-fc-{{ section.id }} .udc-fc__dot{
+    width:7px;height:7px;border-radius:50%;background:var(--udc-line2);border:0;padding:0;cursor:pointer;
+    transition:background .2s ease,transform .2s ease}
+  #udc-fc-{{ section.id }} .udc-fc__dot.is-active{background:var(--udc-accent);transform:scale(1.3)}
+
+  #udc-fc-{{ section.id }} .udc-fc__disclaimer{
+    margin:32px auto 0;max-width:640px;text-align:center;font-size:11.5px;line-height:1.55;color:#6E6A64}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-fc-{{ section.id }} .udc-fc__mq{animation:none}
+    #udc-fc-{{ section.id }} .udc-fc__slide{transition:none}
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-fc-{{ section.id }}');
+    if (!root) return;
+    var carousel = root.querySelector('.udc-fc__carousel');
+    if (!carousel) return;
+    var slides = Array.prototype.slice.call(carousel.querySelectorAll('.udc-fc__slide'));
+    var dots = Array.prototype.slice.call(carousel.querySelectorAll('.udc-fc__dot'));
+    if (slides.length < 2) return;
+    var interval = (parseFloat(carousel.getAttribute('data-interval')) || 4) * 1000;
+    var active = 0;
+    var show = function (i) {
+      slides[active].classList.remove('is-active');
+      if (dots[active]) dots[active].classList.remove('is-active');
+      active = i;
+      slides[active].classList.add('is-active');
+      if (dots[active]) dots[active].classList.add('is-active');
+    };
+    var timer = setInterval(function () { show((active + 1) % slides.length); }, interval);
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () {
+        clearInterval(timer);
+        show(i);
+        timer = setInterval(function () { show((active + 1) % slides.length); }, interval);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "UDC · Facturación",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Facturación de alumnos" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Lo que están facturando" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "nuestros alumnos" },
+    {
+      "type": "select", "id": "layout", "label": "Diseño", "default": "carousel",
+      "options": [
+        { "value": "carousel", "label": "Carrusel (una tarjeta a la vez)" },
+        { "value": "wall", "label": "Marquesina (todas a la vez)" }
+      ]
+    },
+    { "type": "range", "id": "interval", "label": "Segundos por tarjeta (carrusel)", "min": 2, "max": 10, "default": 4 },
+    { "type": "range", "id": "wall_speed", "label": "Velocidad (marquesina)", "min": 3, "max": 20, "unit": "s", "default": 7 },
+    { "type": "textarea", "id": "disclaimer", "label": "Aclaración legal" }
+  ],
+  "blocks": [
+    {
+      "type": "caso",
+      "name": "Alumno",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Foto" },
+        { "type": "text", "id": "amount", "label": "Monto", "info": "Ej: 200K" },
+        { "type": "text", "id": "name", "label": "Nombre" },
+        { "type": "text", "id": "period", "label": "Detalle", "info": "Ej: Closer de ventas · 2025" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Facturación" }]
+}
+{% endschema %}

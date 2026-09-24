@@ -1,0 +1,23 @@
+{%- comment -%}
+  UDC — Tarjeta de video, usada por sections/udc-prod-video.liquid.
+  Recibe: block (un bloque de tipo "video").
+
+  block.settings.video_url es un setting de tipo "video_url" (nativo de
+  Shopify, acepta YouTube y Vimeo): por eso se embebe con external_video_tag
+  en vez de armar el iframe a mano — Shopify ya resuelve el ID y el embed
+  correcto para las dos plataformas.
+
+  Sin <style> propio: las reglas .udc-vd__card* viven en el <style> de la
+  sección, escopeadas a #udc-vd-{{ section.id }}.
+{%- endcomment -%}
+
+<div class="udc-vd__card" {{ block.shopify_attributes }}>
+  {%- if block.settings.video_url != blank -%}
+    <div class="udc-vd__frame">
+      {{ block.settings.video_url | external_video_tag: class: 'udc-vd__iframe', loading: 'lazy' }}
+    </div>
+  {%- endif -%}
+  {%- if block.settings.caption != blank -%}
+    <p class="udc-vd__caption">{{ block.settings.caption }}</p>
+  {%- endif -%}
+</div>

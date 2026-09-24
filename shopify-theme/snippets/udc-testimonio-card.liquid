@@ -1,0 +1,35 @@
+{%- comment -%}
+  UDC — Tarjeta de testimonio, usada por sections/udc-prod-testimonios.liquid.
+  Recibe: block (un bloque de tipo "testimonio").
+  Sin <style> propio: las reglas .udc-pt__card* viven en el <style> de la
+  sección, escopeadas a #udc-pt-{{ section.id }}.
+{%- endcomment -%}
+
+<div class="udc-pt__card" {{ block.shopify_attributes }}>
+  {%- if block.settings.rating > 0 -%}
+    <span class="udc-pt__stars">
+      {%- for i in (1..5) -%}
+        <span{% if i > block.settings.rating %} class="is-off"{% endif %}>★</span>
+      {%- endfor -%}
+    </span>
+  {%- endif -%}
+
+  {%- if block.settings.quote != blank -%}
+    <p class="udc-pt__quote">{{ block.settings.quote }}</p>
+  {%- endif -%}
+
+  <div class="udc-pt__author">
+    {%- if block.settings.photo != blank -%}
+      <span class="udc-pt__avatar">
+        <img src="{{ block.settings.photo | image_url: width: 64 }}" loading="lazy"
+             width="32" height="32" alt="{{ block.settings.name | escape }}">
+      </span>
+    {%- elsif block.settings.name != blank -%}
+      <span class="udc-pt__avatar udc-pt__avatar--initial">{{ block.settings.name | slice: 0, 1 }}</span>
+    {%- endif -%}
+    <span class="udc-pt__authorinfo">
+      {%- if block.settings.name != blank -%}<b>{{ block.settings.name }}</b>{%- endif -%}
+      {%- if block.settings.role != blank -%}<span>{{ block.settings.role }}</span>{%- endif -%}
+    </span>
+  </div>
+</div>

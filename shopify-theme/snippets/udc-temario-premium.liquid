@@ -1,0 +1,46 @@
+{%- comment -%}
+  UDC — Temario de la Membresía Premium.
+  Lo usa sections/udc-planes.liquid. Los estilos viven en esa sección.
+
+  A diferencia de udc-temario-esencial.liquid (recuperado byte a byte desde
+  la tienda suspendida), el temario módulo-por-módulo del Premium NO
+  apareció en ningún lado recuperable: ni en el artifact de Claude Design ni
+  en templates/index.json. Lo único real que hay es el resumen de 4 líneas
+  que ya estaba en el bloque "planes" > p2 > features:
+    "Marketing Digital · 6 módulos / Marca Personal + TikTok /
+     Automatización: landing page y delegación / Todo el Esencial incluido"
+
+  Por eso acá abajo solo están esas 3 áreas propias del Premium, cada una
+  como un único ítem (sin desglosar en módulos con viñetas, porque esas
+  viñetas no existen recuperadas y no se van a inventar). Si aparece el
+  temario real — desde la tienda si vuelve, o porque el cliente lo pasa —
+  reemplazar cada <li> por el <ol class="udc-pl__temlist"> completo, igual
+  que en udc-temario-esencial.liquid.
+
+  Premium incluye el Esencial de regalo (ver templates/index.json, "gift":
+  "Con acceso al Esencial de regalo"), por eso el temario del Esencial se
+  agrega completo al final con un render.
+{%- endcomment -%}
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Marketing Digital</span>
+  <ol class="udc-pl__temlist">
+    <li><b>6 módulos de Marketing Digital</b></li>
+  </ol>
+</div>
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Marca Personal</span>
+  <ol class="udc-pl__temlist">
+    <li><b>Marca Personal + TikTok</b></li>
+  </ol>
+</div>
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Automatización</span>
+  <ol class="udc-pl__temlist">
+    <li><b>Landing page y delegación</b></li>
+  </ol>
+</div>
+
+{% render 'udc-temario-esencial' %}

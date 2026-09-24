@@ -1,0 +1,131 @@
+{%- comment -%}
+  UDC — Carrito
+
+  Sin diseño de referencia recuperado (no estaba en el artifact ni en
+  ningún archivo rescatado): se construye nueva, siguiendo el mismo sistema
+  visual --udc-* que el resto del tema. Pensada para templates/cart.json
+  (que tampoco existe todavía, ver README).
+
+  Funciona sin JS: es un <form action="/cart"> con inputs de cantidad y un
+  botón "Actualizar" que hace un POST normal a /cart/update.js — el patrón
+  estándar de Shopify. snippets/udc-cart-js.liquid progresivamente mejora
+  eso con +/- que actualiza por Ajax (Cart API) sin recargar la página,
+  y cae solo al form si algo falla.
+
+  El CSS y el JS viven en snippets propios (mismo motivo que
+  udc-planes-css/js: no encoger este archivo con estilos no ayuda a nadie
+  a mantenerlo, y separa lo que es markup de lo que es comportamiento).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-ct" id="udc-ct-{{ section.id }}">
+  <div class="udc-ct__head" data-udc-reveal>
+    <h1 class="udc-h2">{{ section.settings.title | default: 'Tu carrito' }}</h1>
+    {%- if cart.item_count > 0 -%}
+      <span class="udc-ct__count">{{ cart.item_count }} {% if cart.item_count == 1 %}producto{% else %}productos{% endif %}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="udc-ct__empty" data-udc-reveal>
+      <p>{{ section.settings.empty_text | default: 'Todavía no agregaste nada al carrito.' }}</p>
+      <a href="{{ section.settings.empty_url | default: '/' }}" class="udc-btn">{{ section.settings.empty_cta | default: 'Ver membresías →' }}</a>
+    </div>
+  {%- else -%}
+    {%- form 'cart', cart, class: 'udc-ct__form', id: 'udc-ct-form-' | append: section.id -%}
+      <div class="udc-ct__lines">
+        {%- for item in cart.items -%}
+          <div class="udc-ct__line" data-udc-cart-line="{{ forloop.index }}">
+            <a href="{{ item.url }}" class="udc-ct__thumb">
+              {%- if item.image != blank -%}
+                <img src="{{ item.image | image_url: width: 160 }}" loading="lazy"
+                     width="80" height="80" alt="{{ item.image.alt | default: item.product.title | escape }}">
+              {%- endif -%}
+            </a>
+
+            <div class="udc-ct__info">
+              <a href="{{ item.url }}" class="udc-ct__title">{{ item.product.title }}</a>
+              {%- unless item.variant.title == 'Default Title' -%}
+                <span class="udc-ct__variant">{{ item.variant.title }}</span>
+              {%- endunless -%}
+              {%- if item.selling_plan_allocation == nil and item.original_price != item.final_price -%}
+                <span class="udc-ct__price">
+                  <s>{{ item.original_price | money }}</s> {{ item.final_price | money }}
+                </span>
+              {%- else -%}
+                <span class="udc-ct__price">{{ item.final_price | money }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="udc-ct__qty">
+              <button type="button" class="udc-ct__qtybtn" data-udc-cart-decrease aria-label="Restar una unidad">−</button>
+              <input type="number"
+                     class="udc-ct__qtyinput"
+                     name="updates[]"
+                     value="{{ item.quantity }}"
+                     min="0"
+                     data-udc-cart-qty
+                     data-line="{{ forloop.index }}"
+                     aria-label="Cantidad de {{ item.product.title | escape }}">
+              <button type="button" class="udc-ct__qtybtn" data-udc-cart-increase aria-label="Sumar una unidad">+</button>
+            </div>
+
+            <div class="udc-ct__linetotal">{{ item.final_line_price | money }}</div>
+
+            <a href="{{ item.url_to_remove }}" class="udc-ct__remove" data-udc-cart-remove="{{ forloop.index }}" aria-label="Quitar {{ item.product.title | escape }}">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+                <path d="M5 5l14 14M19 5L5 19"/>
+              </svg>
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="udc-ct__foot">
+        <button type="submit" name="update" class="udc-ct__update">{{ section.settings.update_text | default: 'Actualizar carrito' }}</button>
+
+        <div class="udc-ct__totals">
+          <span>{{ section.settings.subtotal_label | default: 'Subtotal' }}</span>
+          <span class="udc-ct__subtotal">{{ cart.total_price | money }}</span>
+        </div>
+
+        {%- if section.settings.note != blank -%}
+          <p class="udc-ct__note">{{ section.settings.note }}</p>
+        {%- endif -%}
+
+        <button type="submit" name="checkout" class="udc-btn udc-ct__checkout">
+          {{ section.settings.checkout_text | default: 'Finalizar compra →' }}
+        </button>
+      </div>
+    {%- endform -%}
+  {%- endif -%}
+</section>
+
+<style>
+{% render 'udc-cart-css', sid: section.id %}
+</style>
+
+{% render 'udc-cart-js', sid: section.id %}
+
+{% schema %}
+{
+  "name": "UDC · Carrito",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "Tu carrito" },
+
+    { "type": "header", "content": "Carrito vacío" },
+    { "type": "text", "id": "empty_text", "label": "Texto", "default": "Todavía no agregaste nada al carrito." },
+    { "type": "text", "id": "empty_cta", "label": "Texto del botón", "default": "Ver membresías →" },
+    { "type": "url", "id": "empty_url", "label": "Link del botón" },
+
+    { "type": "header", "content": "Pie" },
+    { "type": "text", "id": "update_text", "label": "Texto del botón actualizar", "default": "Actualizar carrito" },
+    { "type": "text", "id": "subtotal_label", "label": "Etiqueta del subtotal", "default": "Subtotal" },
+    { "type": "textarea", "id": "note", "label": "Nota (impuestos, envío, etc.)" },
+    { "type": "text", "id": "checkout_text", "label": "Texto del botón de compra", "default": "Finalizar compra →" }
+  ],
+  "presets": [{ "name": "UDC · Carrito" }]
+}
+{% endschema %}

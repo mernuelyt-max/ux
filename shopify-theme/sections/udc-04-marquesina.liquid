@@ -1,0 +1,66 @@
+{%- comment -%}
+  UDC 04 — Marquesina
+
+  A partir de la sección "MARQUEE 1" de design-reference/landing-base.html.
+  Los 5 items (b1..b5, con settings.style "normal"/"italic") ya estaban
+  grabados en templates/index.json antes de este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign speed = section.settings.speed | default: 20 -%}
+
+<div class="udc udc-top udc-mq" id="udc-mq-{{ section.id }}">
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-marquee udc-mq__mq" style="animation-duration:{{ speed }}s">
+      {%- for pass in (1..2) -%}
+        <div class="udc-marquee__row udc-mq__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <span class="{% if block.settings.style == 'italic' %}udc-serif{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+            <span class="udc-accent" aria-hidden="true">✦</span>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  #udc-mq-{{ section.id }}{padding:16px 0;background:var(--udc-bg2);overflow:hidden}
+  #udc-mq-{{ section.id }} .udc-mq__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-mq-{{ section.id }} .udc-mq__row{
+    gap:40px;padding-right:40px;font-family:var(--udc-anton);font-size:14px;
+    text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;color:var(--udc-text)}
+  #udc-mq-{{ section.id }} .udc-mq__row .udc-serif{text-transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-mq-{{ section.id }} .udc-mq__mq{animation:none}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC 04 · Marquesina",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "speed", "label": "Velocidad", "min": 8, "max": 60, "step": 2, "unit": "s", "default": 20 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto" },
+        {
+          "type": "select", "id": "style", "label": "Estilo", "default": "normal",
+          "options": [
+            { "value": "normal", "label": "Normal (Anton)" },
+            { "value": "italic", "label": "Serif itálica" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 04 · Marquesina" }]
+}
+{% endschema %}

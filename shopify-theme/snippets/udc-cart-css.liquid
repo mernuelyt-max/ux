@@ -1,0 +1,82 @@
+{%- comment -%}
+  UDC — Estilos de sections/udc-cart.liquid.
+  Vive en su propio archivo por el mismo motivo que udc-planes-css.liquid:
+  no encoger la sección con CSS adentro. Se renderiza DENTRO del <style> de
+  la sección y necesita un parámetro, porque render abre un ámbito nuevo:
+    render 'udc-cart-css', sid: section.id
+{%- endcomment -%}
+
+  #udc-ct-{{ sid }}{max-width:900px;margin:0 auto}
+
+  #udc-ct-{{ sid }} .udc-ct__head{
+    display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px}
+  #udc-ct-{{ sid }} .udc-ct__count{font-size:13px;color:var(--udc-dim)}
+
+  #udc-ct-{{ sid }} .udc-ct__empty{
+    margin-top:40px;padding:48px 24px;text-align:center;border:1px solid var(--udc-border);
+    border-radius:20px;background:var(--udc-bg2);display:flex;flex-direction:column;
+    align-items:center;gap:20px}
+  #udc-ct-{{ sid }} .udc-ct__empty p{margin:0;color:var(--udc-muted);font-size:15px}
+
+  #udc-ct-{{ sid }} .udc-ct__lines{
+    margin-top:32px;display:flex;flex-direction:column;border-top:1px solid var(--udc-line2)}
+
+  #udc-ct-{{ sid }} .udc-ct__line{
+    display:grid;grid-template-columns:64px 1fr auto auto auto;gap:16px;align-items:center;
+    padding:18px 0;border-bottom:1px solid var(--udc-line2)}
+  @media (max-width:640px){
+    #udc-ct-{{ sid }} .udc-ct__line{grid-template-columns:56px 1fr auto;row-gap:10px}
+    #udc-ct-{{ sid }} .udc-ct__linetotal{grid-column:2 / 3;justify-self:start}
+    #udc-ct-{{ sid }} .udc-ct__remove{grid-column:3 / 4}
+  }
+
+  #udc-ct-{{ sid }} .udc-ct__thumb{
+    display:block;width:64px;height:64px;border-radius:12px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2)}
+  #udc-ct-{{ sid }} .udc-ct__thumb img{display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-ct-{{ sid }} .udc-ct__info{display:flex;flex-direction:column;gap:4px;min-width:0}
+  #udc-ct-{{ sid }} .udc-ct__title{
+    font-family:var(--udc-anton);font-size:14px;text-transform:uppercase;color:var(--udc-text)}
+  #udc-ct-{{ sid }} .udc-ct__title:hover{color:var(--udc-accent)}
+  #udc-ct-{{ sid }} .udc-ct__variant{font-size:12px;color:var(--udc-dim)}
+  #udc-ct-{{ sid }} .udc-ct__price{font-size:12px;color:var(--udc-muted)}
+  #udc-ct-{{ sid }} .udc-ct__price s{color:var(--udc-dim);margin-right:6px}
+
+  #udc-ct-{{ sid }} .udc-ct__qty{
+    display:flex;align-items:center;gap:0;border:1px solid var(--udc-line2);border-radius:999px;overflow:hidden}
+  #udc-ct-{{ sid }} .udc-ct__qtybtn{
+    width:30px;height:30px;border:0;background:transparent;color:var(--udc-text);
+    font-size:15px;cursor:pointer;line-height:1}
+  #udc-ct-{{ sid }} .udc-ct__qtybtn:hover{color:var(--udc-accent)}
+  #udc-ct-{{ sid }} .udc-ct__qtyinput{
+    width:36px;border:0;background:transparent;color:var(--udc-text);text-align:center;
+    font-size:13px;font-family:var(--udc-sans);-moz-appearance:textfield}
+  #udc-ct-{{ sid }} .udc-ct__qtyinput::-webkit-outer-spin-button,
+  #udc-ct-{{ sid }} .udc-ct__qtyinput::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+  #udc-ct-{{ sid }} .udc-ct__linetotal{
+    font-family:var(--udc-anton);font-size:14px;color:var(--udc-text);white-space:nowrap}
+
+  #udc-ct-{{ sid }} .udc-ct__remove{
+    display:flex;align-items:center;justify-content:center;width:28px;height:28px;
+    color:var(--udc-dim);transition:color .2s ease}
+  #udc-ct-{{ sid }} .udc-ct__remove:hover{color:var(--udc-accent)}
+
+  #udc-ct-{{ sid }} .udc-ct__foot{
+    margin-top:28px;display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+  #udc-ct-{{ sid }} .udc-ct__update{
+    align-self:flex-start;border:1px solid var(--udc-line2);background:transparent;
+    color:var(--udc-muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    padding:10px 18px;border-radius:999px;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+  #udc-ct-{{ sid }} .udc-ct__update:hover{border-color:var(--udc-accent);color:var(--udc-accent)}
+
+  #udc-ct-{{ sid }} .udc-ct__totals{
+    display:flex;align-items:baseline;gap:14px;font-size:14px;color:var(--udc-muted)}
+  #udc-ct-{{ sid }} .udc-ct__subtotal{
+    font-family:var(--udc-anton);font-size:clamp(22px,3vw,30px);color:var(--udc-text)}
+
+  #udc-ct-{{ sid }} .udc-ct__note{
+    margin:0;max-width:420px;text-align:right;font-size:12px;color:var(--udc-dim);line-height:1.5}
+
+  #udc-ct-{{ sid }} .udc-ct__checkout{width:100%;max-width:420px}

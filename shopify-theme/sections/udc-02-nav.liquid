@@ -1,0 +1,57 @@
+{%- comment -%}
+  UDC 02 — Nav
+
+  A partir del <header> de design-reference/landing-base.html. En
+  templates/index.json esta sección ya existía "disabled": true (el
+  comerciante la había apagado), con settings: {}.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+<header class="udc udc-nb" id="udc-nb-{{ section.id }}">
+  <div class="udc-nb__brand">
+    <span class="udc-nb__name">{{ section.settings.brand | default: shop.name }}</span>
+    {%- if section.settings.kicker != blank -%}
+      <span class="udc-nb__kicker">{{ section.settings.kicker }}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.cta_text != blank -%}
+    <a href="{{ wa_link }}" target="_blank" rel="noopener" class="udc-nb__cta">{{ section.settings.cta_text }}</a>
+  {%- endif -%}
+</header>
+
+<style>
+  #udc-nb-{{ section.id }}{
+    padding:22px clamp(20px,5vw,72px);display:flex;align-items:center;
+    justify-content:space-between;border-bottom:1px solid var(--udc-line)}
+  #udc-nb-{{ section.id }} .udc-nb__brand{display:flex;align-items:baseline;gap:14px}
+  #udc-nb-{{ section.id }} .udc-nb__name{
+    font-family:var(--udc-anton);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+  #udc-nb-{{ section.id }} .udc-nb__kicker{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--udc-accent)}
+  #udc-nb-{{ section.id }} .udc-nb__cta{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--udc-text);
+    border:1px solid #333;padding:10px 20px;border-radius:999px;
+    transition:border-color .2s ease,color .2s ease}
+  #udc-nb-{{ section.id }} .udc-nb__cta:hover{border-color:var(--udc-accent);color:var(--udc-accent)}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 02 · Nav",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "brand", "label": "Marca", "info": "Vacío = usa el nombre de la tienda." },
+    { "type": "text", "id": "kicker", "label": "Línea bajo la marca" },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "WhatsApp →" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "presets": [{ "name": "UDC 02 · Nav" }]
+}
+{% endschema %}

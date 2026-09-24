@@ -1,0 +1,29 @@
+{%- comment -%}
+  UDC — Tarjeta de facturación de un alumno, usada por sections/udc-facturacion.liquid.
+  Recibe: block (un bloque de tipo "caso").
+  Sin <style> propio: las reglas .udc-fc__card* viven en el <style> de la
+  sección, escopeadas a #udc-fc-{{ section.id }}.
+{%- endcomment -%}
+
+<div class="udc-fc__card" {{ block.shopify_attributes }}>
+  {%- if block.settings.image != blank -%}
+    <div class="udc-fc__photo">
+      <img src="{{ block.settings.image | image_url: width: 300 }}"
+           loading="lazy"
+           width="{{ block.settings.image.width }}"
+           height="{{ block.settings.image.height }}"
+           alt="{{ block.settings.image.alt | default: block.settings.name | escape }}">
+    </div>
+  {%- endif -%}
+  <div class="udc-fc__body">
+    {%- if block.settings.amount != blank -%}
+      <span class="udc-fc__amount">{{ block.settings.amount }}</span>
+    {%- endif -%}
+    {%- if block.settings.name != blank -%}
+      <span class="udc-fc__name">{{ block.settings.name }}</span>
+    {%- endif -%}
+    {%- if block.settings.period != blank -%}
+      <span class="udc-fc__period">{{ block.settings.period }}</span>
+    {%- endif -%}
+  </div>
+</div>

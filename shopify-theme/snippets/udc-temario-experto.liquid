@@ -1,0 +1,40 @@
+{%- comment -%}
+  UDC — Temario de la Membresía Experto.
+  Lo usa sections/udc-planes.liquid. Los estilos viven en esa sección.
+
+  Mismo caso que udc-temario-premium.liquid: el temario módulo-por-módulo
+  del Experto no apareció recuperable en ningún lado. Lo único real es el
+  resumen de templates/index.json, "planes" > p3 > features:
+    "Desarrollo Personal y Organización / Monetización con clientes ·
+     2 módulos / Edición de video / Todo el Premium y el Esencial incluidos"
+
+  Cada área va como un único ítem, sin viñetas inventadas — igual criterio
+  que en udc-temario-premium.liquid.
+
+  Experto incluye el Premium (y por lo tanto el Esencial) de regalo, por eso
+  se agrega el temario del Premium completo al final con un render, que a su
+  vez ya trae el del Esencial.
+{%- endcomment -%}
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Desarrollo Personal y Organización</span>
+  <ol class="udc-pl__temlist">
+    <li><b>Desarrollo Personal y Organización</b></li>
+  </ol>
+</div>
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Monetización con clientes</span>
+  <ol class="udc-pl__temlist">
+    <li><b>2 módulos de Monetización con clientes</b></li>
+  </ol>
+</div>
+
+<div class="udc-pl__temgroup">
+  <span class="udc-pl__temarea">Edición de video</span>
+  <ol class="udc-pl__temlist">
+    <li><b>Edición de video</b></li>
+  </ol>
+</div>
+
+{% render 'udc-temario-premium' %}

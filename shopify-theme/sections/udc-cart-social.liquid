@@ -1,0 +1,80 @@
+{%- comment -%}
+  UDC — Tira de confianza del carrito
+
+  Sin diseño de referencia recuperado. Pensada para ir debajo de
+  sections/udc-cart.liquid en templates/cart.json: una tira angosta con
+  medios de pago, una nota de compra segura y un link de soporte por
+  WhatsApp, para sostener la decisión justo antes del checkout.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+<div class="udc udc-cs" id="udc-cs-{{ section.id }}">
+  {%- if section.settings.secure_text != blank -%}
+    <span class="udc-cs__secure">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+      </svg>
+      {{ section.settings.secure_text }}
+    </span>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-cs__methods">
+      {%- for block in section.blocks -%}
+        <span {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.support_text != blank -%}
+    <a href="{{ wa_link }}" target="_blank" rel="noopener" class="udc-cs__support">
+      {{ section.settings.support_text }}
+    </a>
+  {%- endif -%}
+</div>
+
+<style>
+  #udc-cs-{{ section.id }}{
+    max-width:900px;margin:0 auto;padding-top:24px;padding-bottom:clamp(52px,8vh,88px);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(16px,3vw,32px);
+    text-align:center}
+
+  #udc-cs-{{ section.id }} .udc-cs__secure{
+    display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--udc-dim)}
+
+  #udc-cs-{{ section.id }} .udc-cs__methods{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(18px,4vw,32px)}
+  #udc-cs-{{ section.id }} .udc-cs__methods span{
+    font-size:13px;letter-spacing:.06em;color:var(--udc-dim);font-weight:700}
+
+  #udc-cs-{{ section.id }} .udc-cs__support{
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--udc-accent)}
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Confianza (carrito)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "secure_text", "label": "Texto de compra segura", "default": "Pago seguro" },
+    { "type": "text", "id": "support_text", "label": "Texto del link de soporte", "default": "¿Dudas? Escribinos por WhatsApp →" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "blocks": [
+    {
+      "type": "method",
+      "name": "Medio de pago",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto", "default": "Mercado Pago" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Confianza (carrito)" }]
+}
+{% endschema %}

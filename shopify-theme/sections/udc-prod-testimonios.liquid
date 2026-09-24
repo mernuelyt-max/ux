@@ -1,0 +1,95 @@
+{%- comment -%}
+  UDC — Testimonios de página de producto
+
+  Sin diseño ni contenido recuperado: a diferencia de sections/udc-prod-resenas.liquid
+  (que sí tenía las 6 reseñas reales de Trustpilot ya grabadas en
+  templates/index.json), esta sección no tiene ningún testimonio guardado en
+  ningún lado. Por eso los bloques de acá abajo no traen texto por
+  defecto — se completan a mano desde el editor del tema, con testimonios
+  reales de cada membresía. No se inventó ningún nombre ni cita.
+
+  Pensada para templates/product.json (que tampoco existe todavía, ver
+  README), junto con udc-prod-video.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-pt" id="udc-pt-{{ section.id }}">
+  <div class="udc-pt__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-pt__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-pt__grid" data-udc-reveal>
+      {%- for block in section.blocks -%}
+        {%- render 'udc-testimonio-card', block: block -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-pt-{{ section.id }}{position:relative}
+  #udc-pt-{{ section.id }} .udc-pt__head{text-align:center;position:relative}
+  #udc-pt-{{ section.id }} .udc-pt__title{margin-top:14px}
+
+  #udc-pt-{{ section.id }} .udc-pt__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;
+    max-width:1080px;margin:44px auto 0;position:relative}
+
+  #udc-pt-{{ section.id }} .udc-pt__card{
+    border:1px solid var(--udc-border);border-radius:16px;background:var(--udc-bg2);
+    padding:22px;display:flex;flex-direction:column;gap:12px;text-align:left;
+    transition:border-color .25s ease,box-shadow .25s ease}
+  #udc-pt-{{ section.id }} .udc-pt__card:hover{
+    border-color:var(--udc-accent);box-shadow:0 0 50px color-mix(in srgb, var(--udc-accent) 18%, transparent)}
+
+  #udc-pt-{{ section.id }} .udc-pt__stars{display:inline-flex;gap:4px}
+  #udc-pt-{{ section.id }} .udc-pt__stars span{
+    display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
+    border-radius:3px;background:var(--udc-accent);color:#fff;font-size:11px;line-height:1}
+  #udc-pt-{{ section.id }} .udc-pt__stars span.is-off{background:var(--udc-line2);color:transparent}
+
+  #udc-pt-{{ section.id }} .udc-pt__quote{margin:0;font-size:14px;line-height:1.6;color:#D9D9CF}
+
+  #udc-pt-{{ section.id }} .udc-pt__author{display:flex;align-items:center;gap:10px;margin-top:auto}
+  #udc-pt-{{ section.id }} .udc-pt__avatar{
+    width:32px;height:32px;flex:0 0 auto;border-radius:50%;overflow:hidden;
+    background:#1C1614;color:var(--udc-accent);display:flex;align-items:center;justify-content:center;
+    font-family:var(--udc-anton);font-size:14px}
+  #udc-pt-{{ section.id }} .udc-pt__avatar img{width:100%;height:100%;object-fit:cover}
+  #udc-pt-{{ section.id }} .udc-pt__authorinfo{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--udc-dim)}
+  #udc-pt-{{ section.id }} .udc-pt__authorinfo b{color:var(--udc-text);font-weight:400}
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Testimonios (producto)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonio",
+      "name": "Testimonio",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Estrellas", "min": 0, "max": 5, "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Cita" },
+        { "type": "image_picker", "id": "photo", "label": "Foto (opcional)" },
+        { "type": "text", "id": "name", "label": "Nombre" },
+        { "type": "text", "id": "role", "label": "Detalle", "info": "Ej: Membresía Premium · 3 meses" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Testimonios (producto)" }]
+}
+{% endschema %}

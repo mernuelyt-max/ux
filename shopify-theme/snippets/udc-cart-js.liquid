@@ -1,0 +1,93 @@
+{%- comment -%}
+  UDC — Comportamiento de sections/udc-cart.liquid.
+  Se renderiza con render 'udc-cart-js', sid: section.id
+
+  Mejora progresiva sobre el <form action="/cart">, que ya funciona solo
+  (POST normal a /cart/update). Acá se intercepta:
+    · los botones +/- y el input de cantidad → /cart/change.js (Cart AJAX API)
+    · el link de quitar (item.url_to_remove) → la misma llamada con quantity 0
+  y se actualiza el total de la línea, el subtotal y el contador sin recargar
+  la página. Si el fetch falla (o el carrito queda en 0), cae al comportamiento
+  normal del link/form.
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-ct-{{ sid }}');
+    if (!root) return;
+
+    var moneyFormat = {{ shop.money_format | json }};
+    var formatMoney = function (cents) {
+      var value = (cents / 100).toFixed(2);
+      var parts = value.split('.');
+      var formatted = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + parts[1];
+      return moneyFormat.replace(/\{\{\s*amount\s*\}\}/, formatted).replace(/<[^>]+>/g, '');
+    };
+
+    var changeLine = function (line, quantity) {
+      return fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: line, quantity: quantity })
+      }).then(function (res) { return res.json(); });
+    };
+
+    var refreshLine = function (lineEl, item) {
+      var input = lineEl.querySelector('[data-udc-cart-qty]');
+      var total = lineEl.querySelector('.udc-ct__linetotal');
+      if (input) input.value = item.quantity;
+      if (total) total.textContent = formatMoney(item.final_line_price);
+    };
+
+    var refreshTotals = function (cart) {
+      var subtotal = root.querySelector('.udc-ct__subtotal');
+      if (subtotal) subtotal.textContent = formatMoney(cart.total_price);
+      var count = root.querySelector('.udc-ct__count');
+      if (count) count.textContent = cart.item_count + (cart.item_count === 1 ? ' producto' : ' productos');
+    };
+
+    var applyChange = function (line, quantity, lineEl) {
+      changeLine(line, quantity).then(function (cart) {
+        if (quantity <= 0 || cart.item_count === 0) {
+          window.location.reload();
+          return;
+        }
+        var item = cart.items[line - 1];
+        if (item) refreshLine(lineEl, item);
+        refreshTotals(cart);
+      }).catch(function () {
+        var form = document.getElementById('udc-ct-form-{{ sid }}');
+        if (form) form.submit();
+      });
+    };
+
+    root.addEventListener('click', function (evt) {
+      var decBtn = evt.target.closest('[data-udc-cart-decrease]');
+      var incBtn = evt.target.closest('[data-udc-cart-increase]');
+      var removeLink = evt.target.closest('[data-udc-cart-remove]');
+
+      if (decBtn || incBtn) {
+        var qtyWrap = (decBtn || incBtn).closest('.udc-ct__qty');
+        var input = qtyWrap.querySelector('[data-udc-cart-qty]');
+        var line = parseInt(input.getAttribute('data-line'), 10);
+        var next = Math.max(0, (parseInt(input.value, 10) || 0) + (incBtn ? 1 : -1));
+        applyChange(line, next, input.closest('.udc-ct__line'));
+        return;
+      }
+
+      if (removeLink) {
+        evt.preventDefault();
+        var line2 = parseInt(removeLink.getAttribute('data-udc-cart-remove'), 10);
+        applyChange(line2, 0, removeLink.closest('.udc-ct__line'));
+      }
+    });
+
+    root.addEventListener('change', function (evt) {
+      var input = evt.target.closest('[data-udc-cart-qty]');
+      if (!input) return;
+      var line = parseInt(input.getAttribute('data-line'), 10);
+      var quantity = Math.max(0, parseInt(input.value, 10) || 0);
+      applyChange(line, quantity, input.closest('.udc-ct__line'));
+    });
+  })();
+</script>

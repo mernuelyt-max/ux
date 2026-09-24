@@ -1,0 +1,216 @@
+{%- comment -%}
+  UDC 14 — Packs (legacy, del ebook)
+
+  A partir de "Tres formas de arrancar hoy" dentro de la sección
+  "BONUS + UPSELLS" de design-reference/landing-base.html. En
+  templates/index.json esta sección ya está "disabled": true — la reemplazó
+  udc-planes (las membresías). Se reconstruye igual, completa, por si se
+  quiere reactivar o reusar el patrón; los 3 bloques (b1..b3) ya estaban
+  grabados en el template antes de este archivo.
+
+  Mismo principio que udc-planes.liquid: si el bloque tiene un producto
+  vinculado y use_product_price está activo, el precio sale en vivo de
+  Shopify, nunca del campo de texto "price". Así ningún precio queda
+  desactualizado a mano.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-pk" id="udc-pk-{{ section.id }}">
+  <div class="udc-pk__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-pk__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-pk__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign prod = blank
+          if block.settings.product != blank
+            assign prod = block.settings.product
+          endif
+          assign v = prod.selected_or_first_available_variant
+
+          assign wa = section.settings.whatsapp
+          if wa == blank
+            assign wa = settings.udc_whatsapp
+          endif
+          if wa == blank
+            assign wa = '+54 9 11 0000 0000'
+          endif
+          assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/'
+
+          assign href = wa_link
+          if block.settings.link_type == 'product' and prod != blank
+            assign href = prod.url
+            if v != blank and v.available
+              assign href = '/cart/' | append: v.id | append: ':1'
+            endif
+          elsif block.settings.link_type == 'custom' and block.settings.custom_url != blank
+            assign href = block.settings.custom_url
+          endif
+        -%}
+
+        <div class="udc-pk__card{% if block.settings.featured %} is-top{% endif %}" data-udc-reveal {{ block.shopify_attributes }}>
+          {%- if block.settings.featured -%}
+            <span class="udc-glow udc-pk__cardglow" aria-hidden="true"></span>
+          {%- endif -%}
+
+          {%- if block.settings.level != blank -%}
+            <span class="udc-tag {% if block.settings.featured %}udc-pk__badge{% else %}udc-tag--ghost{% endif %}">{{ block.settings.level }}</span>
+          {%- endif -%}
+          <h3 class="udc-pk__ctitle">{{ block.settings.title }}</h3>
+
+          {%- if block.settings.image != blank -%}
+            <div class="udc-pk__img">
+              <img src="{{ block.settings.image | image_url: width: 400 }}" loading="lazy"
+                   width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}"
+                   alt="{{ block.settings.image.alt | default: block.settings.title | escape }}">
+            </div>
+          {%- endif -%}
+
+          {%- assign feats = block.settings.features | newline_to_br | split: '<br />' -%}
+          <ul class="udc-pk__list">
+            {%- for raw in feats -%}
+              {%- assign f = raw | strip -%}
+              {%- if f != blank -%}
+                <li><span class="udc-pk__tick" aria-hidden="true">✓</span>{{ f }}</li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+
+          <div class="udc-pk__price_row">
+            {%- if block.settings.use_product_price and v != blank -%}
+              {%- if v.compare_at_price > v.price -%}
+                <s class="udc-pk__was">{{ v.compare_at_price | money_without_trailing_zeros }}</s>
+              {%- endif -%}
+              <span class="udc-pk__now">{{ v.price | money_without_trailing_zeros }}</span>
+            {%- else -%}
+              {%- if block.settings.compare_price != blank -%}
+                <s class="udc-pk__was">{{ block.settings.compare_price }}</s>
+              {%- endif -%}
+              {%- if block.settings.price != blank -%}
+                <span class="udc-pk__now">{{ block.settings.price }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.cta != blank -%}
+            <a href="{{ href }}"
+               {% unless block.settings.link_type == 'product' %}target="_blank" rel="noopener"{% endunless %}
+               class="udc-pk__cta{% if block.settings.featured %} is-buy{% endif %}">{{ block.settings.cta }}</a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-pk-{{ section.id }}{position:relative}
+  #udc-pk-{{ section.id }} .udc-pk__head{text-align:center;position:relative}
+  #udc-pk-{{ section.id }} .udc-pk__title{margin-top:14px}
+
+  #udc-pk-{{ section.id }} .udc-pk__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;
+    max-width:1200px;margin:44px auto 0;position:relative;align-items:stretch}
+  #udc-pk-{{ section.id }} .udc-pk__card{
+    border:1px solid var(--udc-border);border-radius:20px;background:var(--udc-bg2);
+    padding:clamp(24px,3vw,32px);display:flex;flex-direction:column;gap:16px;position:relative;
+    overflow:hidden;transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+  #udc-pk-{{ section.id }} .udc-pk__card:hover{transform:translateY(-6px);border-color:var(--udc-accent);
+    box-shadow:0 0 80px color-mix(in srgb, var(--udc-accent) 32%, transparent)}
+  #udc-pk-{{ section.id }} .udc-pk__card.is-top{
+    border-color:var(--udc-accent);background:#0B0606;
+    box-shadow:0 0 70px color-mix(in srgb, var(--udc-accent) 25%, transparent)}
+  #udc-pk-{{ section.id }} .udc-pk__cardglow{
+    bottom:-180px;right:-120px;width:420px;height:420px;filter:blur(90px);opacity:.3}
+
+  #udc-pk-{{ section.id }} .udc-pk__badge{align-self:flex-start}
+  #udc-pk-{{ section.id }} .udc-pk__ctitle{
+    position:relative;margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(17px,1.8vw,24px);line-height:1.15}
+
+  #udc-pk-{{ section.id }} .udc-pk__img{
+    position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg)}
+  #udc-pk-{{ section.id }} .udc-pk__img img{display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-pk-{{ section.id }} .udc-pk__list{position:relative;display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+  #udc-pk-{{ section.id }} .udc-pk__list li{
+    display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--udc-line2);
+    padding-top:10px;font-size:13px;color:#D9D9CF;line-height:1.45}
+  #udc-pk-{{ section.id }} .udc-pk__tick{color:var(--udc-accent);flex:0 0 auto;font-size:13px}
+
+  #udc-pk-{{ section.id }} .udc-pk__price_row{
+    position:relative;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-top:auto;padding-top:8px}
+  #udc-pk-{{ section.id }} .udc-pk__was{font-family:var(--udc-serif-font);font-style:italic;font-size:16px;color:var(--udc-dim)}
+  #udc-pk-{{ section.id }} .udc-pk__now{
+    font-family:var(--udc-anton);text-transform:uppercase;font-size:clamp(20px,2.2vw,28px);line-height:1;
+    color:var(--udc-text);text-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 45%, transparent)}
+  #udc-pk-{{ section.id }} .udc-pk__card.is-top .udc-pk__now{color:var(--udc-accent)}
+
+  #udc-pk-{{ section.id }} .udc-pk__cta{
+    position:relative;text-align:center;border:1px solid #3A3A34;color:var(--udc-text);
+    font-family:var(--udc-anton);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+    padding:14px 24px;border-radius:999px;transition:transform .2s ease,border-color .2s ease,color .2s ease}
+  #udc-pk-{{ section.id }} .udc-pk__cta:hover{transform:scale(1.03);border-color:var(--udc-accent);color:var(--udc-accent)}
+  #udc-pk-{{ section.id }} .udc-pk__cta.is-buy{
+    background:var(--udc-accent);border-color:var(--udc-accent);color:#fff;
+    box-shadow:0 0 50px color-mix(in srgb, var(--udc-accent) 45%, transparent)}
+  #udc-pk-{{ section.id }} .udc-pk__cta.is-buy:hover{color:#fff}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 14 · Packs (legacy)",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Elegí cómo lo querés" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Tres formas de" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "arrancar hoy" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "blocks": [
+    {
+      "type": "pack",
+      "name": "Pack",
+      "settings": [
+        { "type": "text", "id": "level", "label": "Etiqueta" },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "image_picker", "id": "image", "label": "Imagen (opcional)" },
+        { "type": "textarea", "id": "features", "label": "Beneficios", "info": "Uno por línea." },
+
+        { "type": "header", "content": "Precio" },
+        { "type": "product", "id": "product", "label": "Producto (opcional)" },
+        { "type": "checkbox", "id": "use_product_price", "label": "Usar el precio en vivo del producto", "default": false },
+        { "type": "text", "id": "price", "label": "Precio manual", "info": "Se usa solo si arriba no elegís 'usar el precio en vivo'." },
+        { "type": "text", "id": "compare_price", "label": "Precio tachado (manual)" },
+
+        { "type": "header", "content": "Botón" },
+        { "type": "text", "id": "cta", "label": "Texto del botón" },
+        {
+          "type": "select", "id": "link_type", "label": "El botón lleva a", "default": "whatsapp",
+          "options": [
+            { "value": "whatsapp", "label": "WhatsApp" },
+            { "value": "product", "label": "Producto / carrito" },
+            { "value": "custom", "label": "Link personalizado" }
+          ]
+        },
+        { "type": "url", "id": "custom_url", "label": "Link personalizado" },
+
+        { "type": "header", "content": "Destacado" },
+        { "type": "checkbox", "id": "featured", "label": "Destacar este pack", "default": false }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 14 · Packs (legacy)" }]
+}
+{% endschema %}

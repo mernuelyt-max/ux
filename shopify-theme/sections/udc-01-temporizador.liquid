@@ -1,0 +1,117 @@
+{%- comment -%}
+  UDC 01 — Temporizador
+
+  A partir de la barra "TEMPORIZADOR" de design-reference/landing-base.html
+  (la franja de arriba de todo, antes del nav). En el artifact original la
+  cuenta regresiva la manejaba un componente de React (DCLogic) con estado y
+  localStorage; acá se reimplementa igual (localStorage con la key
+  udc-countdown-end, para que no se reinicie en cada visita) pero en JS
+  plano, propio de esta sección.
+
+  hours/minutes/seconds nunca se guardaron reales en templates/index.json
+  (la sección tenía settings: {}), así que el valor por defecto de "horas"
+  es el mismo 24 que traía el artifact (countdownHours).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<div class="udc udc-tm" id="udc-tm-{{ section.id }}" data-hours="{{ section.settings.hours | default: 24 }}">
+  <span class="udc-glow udc-tm__glow" aria-hidden="true"></span>
+
+  {%- if section.settings.eyebrow != blank -%}
+    <span class="udc-tm__eyebrow"><span class="udc-accent" aria-hidden="true">✦</span>{{ section.settings.eyebrow }}</span>
+  {%- endif -%}
+  {%- if section.settings.label != blank -%}
+    <span class="udc-serif udc-tm__label">{{ section.settings.label }}</span>
+  {%- endif -%}
+
+  <span class="udc-tm__clock" role="timer" aria-live="off">
+    <span class="udc-tm__unit">
+      <span class="udc-tm__num" data-udc-tm="h">00</span>
+      <span class="udc-tm__unitlabel">{{ section.settings.hours_label | default: 'horas' }}</span>
+    </span>
+    <span class="udc-tm__sep" aria-hidden="true">:</span>
+    <span class="udc-tm__unit">
+      <span class="udc-tm__num" data-udc-tm="m">00</span>
+      <span class="udc-tm__unitlabel">{{ section.settings.minutes_label | default: 'min' }}</span>
+    </span>
+    <span class="udc-tm__sep" aria-hidden="true">:</span>
+    <span class="udc-tm__unit">
+      <span class="udc-tm__num" data-udc-tm="s">00</span>
+      <span class="udc-tm__unitlabel">{{ section.settings.seconds_label | default: 'seg' }}</span>
+    </span>
+  </span>
+</div>
+
+<style>
+  #udc-tm-{{ section.id }}{
+    padding:12px clamp(20px,5vw,72px);background:var(--udc-bg2);
+    border-bottom:1px solid var(--udc-line);display:flex;flex-wrap:wrap;align-items:center;
+    justify-content:center;gap:clamp(16px,3vw,32px);overflow:hidden}
+  #udc-tm-{{ section.id }} .udc-tm__glow{
+    top:-60px;left:50%;translate:-50% 0;width:520px;height:140px;filter:blur(60px);opacity:.35}
+
+  #udc-tm-{{ section.id }} .udc-tm__eyebrow{
+    position:relative;display:flex;align-items:center;gap:10px;font-size:11px;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--udc-dim)}
+  #udc-tm-{{ section.id }} .udc-tm__label{position:relative;font-size:15px;color:#D9D9CF}
+
+  #udc-tm-{{ section.id }} .udc-tm__clock{position:relative;display:flex;align-items:flex-start;gap:10px}
+  #udc-tm-{{ section.id }} .udc-tm__unit{display:flex;flex-direction:column;align-items:center;gap:4px}
+  #udc-tm-{{ section.id }} .udc-tm__num{
+    font-family:var(--udc-anton);font-size:20px;line-height:1;color:var(--udc-text);
+    min-width:34px;text-align:center;
+    text-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 60%, transparent)}
+  #udc-tm-{{ section.id }} .udc-tm__unitlabel{
+    font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:#6A6A62}
+  #udc-tm-{{ section.id }} .udc-tm__sep{
+    font-family:var(--udc-anton);font-size:18px;color:var(--udc-accent);margin-bottom:12px;
+    animation:udcBlink 1.2s steps(2) infinite}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-tm-{{ section.id }} .udc-tm__sep{animation:none}
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-tm-{{ section.id }}');
+    if (!root) return;
+    var hours = parseFloat(root.getAttribute('data-hours')) || 24;
+    var key = 'udc-countdown-end';
+    var end = parseInt(localStorage.getItem(key) || '0', 10);
+    if (!end || end < Date.now()) {
+      end = Date.now() + hours * 3600 * 1000;
+      try { localStorage.setItem(key, String(end)); } catch (e) {}
+    }
+    var h = root.querySelector('[data-udc-tm="h"]');
+    var m = root.querySelector('[data-udc-tm="m"]');
+    var s = root.querySelector('[data-udc-tm="s"]');
+    var pad = function (n) { return String(n).padStart(2, '0'); };
+    var tick = function () {
+      var left = Math.max(0, end - Date.now());
+      var total = Math.floor(left / 1000);
+      if (h) h.textContent = pad(Math.floor(total / 3600));
+      if (m) m.textContent = pad(Math.floor((total % 3600) / 60));
+      if (s) s.textContent = pad(total % 60);
+    };
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "UDC 01 · Temporizador",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Oferta de lanzamiento" },
+    { "type": "text", "id": "label", "label": "Texto junto al reloj", "default": "termina en" },
+    { "type": "range", "id": "hours", "label": "Horas de la cuenta regresiva", "min": 1, "max": 168, "unit": "h", "default": 24, "info": "Al llegar a 0 vuelve a arrancar en la próxima visita del comprador (se guarda en su navegador)." },
+    { "type": "text", "id": "hours_label", "label": "Etiqueta horas", "default": "horas" },
+    { "type": "text", "id": "minutes_label", "label": "Etiqueta minutos", "default": "min" },
+    { "type": "text", "id": "seconds_label", "label": "Etiqueta segundos", "default": "seg" }
+  ],
+  "presets": [{ "name": "UDC 01 · Temporizador" }]
+}
+{% endschema %}

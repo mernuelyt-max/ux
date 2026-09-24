@@ -1,0 +1,93 @@
+{%- comment -%}
+  UDC 12 — Casos de éxito
+
+  Esta sección no estaba en design-reference/landing-base.html: se agregó
+  después, por chat (ver README, "Rescate 1"). Los 4 casos (b1..b4, con
+  stat/stat_label/text) ya estaban grabados en templates/index.json antes de
+  este archivo, pero title_1/title_2 no — son texto nuevo, no recuperado.
+
+  El texto de cada caso (b1..b4) queda tal cual está en el template: son
+  resultados de alumnos reales, no se tocó ni una palabra.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-ce" id="udc-ce-{{ section.id }}">
+  <span class="udc-glow udc-ce__glow" aria-hidden="true"></span>
+
+  <div class="udc-ce__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-ce__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-ce__grid">
+      {%- for block in section.blocks -%}
+        <div class="udc-ce__card" data-udc-reveal {{ block.shopify_attributes }}>
+          <div class="udc-ce__stat">{{ block.settings.stat }}</div>
+          {%- if block.settings.stat_label != blank -%}
+            <div class="udc-ce__statlabel">{{ block.settings.stat_label }}</div>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <p class="udc-ce__text">{{ block.settings.text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-ce-{{ section.id }}{position:relative}
+  #udc-ce-{{ section.id }} .udc-ce__glow{
+    top:10%;right:-160px;width:520px;height:520px;filter:blur(110px);opacity:.18}
+
+  #udc-ce-{{ section.id }} .udc-ce__head{text-align:center;position:relative}
+  #udc-ce-{{ section.id }} .udc-ce__title{margin-top:14px}
+
+  #udc-ce-{{ section.id }} .udc-ce__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;
+    margin-top:48px;max-width:1100px;margin-left:auto;margin-right:auto;position:relative}
+  #udc-ce-{{ section.id }} .udc-ce__card{
+    border:1px solid var(--udc-border);border-radius:20px;background:var(--udc-bg2);
+    padding:30px 26px;text-align:center;transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+  #udc-ce-{{ section.id }} .udc-ce__card:hover{
+    border-color:var(--udc-accent);transform:translateY(-6px);
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 20%, transparent)}
+  #udc-ce-{{ section.id }} .udc-ce__stat{
+    font-family:var(--udc-anton);font-size:clamp(30px,3.2vw,44px);line-height:1;color:var(--udc-accent);
+    text-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+  #udc-ce-{{ section.id }} .udc-ce__statlabel{
+    margin-top:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--udc-dim)}
+  #udc-ce-{{ section.id }} .udc-ce__text{
+    margin:16px 0 0;color:var(--udc-muted);font-size:13px;line-height:1.6}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 12 · Casos de éxito",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Casos reales" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Lo que logran" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "quienes ya empezaron" }
+  ],
+  "blocks": [
+    {
+      "type": "caso",
+      "name": "Caso",
+      "settings": [
+        { "type": "text", "id": "stat", "label": "Estadística", "info": "Ej: +30, x2, 7 días, 100%" },
+        { "type": "text", "id": "stat_label", "label": "Etiqueta de la estadística" },
+        { "type": "textarea", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 12 · Casos de éxito" }]
+}
+{% endschema %}
