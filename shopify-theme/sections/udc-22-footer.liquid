@@ -1,0 +1,41 @@
+{%- comment -%} BLOQUE 22 — Footer {%- endcomment -%}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+<footer class="udc udc-top udc-ft" id="udc-ft-{{ section.id }}">
+  <span class="udc-ft__brand">{{ section.settings.brand }}</span>
+  <span class="udc-ft__legal">{{ section.settings.legal }}</span>
+  {%- if section.settings.show_cta -%}
+    <a href="{{ wa_link }}" target="_blank" rel="noopener" class="udc-ft__cta">{{ section.settings.cta_text }}</a>
+  {%- endif -%}
+</footer>
+
+<style>
+  #udc-ft-{{ section.id }}{
+    padding:36px clamp(20px,5vw,72px);display:flex;flex-wrap:wrap;align-items:center;
+    justify-content:space-between;gap:16px}
+  #udc-ft-{{ section.id }} .udc-ft__brand{
+    font-family:var(--udc-anton);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+  #udc-ft-{{ section.id }} .udc-ft__legal{font-size:12px;color:#6A6A62}
+  #udc-ft-{{ section.id }} .udc-ft__cta{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--udc-accent);transition:color .2s ease}
+  #udc-ft-{{ section.id }} .udc-ft__cta:hover{color:#fff}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 22 · Footer",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "brand", "label": "Marca", "default": "U del Closer" },
+    { "type": "text", "id": "legal", "label": "Texto legal", "default": "© 2026 U del Closer · Los resultados dependen del trabajo de cada persona." },
+    { "type": "checkbox", "id": "show_cta", "label": "Mostrar link de WhatsApp", "default": true },
+    { "type": "text", "id": "cta_text", "label": "Texto del link", "default": "WhatsApp →" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "presets": [{ "name": "UDC 22 · Footer" }]
+}
+{% endschema %}
