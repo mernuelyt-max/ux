@@ -1,0 +1,80 @@
+{%- comment -%}
+  UDC 21 — FAQ
+
+  A partir de la sección "FAQ" de design-reference/landing-base.html. Las 5
+  preguntas (b1..b5) ya estaban grabadas en templates/index.json antes de
+  este archivo. "answer" ya venía como HTML (con <p>), por eso el campo es
+  richtext y no textarea: así se edita con el editor enriquecido de Shopify
+  en vez de mostrar las etiquetas a mano.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-fq" id="udc-fq-{{ section.id }}">
+  <h2 class="udc-h2 udc-fq__title" data-udc-reveal>
+    {{ section.settings.title_1 }} <span class="udc-serif udc-accent">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-fq__list" data-udc-reveal>
+      {%- for block in section.blocks -%}
+        <details class="udc-fq__item" {{ block.shopify_attributes }}>
+          <summary class="udc-fq__q">
+            <span class="udc-accent">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ block.settings.question }}
+          </summary>
+          {%- if block.settings.answer != blank -%}
+            <div class="udc-fq__a">{{ block.settings.answer }}</div>
+          {%- endif -%}
+        </details>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-fq-{{ section.id }}{
+    display:grid;grid-template-columns:minmax(240px,1fr) minmax(300px,2fr);gap:clamp(32px,5vw,80px)}
+  @media (max-width:680px){
+    #udc-fq-{{ section.id }}{grid-template-columns:1fr}
+  }
+
+  #udc-fq-{{ section.id }} .udc-fq__title{position:sticky;top:40px;align-self:start}
+  @media (max-width:680px){
+    #udc-fq-{{ section.id }} .udc-fq__title{position:static}
+  }
+
+  #udc-fq-{{ section.id }} .udc-fq__list{display:flex;flex-direction:column}
+  #udc-fq-{{ section.id }} .udc-fq__item{border-top:1px solid var(--udc-line2);padding:24px 0}
+  #udc-fq-{{ section.id }} .udc-fq__item:last-child{border-bottom:1px solid var(--udc-line2)}
+  #udc-fq-{{ section.id }} .udc-fq__q{
+    cursor:pointer;list-style:none;display:flex;gap:20px;align-items:baseline;
+    font-family:var(--udc-anton);font-size:clamp(15px,1.4vw,18px);text-transform:uppercase}
+  #udc-fq-{{ section.id }} .udc-fq__q::-webkit-details-marker{display:none}
+  #udc-fq-{{ section.id }} .udc-fq__q span{font-size:15px}
+  #udc-fq-{{ section.id }} .udc-fq__a{
+    margin:16px 0 0 44px;color:var(--udc-muted);font-size:14px;line-height:1.6}
+  #udc-fq-{{ section.id }} .udc-fq__a p{margin:0}
+  #udc-fq-{{ section.id }} .udc-fq__a p + p{margin-top:10px}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 21 · FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título", "default": "Preguntas" },
+    { "type": "text", "id": "title_2", "label": "Título (acento serif itálica)", "default": "frecuentes" }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Pregunta" },
+        { "type": "richtext", "id": "answer", "label": "Respuesta" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 21 · FAQ" }]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+{%- comment -%}
+  UDC — Tarjeta de reseña individual, usada por sections/udc-prod-resenas.liquid.
+  Recibe: block (un bloque de tipo "resena").
+{%- endcomment -%}
+
+<div class="udc-rs__card" {{ block.shopify_attributes }}>
+  <div class="udc-rs__cardhead">
+    <span class="udc-rs__cardstars">
+      {%- for i in (1..5) -%}
+        <span{% if i > block.settings.stars %} class="is-off"{% endif %}>★</span>
+      {%- endfor -%}
+    </span>
+    {%- if block.settings.badge != blank -%}
+      <span class="udc-rs__badge">{{ block.settings.badge }}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if block.settings.title != blank -%}
+    <h3 class="udc-rs__cardtitle">{{ block.settings.title }}</h3>
+  {%- endif -%}
+
+  {%- if block.settings.text != blank -%}
+    <p class="udc-rs__cardtext">{{ block.settings.text }}</p>
+  {%- endif -%}
+
+  <div class="udc-rs__cardauthor">
+    {%- if block.settings.author != blank -%}
+      <span class="udc-rs__avatar" aria-hidden="true">{{ block.settings.author | slice: 0, 1 }}</span>
+    {%- endif -%}
+    <span class="udc-rs__authorinfo">
+      {%- if block.settings.author != blank -%}<b>{{ block.settings.author }}</b>{%- endif -%}
+      {%- assign meta_parts = '' -%}
+      {%- if block.settings.meta != blank -%}{%- assign meta_parts = block.settings.meta -%}{%- endif -%}
+      {%- if block.settings.date != blank -%}
+        {%- if meta_parts != blank -%}
+          {%- assign meta_parts = meta_parts | append: ' · ' | append: block.settings.date -%}
+        {%- else -%}
+          {%- assign meta_parts = block.settings.date -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if meta_parts != blank -%}<span>{{ meta_parts }}</span>{%- endif -%}
+    </span>
+  </div>
+</div>
+{%- comment -%}
+  Sin <style> propio a propósito: las reglas .udc-rs__card* viven en el
+  <style> de sections/udc-prod-resenas.liquid, escopeadas a #udc-rs-{{ section.id }}.
+  Este snippet se renderiza una vez por reseña (hasta 12 veces si la sección
+  está animada), así que un <style> acá adentro se repetiría esa misma
+  cantidad de veces sin necesidad.
+{%- endcomment -%}

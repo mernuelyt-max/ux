@@ -1,0 +1,81 @@
+{%- comment -%}
+  UDC 08 — 3 pilares
+
+  A partir de la sección "3 PILARES" de design-reference/landing-base.html.
+  Los 3 pilares (b1..b3) ya estaban grabados en templates/index.json antes de
+  este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-pi" id="udc-pi-{{ section.id }}">
+  <span class="udc-glow udc-pi__glow" aria-hidden="true"></span>
+
+  <h2 class="udc-h2 udc-pi__title" data-udc-reveal>
+    {{ section.settings.title_1 }}<br>
+    <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-pi__grid">
+      {%- for block in section.blocks -%}
+        <div class="udc-pi__card" data-udc-reveal {{ block.shopify_attributes }}>
+          <span class="udc-pi__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <h3 class="udc-pi__ctitle">{{ block.settings.title }}</h3>
+          {%- if block.settings.text != blank -%}
+            <p class="udc-pi__ctext">{{ block.settings.text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-pi-{{ section.id }}{position:relative}
+  #udc-pi-{{ section.id }} .udc-pi__glow{
+    top:12%;left:-160px;width:520px;height:520px;filter:blur(110px);opacity:.18}
+
+  #udc-pi-{{ section.id }} .udc-pi__title{text-align:center;position:relative}
+
+  #udc-pi-{{ section.id }} .udc-pi__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;
+    margin-top:48px;max-width:1200px;margin-left:auto;margin-right:auto;position:relative}
+  #udc-pi-{{ section.id }} .udc-pi__card{
+    border:1px solid var(--udc-border);border-radius:20px;background:var(--udc-bg2);
+    padding:32px 28px;display:flex;flex-direction:column;gap:16px;position:relative;
+    overflow:hidden;transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+  #udc-pi-{{ section.id }} .udc-pi__card:hover{
+    border-color:var(--udc-accent);transform:translateY(-6px);
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 22%, transparent)}
+  #udc-pi-{{ section.id }} .udc-pi__num{
+    font-family:var(--udc-anton);font-size:clamp(38px,3.6vw,56px);line-height:1;
+    color:var(--udc-accent);text-shadow:0 0 34px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+  #udc-pi-{{ section.id }} .udc-pi__ctitle{
+    margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(17px,1.6vw,21px);line-height:1.15}
+  #udc-pi-{{ section.id }} .udc-pi__ctext{
+    margin:0;color:var(--udc-muted);font-size:14px;line-height:1.6}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 08 · 3 pilares",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "La guía se apoya en" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "3 pilares" }
+  ],
+  "blocks": [
+    {
+      "type": "pilar",
+      "name": "Pilar",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 08 · 3 pilares" }]
+}
+{% endschema %}

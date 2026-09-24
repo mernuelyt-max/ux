@@ -175,3 +175,95 @@ pero las fotos no estaban en el artifact.
 Falta reescribir como Liquid las 14 secciones del diseño: agregarles
 `{% schema %}` para que sean editables, los precios en vivo desde Shopify y el
 carrito. El diseño es HTML estático y no trae nada de eso.
+
+---
+
+# Rescate 3 — las 14 secciones ya están en Liquid
+
+Las 14 secciones de `design-reference/landing-base.html` (ver el índice más
+arriba) ya están reescritas como secciones Shopify, con `{% schema %}` y
+usando el contenido real que ya estaba grabado en `templates/index.json`
+(reseñas de Trustpilot, capítulos, pilares, bonus, ventajas, niveles, FAQ)
+en vez del copy del ebook viejo del artifact.
+
+## Lo nuevo
+
+**`snippets/udc-base.liquid`** — la hoja de estilos base que el rescate 1
+marcaba como la pieza más crítica que faltaba. Define las variables
+`--udc-bg`, `--udc-bg2`, `--udc-text`, `--udc-muted`, `--udc-dim`,
+`--udc-accent`, `--udc-border`, `--udc-line`, `--udc-line2`, `--udc-anton`,
+las clases `.udc`, `.udc-top`, `.udc-clip`, `.udc-glow`, `.udc-h2`,
+`.udc-eyebrow`, `.udc-serif`, `.udc-serif-glow`, `.udc-tag`, `.udc-btn`,
+`.udc-marquee`, el atributo `data-udc-reveal` y `@keyframes udcMarquee`, más
+los 3 `@font-face` (Anton, Instrument Serif, Space Grotesk) apuntando a los
+10 `.woff2` ya copiados a `assets/`. También trae el JS de scroll-reveal,
+contador animado (`data-udc-count`) y arranque de marquesinas. Se renderiza
+con `{% render 'udc-base' %}` al principio de cada sección nueva — es
+seguro que varias secciones lo hagan en la misma página, el `<script>` se
+protege solo con `window.__udcBaseInit`.
+
+**Las 14 secciones**, cada una con su propio `<style>` escopeado a
+`#udc-xx-{{ section.id }}` (mismo patrón que `udc-planes.liquid`):
+
+| Sección del diseño | Archivo | Contenido real usado |
+|---|---|---|
+| Hero | `sections/udc-03-hero.liquid` | `cover_image` que ya estaba en el template |
+| Statement | `sections/udc-05-statement.liquid` | chips `udc_05` |
+| Qué aprendés | `sections/udc-06-que-aprendes.liquid` | 12 chips `udc_06` (2 marquesinas) |
+| Contenido | `sections/udc-07-contenido.liquid` | 8 capítulos `udc_07` |
+| 3 pilares | `sections/udc-08-pilares.liquid` | 3 pilares `udc_08` |
+| Prueba social | `sections/udc-11-prueba-social.liquid` | stats + 12 capturas `udc_11` |
+| Resultados (Trustpilot) | `sections/udc-prod-resenas.liquid` | las 6 reseñas reales + score 4,8 |
+| Bonus | `sections/udc-13-bonus.liquid` | 4 bonus `udc_13` |
+| Bonus estrella (mentoría) | `sections/udc-15-mentoria.liquid` | schema nuevo (settings estaban vacíos) |
+| Ventajas | `sections/udc-16-ventajas.liquid` | 4 ventajas `udc_16` |
+| Niveles | `sections/udc-17-niveles.liquid` | 4 niveles `udc_17` |
+| Pensada para | `sections/udc-18-pensada-para.liquid` | 5 puntos `udc_18` |
+| Autor | `sections/udc-20-autor.liquid` | schema nuevo (settings estaban vacíos) |
+| FAQ | `sections/udc-21-faq.liquid` | 5 preguntas `udc_21` |
+
+Se verificó con un script que cada `settings`/`block.settings` que ya estaba
+grabado en `templates/index.json` tiene su campo correspondiente en el
+`{% schema %}` de la sección — nada de lo recuperado se pierde al cargar el
+tema.
+
+`sections/udc-prod-resenas.liquid` usa un snippet propio,
+`snippets/udc-resena-card.liquid`, para no repetir el markup de cada tarjeta
+de reseña (sus estilos viven en el `<style>` de la sección, escopeados, para
+no duplicar CSS por cada una de las 6 reseñas).
+
+## Decisiones que no estaban en el artifact
+
+- **`udc-15-mentoria` y `udc-20-autor`** tenían `settings: {}` en el template
+  (nunca se les había armado el schema). El copy por defecto es el texto
+  real del artifact — no se inventó nada — pero **no se copió el precio
+  "64.000 ARS"** del Pack VIP del ebook viejo: ese precio ya no existe, la
+  mentoría ahora es un beneficio de la membresía Experto (con precio real en
+  vivo, ver `udc-planes.liquid` bloque `p3`). El botón de `udc-15-mentoria`
+  por defecto manda a WhatsApp, y tiene un campo de precio opcional (vacío)
+  para quien quiera venderla suelta más adelante.
+- Los botones de `udc-03-hero` van a WhatsApp por defecto (mismo patrón que
+  `udc-19-cta-final` y `udc-22-footer`), no a "Descargar la guía": el
+  producto ya no es un ebook de descarga inmediata.
+
+## Lo que todavía falta
+
+- **`udc-01-temporizador`, `udc-02-nav`, `udc-04-marquesina`** — están en
+  `design-reference/landing-base.html` (barra de oferta, header, marquesina
+  de arriba) pero quedaron fuera de esta tanda de 14 porque no forman parte
+  de las "14 secciones" que enumera el índice del Rescate 2. `udc_04` ya
+  tiene contenido real grabado en el template; a `udc_01` y `udc_02` (nav
+  está `disabled` en el template) les falta también el schema.
+- **`udc-12-casos-exito` y `udc-facturacion`** — no estaban en el artifact
+  del Rescate 2 (se agregaron después, por chat): tienen contenido real en
+  `templates/index.json` (los 4 casos con stat/texto, y los 5 alumnos con
+  foto/monto/nombre) pero ningún diseño de referencia del que partir.
+- **`udc-14-packs`** — sección vieja de 3 niveles de ebook, ya `disabled`
+  en el template (reemplazada por `udc-planes`, las membresías). No hace
+  falta reconstruirla salvo que se quiera mantener como legacy.
+- Las imágenes que faltan (ver "Imágenes" y "Lo que sigue sin aparecer"
+  más arriba) siguen sin aparecer: los `image_picker` de las secciones
+  nuevas quedan vacíos hasta que se puedan subir a *Archivos* de la tienda.
+- Falta `layout/theme.liquid`, `config/settings_schema.json` (de ahí sale
+  `settings.udc_whatsapp`, el fallback global de WhatsApp que ya usan varias
+  secciones) y `templates/product.json`/`cart.json`.

@@ -1,0 +1,144 @@
+{%- comment -%}
+  UDC 11 — Prueba social (stats + grilla de capturas)
+
+  A partir de la sección "PRUEBA SOCIAL" de design-reference/landing-base.html.
+  Los 3 stats (b1-b3) y las 12 capturas (b4-b15, apuntando a los archivos
+  reales de Instagram) ya estaban grabados en templates/index.json antes de
+  este archivo.
+
+  La versión del artifact animaba las columnas de capturas con un scroll
+  vertical infinito dentro de un contenedor de altura fija. Acá se simplifica
+  a una grilla con flotación sutil por columna (misma sensación, sin el
+  recorte de altura que en pantallas chicas cortaba fotos a la mitad).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign stats = section.blocks | where: 'type', 'stat' -%}
+{%- assign shots = section.blocks | where: 'type', 'shot' -%}
+
+<section class="udc udc-top udc-ps" id="udc-ps-{{ section.id }}">
+  <div class="udc-ps__head" data-udc-reveal>
+    <h2 class="udc-h2">
+      {{ section.settings.title_1 }}
+      <span class="udc-serif udc-accent">{{ section.settings.title_2 }}</span>
+    </h2>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.avatar_line != blank -%}
+    <p class="udc-serif udc-ps__avatarline" data-udc-reveal>{{ section.settings.avatar_line }}</p>
+  {%- endif -%}
+
+  {%- if stats.size > 0 -%}
+    <div class="udc-ps__stats" data-udc-reveal>
+      {%- for block in stats -%}
+        <div class="udc-ps__stat" {{ block.shopify_attributes }}>
+          <div class="udc-ps__num{% if block.settings.accent %} is-accent{% endif %}">
+            <span data-udc-count="{{ block.settings.number }}" data-udc-prefix="{{ block.settings.prefix }}">{{ block.settings.prefix }}{{ block.settings.number }}</span>
+          </div>
+          <div class="udc-ps__label">{{ block.settings.label }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if shots.size > 0 -%}
+    <div class="udc-ps__wall" data-udc-reveal>
+      <span class="udc-glow udc-ps__glowl" aria-hidden="true"></span>
+      <span class="udc-glow udc-ps__glowr" aria-hidden="true"></span>
+      <div class="udc-ps__grid">
+        {%- for block in shots -%}
+          {%- if block.settings.image != blank -%}
+            <div class="udc-ps__shot" {{ block.shopify_attributes }}>
+              <img src="{{ block.settings.image | image_url: width: 300 }}"
+                   loading="lazy"
+                   width="{{ block.settings.image.width }}"
+                   height="{{ block.settings.image.height }}"
+                   alt="{{ block.settings.image.alt | default: 'Captura de pantalla' | escape }}">
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-ps-{{ section.id }}{position:relative}
+
+  #udc-ps-{{ section.id }} .udc-ps__head{
+    display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px}
+  #udc-ps-{{ section.id }} .udc-ps__head .udc-eyebrow{color:var(--udc-dim);letter-spacing:.28em}
+
+  #udc-ps-{{ section.id }} .udc-ps__avatarline{margin:20px 0 0;font-size:clamp(15px,1.5vw,18px);color:#D9D9CF}
+
+  #udc-ps-{{ section.id }} .udc-ps__stats{
+    display:flex;flex-wrap:wrap;gap:clamp(28px,6vw,90px);margin-top:40px}
+  #udc-ps-{{ section.id }} .udc-ps__num{font-family:var(--udc-anton);font-size:clamp(32px,3.4vw,52px);line-height:1}
+  #udc-ps-{{ section.id }} .udc-ps__num.is-accent{color:var(--udc-accent)}
+  #udc-ps-{{ section.id }} .udc-ps__label{
+    font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--udc-dim);margin-top:8px}
+
+  #udc-ps-{{ section.id }} .udc-ps__wall{
+    position:relative;overflow:hidden;padding-top:40px}
+  #udc-ps-{{ section.id }} .udc-ps__glowl{
+    top:0;bottom:0;left:-90px;width:220px;height:auto;filter:blur(60px);opacity:.35}
+  #udc-ps-{{ section.id }} .udc-ps__glowr{
+    top:0;bottom:0;right:-90px;width:220px;height:auto;filter:blur(60px);opacity:.35;animation-delay:2.5s}
+
+  #udc-ps-{{ section.id }} .udc-ps__grid{
+    position:relative;display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:14px;
+    max-width:820px;margin:0 auto;padding:0 clamp(16px,3vw,24px)}
+  @media (min-width:640px){
+    #udc-ps-{{ section.id }} .udc-ps__grid{grid-template-columns:repeat(4,minmax(120px,1fr))}
+  }
+
+  #udc-ps-{{ section.id }} .udc-ps__shot{
+    aspect-ratio:9/16;border-radius:16px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2);
+    animation:udcFloaty 6s ease-in-out infinite}
+  #udc-ps-{{ section.id }} .udc-ps__shot img{display:block;width:100%;height:100%;object-fit:cover}
+  #udc-ps-{{ section.id }} .udc-ps__shot:nth-child(4n+2){animation-delay:-1.5s;margin-top:24px}
+  #udc-ps-{{ section.id }} .udc-ps__shot:nth-child(4n+3){animation-delay:-3s}
+  #udc-ps-{{ section.id }} .udc-ps__shot:nth-child(4n+4){animation-delay:-4.5s;margin-top:24px}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-ps-{{ section.id }} .udc-ps__shot{animation:none;margin-top:0}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC 11 · Prueba social",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título", "default": "Ya la están aplicando" },
+    { "type": "text", "id": "title_2", "label": "Título (acento serif itálica)", "default": "desde cero" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo (a la derecha)", "default": "Resultados de quienes la leyeron" },
+    { "type": "text", "id": "avatar_line", "label": "Línea sobre la grilla", "default": "+120 personas ya tienen la guía" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Estadística",
+      "settings": [
+        { "type": "text", "id": "prefix", "label": "Prefijo", "default": "+" },
+        { "type": "text", "id": "number", "label": "Número", "default": "0" },
+        { "type": "text", "id": "label", "label": "Etiqueta" },
+        { "type": "checkbox", "id": "accent", "label": "Destacar en color de acento", "default": false }
+      ]
+    },
+    {
+      "type": "shot",
+      "name": "Captura",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 11 · Prueba social" }]
+}
+{% endschema %}

@@ -1,0 +1,108 @@
+{%- comment -%}
+  UDC 13 — Bonus
+
+  A partir de la sección "BONUS + UPSELLS" de design-reference/landing-base.html
+  (solo la parte de los 4 bonus; los packs de esa misma sección los reemplaza
+  sections/udc-planes.liquid, ya recuperado, con las membresías reales).
+  Los 4 bonus (b1..b4) ya estaban grabados en templates/index.json antes de
+  este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-bn" id="udc-bn-{{ section.id }}">
+  <span class="udc-glow udc-bn__glow" aria-hidden="true"></span>
+
+  <div class="udc-bn__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-bn__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+    {%- if section.settings.intro != blank -%}
+      <p class="udc-bn__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-bn__grid">
+      {%- for block in section.blocks -%}
+        <div class="udc-bn__card" data-udc-reveal {{ block.shopify_attributes }}>
+          <span class="udc-bn__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <div class="udc-bn__body">
+            {%- if block.settings.tag != blank -%}
+              <span class="udc-tag udc-bn__tag">{{ block.settings.tag }}</span>
+            {%- endif -%}
+            <h3 class="udc-bn__ctitle">{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p class="udc-bn__ctext">{{ block.settings.text }}</p>
+            {%- endif -%}
+            {%- if block.settings.value != blank -%}
+              <span class="udc-serif udc-bn__value">{{ block.settings.value }}</span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-bn-{{ section.id }}{position:relative}
+  #udc-bn-{{ section.id }} .udc-bn__glow{
+    top:10%;left:-160px;width:520px;height:520px;filter:blur(110px);opacity:.18}
+
+  #udc-bn-{{ section.id }} .udc-bn__head{text-align:center;position:relative}
+  #udc-bn-{{ section.id }} .udc-bn__title{margin-top:14px}
+  #udc-bn-{{ section.id }} .udc-bn__intro{
+    margin:16px auto 0;max-width:520px;color:var(--udc-muted);font-size:14px;line-height:1.6}
+
+  #udc-bn-{{ section.id }} .udc-bn__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;
+    max-width:1100px;margin:44px auto 0;position:relative}
+  #udc-bn-{{ section.id }} .udc-bn__card{
+    display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2vw,22px);align-items:start;
+    border:1px solid var(--udc-border);border-radius:16px;background:var(--udc-bg2);
+    padding:clamp(18px,2.4vw,26px);position:relative;overflow:hidden;
+    transition:border-color .25s ease,box-shadow .25s ease}
+  #udc-bn-{{ section.id }} .udc-bn__card:hover{
+    border-color:var(--udc-accent);box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 20%, transparent)}
+  #udc-bn-{{ section.id }} .udc-bn__num{
+    font-family:var(--udc-anton);font-size:clamp(26px,2.6vw,40px);line-height:1;color:#2C2422}
+  #udc-bn-{{ section.id }} .udc-bn__tag{margin-bottom:10px}
+  #udc-bn-{{ section.id }} .udc-bn__ctitle{
+    margin:0 0 6px;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(14px,1.4vw,18px);line-height:1.15}
+  #udc-bn-{{ section.id }} .udc-bn__ctext{margin:0 0 10px;color:var(--udc-muted);font-size:13px;line-height:1.55}
+  #udc-bn-{{ section.id }} .udc-bn__value{
+    font-size:15px;color:var(--udc-accent);
+    text-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 55%, transparent)}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 13 · Bonus",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Bonus incluidos" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "No te llevás solo la guía" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "te llevás todo el arsenal" },
+    { "type": "textarea", "id": "intro", "label": "Texto de apoyo", "default": "Los cuatro bonus vienen con cualquier pack. La mentoría 1 a 1 con Tino Mossu solo con el Pack VIP." }
+  ],
+  "blocks": [
+    {
+      "type": "bonus",
+      "name": "Bonus",
+      "settings": [
+        { "type": "text", "id": "tag", "label": "Etiqueta" },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" },
+        { "type": "text", "id": "value", "label": "Valor", "info": "Ej: Valor: 197 USD" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 13 · Bonus" }]
+}
+{% endschema %}

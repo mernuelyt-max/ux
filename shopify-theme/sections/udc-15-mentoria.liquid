@@ -1,0 +1,156 @@
+{%- comment -%}
+  UDC 15 — Mentoría 1 a 1
+
+  A partir del bloque "Bonus estrella · solo Pack VIP" (mentoría con Tino
+  Mossu) dentro de la sección "BONUS + UPSELLS" de
+  design-reference/landing-base.html. En templates/index.json esta sección ya
+  existía con settings vacíos ({}), así que el schema y los valores por
+  defecto de acá abajo son nuevos.
+
+  A propósito NO se copió el precio "64.000 ARS" del artifact: ese precio
+  correspondía al Pack VIP del ebook viejo y ya no existe — ahora la
+  mentoría es un beneficio de la membresía Experto (ver sections/udc-planes.liquid,
+  bloque p3, que sí tiene el precio real en vivo desde Shopify). Por eso acá
+  el botón por defecto va a WhatsApp, no a un precio fijo, y el campo de
+  precio queda opcional para quien quiera agregar uno a mano.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+{%- if section.settings.link_type == 'custom' and section.settings.custom_url != blank -%}
+  {%- assign btn_href = section.settings.custom_url -%}
+{%- else -%}
+  {%- assign btn_href = wa_link -%}
+{%- endif -%}
+
+<section class="udc udc-top udc-mt" id="udc-mt-{{ section.id }}">
+  <span class="udc-glow udc-mt__glow" aria-hidden="true"></span>
+
+  <div class="udc-mt__box" data-udc-reveal>
+    {%- if section.settings.image != blank -%}
+      <div class="udc-mt__imgwrap">
+        <div class="udc-mt__img">
+          <img src="{{ section.settings.image | image_url: width: 500 }}"
+               loading="lazy"
+               width="{{ section.settings.image.width }}"
+               height="{{ section.settings.image.height }}"
+               alt="{{ section.settings.image.alt | default: section.settings.title_2 | escape }}">
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="udc-mt__body">
+      {%- if section.settings.tag != blank -%}
+        <span class="udc-tag udc-mt__tag">{{ section.settings.tag }}</span>
+      {%- endif -%}
+      <h3 class="udc-mt__title">
+        {{ section.settings.title_1 }}
+        <span class="udc-serif udc-serif-glow udc-mt__name">{{ section.settings.title_2 }}</span>
+      </h3>
+      {%- if section.settings.description != blank -%}
+        <p class="udc-mt__desc">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      <div class="udc-mt__foot">
+        {%- if section.settings.value_text != blank -%}
+          <span class="udc-serif udc-mt__value">{{ section.settings.value_text }}</span>
+        {%- endif -%}
+        {%- if section.settings.note != blank -%}
+          <span class="udc-mt__note">{{ section.settings.note }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.price != blank or section.settings.cta_text != blank -%}
+        <div class="udc-mt__cta_row">
+          {%- if section.settings.price != blank -%}
+            <span class="udc-mt__price">{{ section.settings.price }}</span>
+          {%- endif -%}
+          {%- if section.settings.cta_text != blank -%}
+            <a href="{{ btn_href }}"
+               {% if section.settings.link_type != 'custom' %}target="_blank" rel="noopener"{% endif %}
+               class="udc-btn udc-mt__cta">{{ section.settings.cta_text }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #udc-mt-{{ section.id }}{position:relative}
+  #udc-mt-{{ section.id }} .udc-mt__glow{
+    bottom:-180px;right:-140px;width:480px;height:480px;filter:blur(90px);opacity:.3}
+
+  #udc-mt-{{ section.id }} .udc-mt__box{
+    position:relative;max-width:900px;margin:0 auto;border:1px solid var(--udc-accent);
+    border-radius:24px;background:#0B0606;padding:clamp(24px,3.4vw,38px);
+    display:grid;grid-template-columns:minmax(140px,.8fr) minmax(260px,2fr);
+    gap:clamp(22px,3vw,38px);align-items:center;overflow:hidden;
+    box-shadow:0 0 80px color-mix(in srgb, var(--udc-accent) 28%, transparent)}
+  @media (max-width:600px){
+    #udc-mt-{{ section.id }} .udc-mt__box{grid-template-columns:1fr}
+  }
+
+  #udc-mt-{{ section.id }} .udc-mt__imgwrap{position:relative}
+  #udc-mt-{{ section.id }} .udc-mt__img{
+    position:relative;aspect-ratio:1/1;border-radius:16px;overflow:hidden;
+    border:1px solid #3A1D1D}
+  #udc-mt-{{ section.id }} .udc-mt__img img{display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-mt-{{ section.id }} .udc-mt__body{position:relative;display:flex;flex-direction:column;gap:14px}
+  #udc-mt-{{ section.id }} .udc-mt__tag{align-self:flex-start}
+  #udc-mt-{{ section.id }} .udc-mt__title{
+    margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(19px,2vw,28px);line-height:1.12}
+  #udc-mt-{{ section.id }} .udc-mt__desc{margin:0;color:#C9C9C0;font-size:13px;line-height:1.6}
+
+  #udc-mt-{{ section.id }} .udc-mt__foot{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+  #udc-mt-{{ section.id }} .udc-mt__value{
+    font-size:17px;color:var(--udc-accent);
+    text-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 55%, transparent)}
+  #udc-mt-{{ section.id }} .udc-mt__note{font-size:12px;color:#C97A7A}
+
+  #udc-mt-{{ section.id }} .udc-mt__cta_row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:4px}
+  #udc-mt-{{ section.id }} .udc-mt__price{
+    font-family:var(--udc-anton);text-transform:uppercase;font-size:clamp(20px,2.2vw,28px);
+    line-height:1;color:var(--udc-text);
+    text-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 45%, transparent)}
+  #udc-mt-{{ section.id }} .udc-mt__cta{padding:13px 24px;font-size:13px}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 15 · Mentoría",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto" },
+    { "type": "text", "id": "tag", "label": "Etiqueta", "default": "Bonus estrella · solo Pack VIP" },
+    { "type": "text", "id": "title_1", "label": "Título", "default": "Mentoría 1 a 1 con" },
+    { "type": "text", "id": "title_2", "label": "Nombre (acento serif itálica)", "default": "Tino Mossu" },
+    { "type": "textarea", "id": "description", "label": "Descripción", "default": "Sesión de 60 minutos por videollamada para revisar tu caso: en qué nicho arrancar, cómo presentarte, qué corregir en tus primeras llamadas y un plan concreto para tus próximas dos semanas. Se coordina por WhatsApp al recibir el acceso." },
+    { "type": "text", "id": "value_text", "label": "Línea de valor", "default": "Valor: 300 USD" },
+    { "type": "text", "id": "note", "label": "Nota de advertencia", "default": "⚠ Plazas limitadas por mes" },
+
+    { "type": "header", "content": "Precio (opcional)" },
+    { "type": "text", "id": "price", "label": "Precio a mostrar", "info": "Vacío = no aparece. La mentoría ya está incluida en la membresía Experto (sections/udc-planes.liquid); usá este campo solo si querés venderla suelta." },
+
+    { "type": "header", "content": "Botón" },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Coordinar por WhatsApp →" },
+    {
+      "type": "select", "id": "link_type", "label": "El botón lleva a", "default": "whatsapp",
+      "options": [
+        { "value": "whatsapp", "label": "WhatsApp" },
+        { "value": "custom", "label": "Link personalizado" }
+      ]
+    },
+    { "type": "url", "id": "custom_url", "label": "Link personalizado" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "presets": [{ "name": "UDC 15 · Mentoría" }]
+}
+{% endschema %}

@@ -1,0 +1,171 @@
+{%- comment -%}
+  UDC — Base: variables, tipografías y utilidades compartidas por todas las
+  secciones udc-*.
+
+  Esta es la "hoja de estilos base" que el README marcaba como la pieza más
+  crítica que faltaba: sin esto, las secciones ya recuperadas (udc-planes,
+  udc-19-cta-final, udc-22-footer) y las nuevas se ven sin colores, sin
+  tipografías Anton/Instrument Serif y sin ninguna animación, porque todas
+  dependen de las variables --udc-* y de las clases .udc-*.
+
+  Se renderiza con {% render 'udc-base' %} al principio de cada sección nueva
+  (igual que udc-planes ya hace con sus propios snippets de CSS/JS). Es
+  seguro que varias secciones lo rendericen en la misma página: el <style> se
+  puede repetir sin romper nada, y el <script> se auto-protege con
+  window.__udcBaseInit para no inicializarse dos veces.
+
+  Cuando este tema tenga layout/theme.liquid, lo ideal es mover este render
+  al <head> (una sola vez, antes que cualquier sección) para eliminar el
+  pequeño flash que puede verse si la primera sección de la página es una de
+  las 8 ya recuperadas (que no lo renderizan, para no tocar sus bytes).
+
+  Las variables --udc-bg2/--udc-text/--udc-muted/--udc-dim/--udc-border/
+  --udc-line/--udc-line2/--udc-anton ya las usaban udc-planes-css.liquid y
+  udc-planes-temario-css.liquid sin definirlas: los valores de acá son los
+  que esos archivos ya esperaban.
+{%- endcomment -%}
+
+<style>
+  :root{
+    --udc-bg:#050505;
+    --udc-bg2:#080808;
+    --udc-text:#F4F4F0;
+    --udc-muted:#B9B9B0;
+    --udc-dim:#8A8A82;
+    --udc-accent:#C11414;
+    --udc-border:#241E1E;
+    --udc-line:#1A1A1A;
+    --udc-line2:#22221E;
+    --udc-anton:'Anton',sans-serif;
+    --udc-serif-font:'Instrument Serif',serif;
+    --udc-sans:'Space Grotesk',sans-serif;
+  }
+
+  @font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url("{{ 'ae59dc62.woff2' | asset_url }}") format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+  @font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '1e3dccee.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '087920bd.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+  @font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url("{{ '93b23ee9.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url("{{ 'ef785d21.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+  @font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url("{{ 'd00061d5.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '74aebfab.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '154425d3.woff2' | asset_url }}") format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '139b7e79.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:400;font-display:swap;src:url("{{ '6411c373.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url("{{ '154425d3.woff2' | asset_url }}") format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url("{{ '139b7e79.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url("{{ '6411c373.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url("{{ '154425d3.woff2' | asset_url }}") format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url("{{ '139b7e79.woff2' | asset_url }}") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url("{{ '6411c373.woff2' | asset_url }}") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+  .udc{position:relative;padding:clamp(52px,8vh,88px) clamp(20px,5vw,72px);font-family:var(--udc-sans);color:var(--udc-text)}
+  .udc-top{border-top:1px solid var(--udc-line)}
+  .udc-clip{overflow:hidden}
+
+  .udc-glow{
+    position:absolute;z-index:0;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side,var(--udc-accent),transparent 70%);
+    animation:udcGlowPulse 5s ease-in-out infinite}
+
+  .udc-eyebrow{display:inline-block;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--udc-accent)}
+
+  .udc-h2{margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(26px,3.4vw,46px);line-height:1.1}
+
+  .udc-serif{font-family:var(--udc-serif-font);font-style:italic;text-transform:none;letter-spacing:0}
+  .udc-serif-glow{text-shadow:0 0 26px color-mix(in srgb, var(--udc-accent) 70%, transparent)}
+
+  .udc-accent{color:var(--udc-accent)}
+
+  .udc-tag{display:inline-block;background:var(--udc-accent);color:#fff;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;font-weight:700;padding:4px 10px;border-radius:999px}
+  .udc-tag--outline{background:transparent;border:1px solid var(--udc-accent);color:var(--udc-accent)}
+  .udc-tag--ghost{background:transparent;border:1px solid #3A3A34;color:var(--udc-dim)}
+
+  .udc-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;
+    background:var(--udc-accent);color:#fff;font-family:var(--udc-anton);
+    font-size:clamp(15px,1.7vw,20px);letter-spacing:.06em;text-transform:uppercase;
+    padding:18px 32px;border-radius:999px;
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 50%, transparent);
+    transition:transform .25s ease, box-shadow .25s ease}
+  .udc-btn:hover{transform:scale(1.03);color:#fff;
+    box-shadow:0 0 100px color-mix(in srgb, var(--udc-accent) 75%, transparent)}
+
+  .udc-marquee{display:flex;width:max-content}
+  .udc-marquee__row{display:flex;gap:14px;padding-right:14px}
+
+  [data-udc-reveal]{opacity:1;transform:none;filter:none}
+  .udc-js [data-udc-reveal]{
+    opacity:0;transform:translateY(56px);filter:blur(10px);
+    transition:opacity .9s cubic-bezier(.2,.65,.2,1),transform .9s cubic-bezier(.2,.65,.2,1),filter .9s cubic-bezier(.2,.65,.2,1)}
+  .udc-js [data-udc-reveal].is-in{opacity:1;transform:none;filter:none}
+
+  @keyframes udcMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes udcMarqueeR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+  @keyframes udcGlowPulse{0%,100%{opacity:.35}50%{opacity:.75}}
+  @keyframes udcBlink{0%,100%{opacity:1}50%{opacity:.15}}
+  @keyframes udcFadeUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:none}}
+  @keyframes udcFloaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  @media (prefers-reduced-motion: reduce){
+    .udc-glow{animation:none}
+    .udc-marquee{animation:none !important}
+    .udc-js [data-udc-reveal]{transition:none}
+  }
+</style>
+
+<script>
+  document.documentElement.classList.add('udc-js');
+  if (!window.__udcBaseInit) {
+    window.__udcBaseInit = true;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-udc-reveal]'));
+      if ('IntersectionObserver' in window) {
+        var revealIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              revealIo.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealEls.forEach(function (el) { revealIo.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('is-in'); });
+      }
+
+      var countEls = Array.prototype.slice.call(document.querySelectorAll('[data-udc-count]'));
+      if (countEls.length) {
+        var renderCount = function (el) {
+          var end = parseFloat(el.getAttribute('data-udc-count'));
+          var prefix = el.getAttribute('data-udc-prefix') || '';
+          var suffix = el.getAttribute('data-udc-suffix') || '';
+          if (isNaN(end)) return;
+          var start = performance.now();
+          var frame = function (now) {
+            var progress = Math.min(1, (now - start) / 1400);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = prefix + Math.round(end * eased) + suffix;
+            if (progress < 1) requestAnimationFrame(frame);
+          };
+          requestAnimationFrame(frame);
+        };
+        if ('IntersectionObserver' in window) {
+          var countIo = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              countIo.unobserve(entry.target);
+              renderCount(entry.target);
+            });
+          }, { threshold: 0.5 });
+          countEls.forEach(function (el) { countIo.observe(el); });
+        } else {
+          countEls.forEach(renderCount);
+        }
+      }
+    });
+  }
+</script>

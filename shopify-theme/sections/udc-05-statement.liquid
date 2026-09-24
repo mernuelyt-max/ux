@@ -1,0 +1,93 @@
+{%- comment -%}
+  UDC 05 — Statement
+
+  A partir de la sección "STATEMENT" de design-reference/landing-base.html.
+  Los 3 chips (b1/b2/b3) ya estaban grabados en templates/index.json antes de
+  este archivo — se respetan tal cual están ahí.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-st" id="udc-st-{{ section.id }}">
+  <span class="udc-glow udc-st__glow" aria-hidden="true"></span>
+
+  <h2 class="udc-h2 udc-st__title" data-udc-reveal>
+    {{ section.settings.title_1 }}<br>
+    <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  {%- if section.settings.image != blank or section.blocks.size > 0 -%}
+    <div class="udc-st__body" data-udc-reveal>
+      {%- if section.settings.image != blank -%}
+        <div class="udc-st__imgwrap">
+          <span class="udc-glow udc-st__imgglow" aria-hidden="true"></span>
+          <div class="udc-st__img">
+            <img src="{{ section.settings.image | image_url: width: 500 }}"
+                 loading="lazy"
+                 width="{{ section.settings.image.width }}"
+                 height="{{ section.settings.image.height }}"
+                 alt="{{ section.settings.image.alt | default: section.settings.title_1 | escape }}">
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="udc-st__chips">
+          {%- for block in section.blocks -%}
+            <span class="udc-st__chip" {{ block.shopify_attributes }}>
+              <span class="udc-accent" aria-hidden="true">✦</span>{{ block.settings.text }}
+            </span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-st-{{ section.id }}{padding-top:clamp(52px,8vh,88px);padding-bottom:0;overflow:hidden}
+  #udc-st-{{ section.id }} .udc-st__glow{
+    top:0;left:50%;translate:-50% 0;width:640px;height:420px;filter:blur(110px);opacity:.25}
+
+  #udc-st-{{ section.id }} .udc-st__title{position:relative;text-align:center}
+
+  #udc-st-{{ section.id }} .udc-st__body{
+    position:relative;max-width:420px;margin:44px auto 0}
+
+  #udc-st-{{ section.id }} .udc-st__imgwrap{position:relative}
+  #udc-st-{{ section.id }} .udc-st__imgglow{
+    inset:-40px;width:auto;height:auto;filter:blur(80px);opacity:.3}
+  #udc-st-{{ section.id }} .udc-st__img{
+    position:relative;aspect-ratio:3/4;border-radius:16px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2);
+    box-shadow:0 24px 60px rgba(0,0,0,.6);animation:udcFloaty 4s ease-in-out infinite}
+  #udc-st-{{ section.id }} .udc-st__img img{display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-st-{{ section.id }} .udc-st__chips{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:26px}
+  #udc-st-{{ section.id }} .udc-st__chip{
+    display:inline-flex;align-items:center;gap:10px;border:1px dashed #443B3B;
+    border-radius:999px;padding:9px 18px;font-size:13px;color:#D9D9CF}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 05 · Statement",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Todos quieren vender" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "pocos saben cerrar" },
+    { "type": "image_picker", "id": "image", "label": "Imagen (opcional)" }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Chip",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto", "default": "Beneficio" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 05 · Statement" }]
+}
+{% endschema %}

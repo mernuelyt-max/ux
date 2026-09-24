@@ -1,0 +1,85 @@
+{%- comment -%}
+  UDC 20 — Autor
+
+  A partir de la sección "AUTOR" de design-reference/landing-base.html. En
+  templates/index.json esta sección ya existía con settings vacíos ({}), así
+  que el schema y los valores por defecto de acá abajo son nuevos (el copy
+  es el mismo texto real del artifact, no inventado).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-at" id="udc-at-{{ section.id }}">
+  <span class="udc-glow udc-at__glow" aria-hidden="true"></span>
+
+  <div class="udc-at__grid">
+    {%- if section.settings.image != blank -%}
+      <div class="udc-at__imgwrap" data-udc-reveal>
+        <span class="udc-glow udc-at__imgglow" aria-hidden="true"></span>
+        <div class="udc-at__img">
+          <img src="{{ section.settings.image | image_url: width: 500 }}"
+               loading="lazy"
+               width="{{ section.settings.image.width }}"
+               height="{{ section.settings.image.height }}"
+               alt="{{ section.settings.image.alt | default: section.settings.name | escape }}">
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div data-udc-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 class="udc-h2 udc-at__title">
+        {{ section.settings.title }} <span class="udc-serif udc-accent">{{ section.settings.name }}</span>
+      </h2>
+      {%- if section.settings.bio_1 != blank -%}
+        <p class="udc-at__bio">{{ section.settings.bio_1 }}</p>
+      {%- endif -%}
+      {%- if section.settings.bio_2 != blank -%}
+        <p class="udc-at__bio">{{ section.settings.bio_2 }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #udc-at-{{ section.id }}{position:relative}
+  #udc-at-{{ section.id }} .udc-at__glow{
+    bottom:-120px;right:-140px;width:480px;height:480px;filter:blur(100px);opacity:.18}
+
+  #udc-at-{{ section.id }} .udc-at__grid{
+    display:grid;grid-template-columns:minmax(220px,1fr) minmax(280px,1.6fr);
+    gap:clamp(28px,5vw,64px);align-items:center;max-width:1100px;margin:0 auto;position:relative}
+  @media (max-width:640px){
+    #udc-at-{{ section.id }} .udc-at__grid{grid-template-columns:1fr}
+  }
+
+  #udc-at-{{ section.id }} .udc-at__imgwrap{position:relative}
+  #udc-at-{{ section.id }} .udc-at__imgglow{
+    inset:-30px;width:auto;height:auto;filter:blur(70px);opacity:.25;animation:none}
+  #udc-at-{{ section.id }} .udc-at__img{
+    position:relative;aspect-ratio:4/5;border-radius:18px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2)}
+  #udc-at-{{ section.id }} .udc-at__img img{display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-at-{{ section.id }} .udc-at__title{margin-top:14px}
+  #udc-at-{{ section.id }} .udc-at__bio{margin:20px 0 0;color:var(--udc-muted);font-size:15px;line-height:1.65}
+  #udc-at-{{ section.id }} .udc-at__bio + .udc-at__bio{margin-top:16px}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 20 · Autor",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Quién te va a enseñar" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Hola, soy" },
+    { "type": "text", "id": "name", "label": "Nombre (acento serif itálica)", "default": "Tino Mossu" },
+    { "type": "textarea", "id": "bio_1", "label": "Bio · párrafo 1", "default": "Llevo años cerrando ventas para infoproductores y equipos de high ticket, 100% desde el celular. Aprendí el oficio a las malas: sin guiones, improvisando en cada llamada y perdiendo ventas por no tener un método." },
+    { "type": "textarea", "id": "bio_2", "label": "Bio · párrafo 2", "default": "Cuando armé mi propio sistema todo cambió. Acá te dejo ese mismo paso a paso, sin relleno, para que consigas tus primeros cierres sin repetir mis errores." }
+  ],
+  "presets": [{ "name": "UDC 20 · Autor" }]
+}
+{% endschema %}

@@ -1,0 +1,106 @@
+{%- comment -%}
+  UDC 06 — Qué aprendés (dos marquesinas de chips, una por fila)
+
+  A partir de la sección "QUÉ APRENDÉS" de design-reference/landing-base.html.
+  Los 12 chips (b1..b12, con settings.row "r1"/"r2") ya estaban grabados en
+  templates/index.json antes de este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign row1 = section.blocks | where: 'settings.row', 'r1' -%}
+{%- assign row2 = section.blocks | where: 'settings.row', 'r2' -%}
+{%- assign speed1 = section.settings.speed_1 | default: 26 -%}
+{%- assign speed2 = section.settings.speed_2 | default: 30 -%}
+
+<section class="udc udc-qa" id="udc-qa-{{ section.id }}">
+  <h2 class="udc-h2 udc-qa__title" data-udc-reveal>
+    {{ section.settings.title_1 }}<br>
+    <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  <div class="udc-qa__rows" data-udc-reveal>
+    {%- if row1.size > 0 -%}
+      <div class="udc-qa__lane">
+        <div class="udc-marquee udc-qa__mq udc-qa__mq--fwd">
+          {%- for pass in (1..2) -%}
+            <div class="udc-marquee__row udc-qa__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+              {%- for block in row1 -%}
+                <span class="udc-qa__chip" {{ block.shopify_attributes }}>
+                  <span class="udc-accent" aria-hidden="true">✦</span>{{ block.settings.text }}
+                </span>
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if row2.size > 0 -%}
+      <div class="udc-qa__lane">
+        <div class="udc-marquee udc-qa__mq udc-qa__mq--rev">
+          {%- for pass in (1..2) -%}
+            <div class="udc-marquee__row udc-qa__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+              {%- for block in row2 -%}
+                <span class="udc-qa__chip" {{ block.shopify_attributes }}>
+                  <span class="udc-accent" aria-hidden="true">✦</span>{{ block.settings.text }}
+                </span>
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #udc-qa-{{ section.id }}{padding-bottom:clamp(52px,8vh,88px)}
+  #udc-qa-{{ section.id }} .udc-qa__title{text-align:center}
+
+  #udc-qa-{{ section.id }} .udc-qa__rows{
+    display:flex;flex-direction:column;gap:16px;margin-top:48px}
+  #udc-qa-{{ section.id }} .udc-qa__lane{overflow:hidden}
+  #udc-qa-{{ section.id }} .udc-qa__mq--fwd{animation:udcMarquee {{ speed1 }}s linear infinite}
+  #udc-qa-{{ section.id }} .udc-qa__mq--rev{animation:udcMarqueeR {{ speed2 }}s linear infinite}
+  #udc-qa-{{ section.id }} .udc-qa__row{gap:14px;padding-right:14px}
+
+  #udc-qa-{{ section.id }} .udc-qa__chip{
+    display:inline-flex;align-items:center;gap:10px;border:1px dashed #443B3B;
+    border-radius:999px;padding:9px 18px;font-size:13px;color:#D9D9CF;white-space:nowrap}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-qa-{{ section.id }} .udc-qa__mq--fwd,
+    #udc-qa-{{ section.id }} .udc-qa__mq--rev{animation:none}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC 06 · Qué aprendés",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Adentro de la guía" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "aprendés todo lo que hace un closer" },
+    { "type": "range", "id": "speed_1", "label": "Velocidad fila 1", "min": 10, "max": 60, "step": 2, "unit": "s", "default": 26 },
+    { "type": "range", "id": "speed_2", "label": "Velocidad fila 2", "min": 10, "max": 60, "step": 2, "unit": "s", "default": 30 }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Chip",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto", "default": "Tema" },
+        {
+          "type": "select", "id": "row", "label": "Fila", "default": "r1",
+          "options": [
+            { "value": "r1", "label": "Fila 1 (va hacia la izquierda)" },
+            { "value": "r2", "label": "Fila 2 (va hacia la derecha)" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 06 · Qué aprendés" }]
+}
+{% endschema %}

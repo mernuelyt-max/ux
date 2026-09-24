@@ -1,0 +1,67 @@
+{%- comment -%}
+  UDC 18 — Pensada para (lista de puntos con check)
+
+  A partir de la sección "PENSADA PARA" de design-reference/landing-base.html.
+  Los 5 puntos (b1..b5) ya estaban grabados en templates/index.json antes de
+  este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
+  <span class="udc-glow udc-pp__glow" aria-hidden="true"></span>
+
+  <h2 class="udc-h2 udc-pp__title" data-udc-reveal>
+    {{ section.settings.title_1 }}<br>
+    <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-pp__list">
+      {%- for block in section.blocks -%}
+        <div class="udc-pp__row" data-udc-reveal {{ block.shopify_attributes }}>
+          <span class="udc-pp__check" aria-hidden="true">✓</span>
+          <p class="udc-pp__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-pp-{{ section.id }}{position:relative}
+  #udc-pp-{{ section.id }} .udc-pp__glow{
+    bottom:-120px;left:-140px;width:480px;height:480px;filter:blur(100px);opacity:.2;animation:none}
+
+  #udc-pp-{{ section.id }} .udc-pp__title{max-width:900px;position:relative}
+
+  #udc-pp-{{ section.id }} .udc-pp__list{
+    display:flex;flex-direction:column;gap:26px;margin-top:48px;max-width:720px;position:relative}
+  #udc-pp-{{ section.id }} .udc-pp__row{display:flex;gap:18px;align-items:flex-start}
+  #udc-pp-{{ section.id }} .udc-pp__check{
+    width:28px;height:28px;flex:0 0 28px;border-radius:50%;background:var(--udc-accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
+    box-shadow:0 0 26px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+  #udc-pp-{{ section.id }} .udc-pp__text{margin:0;font-size:clamp(15px,1.3vw,17px);line-height:1.5;color:#E9E9E2}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 18 · Pensada para",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Esta guía está" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "pensada estratégicamente para..." }
+  ],
+  "blocks": [
+    {
+      "type": "punto",
+      "name": "Punto",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 18 · Pensada para" }]
+}
+{% endschema %}

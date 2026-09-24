@@ -1,0 +1,199 @@
+{%- comment -%}
+  UDC 03 — Hero
+
+  Reescrito como Liquid a partir de la sección "Hero" de
+  design-reference/landing-base.html (el artifact de Claude Design), que es
+  de donde salen el copy y el sistema visual por defecto acá abajo.
+
+  cover_image y float ya estaban grabados en templates/index.json antes de
+  que existiera este archivo (cover_image apunta a
+  shopify://shop_images/udc-mockup-sistema.png, que es udc-mockup-sistema.png
+  en shopify-theme/assets-recuperados/). Por eso el setting se llama igual:
+  así el contenido que ya está en el template lo toma sin tocar el JSON.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+{%- if section.settings.link_type == 'custom' and section.settings.custom_url != blank -%}
+  {%- assign btn_href = section.settings.custom_url -%}
+{%- else -%}
+  {%- assign btn_href = wa_link -%}
+{%- endif -%}
+
+<section class="udc udc-hr" id="udc-hr-{{ section.id }}">
+  <span class="udc-glow udc-hr__glow" aria-hidden="true"></span>
+
+  {%- if section.settings.kicker != blank -%}
+    <div class="udc-hr__kicker" data-udc-reveal>
+      <span>{{ section.settings.kicker }}</span>
+    </div>
+  {%- endif -%}
+
+  <div class="udc-hr__card" data-udc-reveal>
+    <span class="udc-glow udc-hr__cardglow" aria-hidden="true"></span>
+
+    {%- if section.settings.badge_text != blank -%}
+      <span class="udc-hr__badge">
+        <span class="udc-hr__dot" aria-hidden="true">◉</span>{{ section.settings.badge_text }}
+      </span>
+    {%- endif -%}
+
+    {%- if section.settings.social_proof != blank -%}
+      <p class="udc-serif udc-hr__social">{{ section.settings.social_proof }}</p>
+    {%- endif -%}
+
+    <h1 class="udc-hr__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-accent udc-hr__title2">{{ section.settings.title_2 }}</span>
+    </h1>
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="udc-hr__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cover_image != blank -%}
+      <div class="udc-hr__coverwrap{% if section.settings.float %} is-floaty{% endif %}">
+        <span class="udc-glow udc-hr__coverglow" aria-hidden="true"></span>
+        <div class="udc-hr__cover">
+          <img src="{{ section.settings.cover_image | image_url: width: 800 }}"
+               loading="lazy"
+               width="{{ section.settings.cover_image.width }}"
+               height="{{ section.settings.cover_image.height }}"
+               alt="{{ section.settings.cover_image.alt | default: section.settings.title_1 | escape }}">
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.support_text != blank -%}
+      <p class="udc-serif udc-hr__support">{{ section.settings.support_text }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_text != blank -%}
+      <a href="{{ btn_href }}"
+         {% if section.settings.link_type != 'custom' %}target="_blank" rel="noopener"{% endif %}
+         class="udc-btn udc-hr__cta">{{ section.settings.cta_text }}</a>
+    {%- endif -%}
+
+    {%- if section.settings.payment_row != blank -%}
+      <div class="udc-hr__pay">
+        {%- assign pays = section.settings.payment_row | split: ',' -%}
+        {%- for p in pays -%}
+          {%- assign p = p | strip -%}
+          {%- if p != blank -%}<span>{{ p }}</span>{%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #udc-hr-{{ section.id }}{
+    padding-top:clamp(28px,5vh,52px);padding-bottom:clamp(40px,6vh,70px);
+    text-align:center;overflow:hidden}
+  #udc-hr-{{ section.id }} .udc-hr__glow{
+    top:-180px;left:50%;translate:-50% 0;width:680px;height:520px;
+    filter:blur(100px);opacity:.3}
+
+  #udc-hr-{{ section.id }} .udc-hr__kicker{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
+    position:relative;font-size:13px;color:var(--udc-muted)}
+  #udc-hr-{{ section.id }} .udc-hr__kicker strong{color:var(--udc-text)}
+
+  #udc-hr-{{ section.id }} .udc-hr__card{
+    position:relative;margin:clamp(24px,4vh,40px) auto 0;max-width:1000px;
+    border:1px solid var(--udc-border);border-radius:28px;background:var(--udc-bg2);
+    padding:clamp(28px,5vw,56px) clamp(20px,4vw,48px);overflow:hidden}
+  #udc-hr-{{ section.id }} .udc-hr__cardglow{
+    bottom:-200px;left:50%;translate:-50% 0;width:620px;height:520px;
+    filter:blur(100px);opacity:.28;animation-duration:6s}
+
+  #udc-hr-{{ section.id }} .udc-hr__badge{
+    position:relative;display:inline-flex;align-items:center;gap:10px;
+    background:var(--udc-bg);border:1px solid #262220;border-radius:999px;
+    padding:12px 26px;font-size:13px;color:#E9E9E2}
+  #udc-hr-{{ section.id }} .udc-hr__dot{color:var(--udc-accent);animation:udcBlink 1.4s steps(2) infinite}
+
+  #udc-hr-{{ section.id }} .udc-hr__social{
+    position:relative;margin:16px 0 0;font-size:15px;color:var(--udc-dim)}
+  #udc-hr-{{ section.id }} .udc-hr__social strong{color:var(--udc-text);font-style:italic}
+
+  #udc-hr-{{ section.id }} .udc-hr__title{
+    position:relative;margin:26px 0 0;font-family:var(--udc-anton);font-weight:400;
+    text-transform:uppercase;font-size:clamp(30px,4.6vw,64px);line-height:1.05;letter-spacing:.01em}
+  #udc-hr-{{ section.id }} .udc-hr__title2{
+    text-shadow:0 0 42px color-mix(in srgb, var(--udc-accent) 55%, transparent)}
+
+  #udc-hr-{{ section.id }} .udc-hr__subtitle{
+    position:relative;margin:18px auto 0;max-width:620px;
+    font-size:clamp(15px,1.5vw,19px);line-height:1.5;color:#D9D9CF}
+
+  #udc-hr-{{ section.id }} .udc-hr__coverwrap{
+    position:relative;max-width:400px;margin:clamp(28px,5vh,48px) auto 0}
+  #udc-hr-{{ section.id }} .udc-hr__coverglow{
+    inset:-40px;width:auto;height:auto;filter:blur(80px);opacity:.4}
+  #udc-hr-{{ section.id }} .udc-hr__cover{
+    position:relative;aspect-ratio:3/4;border-radius:16px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2);
+    box-shadow:0 30px 70px rgba(0,0,0,.7)}
+  #udc-hr-{{ section.id }} .udc-hr__cover img{
+    display:block;width:100%;height:100%;object-fit:cover}
+  #udc-hr-{{ section.id }} .udc-hr__coverwrap.is-floaty .udc-hr__cover{
+    animation:udcFloaty 4s ease-in-out infinite}
+
+  #udc-hr-{{ section.id }} .udc-hr__support{
+    position:relative;margin:26px auto 0;max-width:560px;
+    font-size:15px;line-height:1.5;color:var(--udc-muted)}
+  #udc-hr-{{ section.id }} .udc-hr__support strong{color:var(--udc-text);font-style:italic}
+
+  #udc-hr-{{ section.id }} .udc-hr__cta{
+    position:relative;max-width:520px;width:100%;margin:26px auto 0}
+
+  #udc-hr-{{ section.id }} .udc-hr__pay{
+    position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:clamp(18px,4vw,38px);margin-top:24px}
+  #udc-hr-{{ section.id }} .udc-hr__pay span{
+    font-size:13px;letter-spacing:.06em;color:var(--udc-dim);font-weight:700}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 03 · Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Línea sobre la tarjeta", "default": "+120 closers ya la están aplicando" },
+
+    { "type": "header", "content": "Tarjeta principal" },
+    { "type": "text", "id": "badge_text", "label": "Texto de la píldora", "default": "Acceso completo + mentoría 1 a 1 incluida" },
+    { "type": "text", "id": "social_proof", "label": "Línea de prueba social", "default": "+600 personas ya descargaron esta guía." },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Cerrá ventas por llamada" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (acento)", "default": "todos los días" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "(Y multiplicá tus comisiones aplicando el mismo método desde tu celular)" },
+
+    { "type": "header", "content": "Imagen" },
+    { "type": "image_picker", "id": "cover_image", "label": "Mockup / imagen principal" },
+    { "type": "checkbox", "id": "float", "label": "Animar la imagen (flotando)", "default": false },
+
+    { "type": "textarea", "id": "support_text", "label": "Texto de apoyo bajo la imagen", "default": "Este es el mismo sistema que usan los closers de high ticket, explicado paso a paso y desde cero." },
+
+    { "type": "header", "content": "Botón" },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Escribir por WhatsApp →" },
+    {
+      "type": "select", "id": "link_type", "label": "El botón lleva a", "default": "whatsapp",
+      "options": [
+        { "value": "whatsapp", "label": "WhatsApp" },
+        { "value": "custom", "label": "Link personalizado" }
+      ]
+    },
+    { "type": "url", "id": "custom_url", "label": "Link personalizado" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." },
+
+    { "type": "text", "id": "payment_row", "label": "Métodos de pago (separados por coma)", "info": "Vacío = no aparece." }
+  ],
+  "presets": [{ "name": "UDC 03 · Hero" }]
+}
+{% endschema %}

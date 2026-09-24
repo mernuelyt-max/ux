@@ -1,0 +1,81 @@
+{%- comment -%}
+  UDC 17 — Niveles ("¿Esto es para vos?")
+
+  A partir de la sección "NIVELES" de design-reference/landing-base.html.
+  Los 4 niveles (b1..b4) ya estaban grabados en templates/index.json antes de
+  este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-nv" id="udc-nv-{{ section.id }}">
+  <span class="udc-glow udc-nv__glow" aria-hidden="true"></span>
+
+  <h2 class="udc-h2 udc-nv__title" data-udc-reveal>
+    {{ section.settings.title_1 }}<br>
+    <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+  </h2>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-nv__grid">
+      {%- for block in section.blocks -%}
+        <div class="udc-nv__card" data-udc-reveal {{ block.shopify_attributes }}>
+          {%- if block.settings.level != blank -%}
+            <span class="udc-tag udc-tag--outline udc-nv__level">{{ block.settings.level }}</span>
+          {%- endif -%}
+          <h3 class="udc-nv__ctitle">{{ block.settings.title }}</h3>
+          {%- if block.settings.text != blank -%}
+            <p class="udc-nv__ctext">{{ block.settings.text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-nv-{{ section.id }}{position:relative}
+  #udc-nv-{{ section.id }} .udc-nv__glow{
+    top:14%;right:-160px;width:520px;height:520px;filter:blur(110px);opacity:.16}
+
+  #udc-nv-{{ section.id }} .udc-nv__title{text-align:center;position:relative}
+
+  #udc-nv-{{ section.id }} .udc-nv__grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;
+    margin-top:48px;max-width:1200px;margin-left:auto;margin-right:auto;position:relative}
+  #udc-nv-{{ section.id }} .udc-nv__card{
+    border:1px solid var(--udc-border);border-radius:20px;background:var(--udc-bg2);
+    padding:30px 26px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+    transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+  #udc-nv-{{ section.id }} .udc-nv__card:hover{
+    border-color:var(--udc-accent);transform:translateY(-6px);
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 20%, transparent)}
+  #udc-nv-{{ section.id }} .udc-nv__level{align-self:flex-start;font-weight:700}
+  #udc-nv-{{ section.id }} .udc-nv__ctitle{
+    margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(16px,1.6vw,21px);line-height:1.15}
+  #udc-nv-{{ section.id }} .udc-nv__ctext{margin:0;color:var(--udc-muted);font-size:14px;line-height:1.6}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 17 · Niveles",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "¿Esto es para vos?" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "sí, si te reconocés en alguno" }
+  ],
+  "blocks": [
+    {
+      "type": "nivel",
+      "name": "Nivel",
+      "settings": [
+        { "type": "text", "id": "level", "label": "Etiqueta", "default": "Nivel 1" },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 17 · Niveles" }]
+}
+{% endschema %}

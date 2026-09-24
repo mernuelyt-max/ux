@@ -1,0 +1,89 @@
+{%- comment -%}
+  UDC 07 — Contenido (lista numerada de capítulos)
+
+  A partir de la sección "CONTENIDO" de design-reference/landing-base.html.
+  Los 8 capítulos (b1..b8) ya estaban grabados en templates/index.json antes
+  de este archivo.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-cn" id="udc-cn-{{ section.id }}">
+  <span class="udc-glow udc-cn__glow" aria-hidden="true"></span>
+
+  <div class="udc-cn__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-cn__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="udc-cn__list">
+      {%- for block in section.blocks -%}
+        <div class="udc-cn__row" data-udc-reveal {{ block.shopify_attributes }}>
+          <span class="udc-cn__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <div>
+            <h3 class="udc-cn__ctitle">{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p class="udc-cn__ctext">{{ block.settings.text }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+      <div class="udc-cn__rule"></div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-cn-{{ section.id }}{position:relative}
+  #udc-cn-{{ section.id }} .udc-cn__glow{
+    top:8%;right:-160px;width:520px;height:520px;filter:blur(110px);opacity:.16}
+
+  #udc-cn-{{ section.id }} .udc-cn__head{text-align:center;position:relative}
+  #udc-cn-{{ section.id }} .udc-cn__title{margin-top:14px}
+
+  #udc-cn-{{ section.id }} .udc-cn__list{
+    max-width:820px;margin:44px auto 0;position:relative}
+  #udc-cn-{{ section.id }} .udc-cn__row{
+    display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;
+    padding:22px 0;border-top:1px solid var(--udc-line2);transition:background .25s ease}
+  #udc-cn-{{ section.id }} .udc-cn__row:hover{background:#0A0A09}
+  #udc-cn-{{ section.id }} .udc-cn__num{
+    font-family:var(--udc-anton);font-size:clamp(22px,2vw,30px);line-height:1;
+    color:var(--udc-accent);text-shadow:0 0 26px color-mix(in srgb, var(--udc-accent) 50%, transparent);
+    min-width:52px}
+  #udc-cn-{{ section.id }} .udc-cn__ctitle{
+    margin:0 0 6px;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:clamp(15px,1.5vw,19px);line-height:1.15}
+  #udc-cn-{{ section.id }} .udc-cn__ctext{
+    margin:0;color:var(--udc-muted);font-size:14px;line-height:1.55}
+  #udc-cn-{{ section.id }} .udc-cn__rule{border-top:1px solid var(--udc-line2)}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 07 · Contenido",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Contenido directo al grano" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Todo lo que vas a encontrar" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "capítulo por capítulo" }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Capítulo",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC 07 · Contenido" }]
+}
+{% endschema %}

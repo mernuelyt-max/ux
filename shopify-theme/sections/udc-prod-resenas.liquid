@@ -1,0 +1,238 @@
+{%- comment -%}
+  UDC · Reseñas (Trustpilot)
+
+  Reemplaza el widget embebido de Trustpilot placeholder (0,0/5, "Reemplazá
+  con tu puntuación real") de la sección "PRUEBA SOCIAL" (testimonios) de
+  design-reference/landing-base.html por las reseñas reales ya recuperadas:
+  puntaje 4,8, distribución y las 6 reseñas verificadas que ya estaban
+  grabadas en templates/index.json (bloque "resenas") antes de este archivo.
+
+  El widget oficial de Trustpilot (data-businessunit-id) necesita un
+  Business Unit ID real y el script de bootstrap: mientras esos dos datos no
+  estén, esta sección muestra las reseñas ya guardadas en vez del widget.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-top udc-rs" id="udc-rs-{{ section.id }}">
+  <span class="udc-glow udc-rs__glow" aria-hidden="true"></span>
+
+  <div class="udc-rs__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-rs__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+  </div>
+
+  <div class="udc-rs__panel" data-udc-reveal>
+    <div class="udc-rs__grid">
+      <div class="udc-rs__score">
+        <span class="udc-glow udc-rs__scoreglow" aria-hidden="true"></span>
+        {%- if section.settings.grade != blank -%}
+          <span class="udc-rs__grade">{{ section.settings.grade }}</span>
+        {%- endif -%}
+        <div class="udc-rs__num">
+          <span>{{ section.settings.score }}</span><span class="udc-rs__of5">/ 5</span>
+        </div>
+        <div class="udc-rs__stars">
+          {%- for i in (1..5) -%}<span>★</span>{%- endfor -%}
+        </div>
+        {%- if section.settings.summary != blank -%}
+          <span class="udc-rs__summary">{{ section.settings.summary }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.show_distribution -%}
+          <div class="udc-rs__dist">
+            {%- assign dist = '5,4,3,2,1' | split: ',' -%}
+            {%- for star in dist -%}
+              {%- assign pct = 0 -%}
+              {%- case star -%}
+                {%- when '5' -%}{%- assign pct = section.settings.pct_5 -%}
+                {%- when '4' -%}{%- assign pct = section.settings.pct_4 -%}
+                {%- when '3' -%}{%- assign pct = section.settings.pct_3 -%}
+                {%- when '2' -%}{%- assign pct = section.settings.pct_2 -%}
+                {%- when '1' -%}{%- assign pct = section.settings.pct_1 -%}
+              {%- endcase -%}
+              <div class="udc-rs__distrow">
+                <span class="udc-rs__distlabel">{{ star }}★</span>
+                <span class="udc-rs__distbar"><span style="width:{{ pct }}%"></span></span>
+                <span class="udc-rs__distpct">{{ pct }}%</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.trustpilot_url != blank -%}
+          <a href="{{ section.settings.trustpilot_url }}" target="_blank" rel="noopener" class="udc-rs__link">
+            {{ section.settings.link_text | default: 'Ver perfil' }} →
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="udc-rs__cards{% if section.settings.animate %} is-animated{% endif %}">
+          {%- if section.settings.animate -%}
+            <div class="udc-marquee udc-rs__mq" style="animation-duration:{{ section.settings.speed | default: 7 }}s">
+              {%- for pass in (1..2) -%}
+                <div class="udc-marquee__row udc-rs__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+                  {%- for block in section.blocks -%}
+                    {%- render 'udc-resena-card', block: block -%}
+                  {%- endfor -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            {%- for block in section.blocks -%}
+              {%- render 'udc-resena-card', block: block -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #udc-rs-{{ section.id }}{position:relative}
+  #udc-rs-{{ section.id }} .udc-rs__glow{
+    top:0;left:50%;translate:-50% 0;width:700px;height:400px;filter:blur(110px);opacity:.2}
+
+  #udc-rs-{{ section.id }} .udc-rs__head{text-align:center;position:relative}
+  #udc-rs-{{ section.id }} .udc-rs__title{margin-top:14px}
+
+  #udc-rs-{{ section.id }} .udc-rs__panel{
+    max-width:1000px;margin:48px auto 0;position:relative}
+  #udc-rs-{{ section.id }} .udc-rs__grid{
+    position:relative;border:1px solid var(--udc-border);border-radius:20px;background:var(--udc-bg2);
+    padding:28px clamp(16px,3vw,28px);display:grid;
+    grid-template-columns:minmax(220px,.85fr) minmax(280px,2.2fr);
+    gap:clamp(20px,3vw,32px);align-items:stretch;overflow:hidden}
+  @media (max-width:680px){
+    #udc-rs-{{ section.id }} .udc-rs__grid{grid-template-columns:1fr}
+  }
+
+  #udc-rs-{{ section.id }} .udc-rs__score{
+    position:relative;border:1px solid var(--udc-accent);border-radius:18px;background:#0B0606;
+    padding:26px 24px;display:flex;flex-direction:column;gap:12px;text-align:left;overflow:hidden;
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 22%, transparent)}
+  #udc-rs-{{ section.id }} .udc-rs__scoreglow{
+    bottom:-140px;right:-100px;width:360px;height:360px;filter:blur(80px);opacity:.3}
+  #udc-rs-{{ section.id }} .udc-rs__grade{
+    position:relative;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--udc-dim)}
+  #udc-rs-{{ section.id }} .udc-rs__num{
+    position:relative;display:flex;align-items:baseline;gap:10px}
+  #udc-rs-{{ section.id }} .udc-rs__num span:first-child{
+    font-family:var(--udc-anton);font-size:clamp(34px,3.6vw,52px);line-height:1;
+    text-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+  #udc-rs-{{ section.id }} .udc-rs__of5{font-family:var(--udc-serif-font);font-style:italic;font-size:17px;color:var(--udc-dim)}
+  #udc-rs-{{ section.id }} .udc-rs__stars{position:relative;display:inline-flex;gap:4px}
+  #udc-rs-{{ section.id }} .udc-rs__stars span{
+    display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+    border-radius:3px;background:var(--udc-accent);color:#fff;font-size:13px;line-height:1}
+  #udc-rs-{{ section.id }} .udc-rs__summary{position:relative;font-size:13px;color:var(--udc-muted)}
+  #udc-rs-{{ section.id }} .udc-rs__link{
+    position:relative;margin-top:auto;padding-top:6px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--udc-accent)}
+
+  #udc-rs-{{ section.id }} .udc-rs__dist{
+    position:relative;display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  #udc-rs-{{ section.id }} .udc-rs__distrow{
+    display:grid;grid-template-columns:24px 1fr 34px;align-items:center;gap:8px}
+  #udc-rs-{{ section.id }} .udc-rs__distlabel{font-size:11px;color:var(--udc-dim)}
+  #udc-rs-{{ section.id }} .udc-rs__distbar{
+    display:block;height:6px;border-radius:999px;background:var(--udc-line2);overflow:hidden}
+  #udc-rs-{{ section.id }} .udc-rs__distbar span{
+    display:block;height:100%;background:var(--udc-accent);border-radius:999px}
+  #udc-rs-{{ section.id }} .udc-rs__distpct{font-size:11px;color:var(--udc-dim);text-align:right}
+
+  #udc-rs-{{ section.id }} .udc-rs__cards{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;align-content:start}
+  #udc-rs-{{ section.id }} .udc-rs__cards.is-animated{
+    display:block;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent);
+    mask-image:linear-gradient(to right,transparent,black 6%,black 94%,transparent)}
+  #udc-rs-{{ section.id }} .udc-rs__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-rs-{{ section.id }} .udc-rs__row{gap:16px;padding-right:16px;align-items:stretch}
+
+  #udc-rs-{{ section.id }} .udc-rs__card{
+    border:1px solid var(--udc-border);border-radius:16px;background:var(--udc-bg2);
+    padding:22px;display:flex;flex-direction:column;gap:12px;text-align:left;
+    transition:border-color .25s ease,box-shadow .25s ease}
+  #udc-rs-{{ section.id }} .udc-rs__cards.is-animated .udc-rs__card{min-width:260px;max-width:300px}
+  #udc-rs-{{ section.id }} .udc-rs__card:hover{
+    border-color:var(--udc-accent);box-shadow:0 0 50px color-mix(in srgb, var(--udc-accent) 18%, transparent)}
+
+  #udc-rs-{{ section.id }} .udc-rs__cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  #udc-rs-{{ section.id }} .udc-rs__cardstars{display:inline-flex;gap:4px}
+  #udc-rs-{{ section.id }} .udc-rs__cardstars span{
+    display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
+    border-radius:3px;background:var(--udc-accent);color:#fff;font-size:11px;line-height:1}
+  #udc-rs-{{ section.id }} .udc-rs__cardstars span.is-off{background:var(--udc-line2);color:transparent}
+  #udc-rs-{{ section.id }} .udc-rs__badge{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--udc-dim)}
+
+  #udc-rs-{{ section.id }} .udc-rs__cardtitle{
+    margin:0;font-family:var(--udc-anton);font-weight:400;text-transform:uppercase;
+    font-size:14px;line-height:1.25}
+  #udc-rs-{{ section.id }} .udc-rs__cardtext{margin:0;font-size:14px;line-height:1.6;color:#D9D9CF}
+
+  #udc-rs-{{ section.id }} .udc-rs__cardauthor{display:flex;align-items:center;gap:10px;margin-top:auto}
+  #udc-rs-{{ section.id }} .udc-rs__avatar{
+    width:32px;height:32px;flex:0 0 auto;border-radius:50%;background:#1C1614;color:var(--udc-accent);
+    display:flex;align-items:center;justify-content:center;font-family:var(--udc-anton);font-size:14px}
+  #udc-rs-{{ section.id }} .udc-rs__authorinfo{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--udc-dim)}
+  #udc-rs-{{ section.id }} .udc-rs__authorinfo b{color:var(--udc-text);font-weight:400}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-rs-{{ section.id }} .udc-rs__mq{animation:none}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Reseñas",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Opiniones en Trustpilot" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Lo que dicen" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "los que ya pasaron por la U" },
+
+    { "type": "header", "content": "Puntaje" },
+    { "type": "text", "id": "grade", "label": "Calificación", "default": "Excelente" },
+    { "type": "text", "id": "score", "label": "Puntaje", "default": "4,8" },
+    { "type": "text", "id": "summary", "label": "Resumen", "default": "Opiniones verificadas en Trustpilot" },
+    { "type": "url", "id": "trustpilot_url", "label": "Link al perfil de Trustpilot" },
+    { "type": "text", "id": "link_text", "label": "Texto del link", "default": "Ver todas en Trustpilot" },
+
+    { "type": "header", "content": "Distribución" },
+    { "type": "checkbox", "id": "show_distribution", "label": "Mostrar distribución de estrellas", "default": true },
+    { "type": "range", "id": "pct_5", "label": "% de 5 estrellas", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "pct_4", "label": "% de 4 estrellas", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "pct_3", "label": "% de 3 estrellas", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "pct_2", "label": "% de 2 estrellas", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "pct_1", "label": "% de 1 estrella", "min": 0, "max": 100, "default": 0 },
+
+    { "type": "header", "content": "Tarjetas" },
+    { "type": "checkbox", "id": "animate", "label": "Animar como marquesina", "default": false },
+    { "type": "range", "id": "speed", "label": "Velocidad (si está animado)", "min": 3, "max": 30, "step": 1, "unit": "s", "default": 7 }
+  ],
+  "blocks": [
+    {
+      "type": "resena",
+      "name": "Reseña",
+      "settings": [
+        { "type": "range", "id": "stars", "label": "Estrellas", "min": 1, "max": 5, "default": 5 },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" },
+        { "type": "text", "id": "author", "label": "Autor" },
+        { "type": "text", "id": "meta", "label": "País · reseñas" },
+        { "type": "text", "id": "date", "label": "Fecha" },
+        { "type": "text", "id": "badge", "label": "Etiqueta", "default": "Opinión espontánea" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Reseñas" }]
+}
+{% endschema %}
