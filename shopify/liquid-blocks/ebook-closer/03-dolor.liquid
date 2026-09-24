@@ -1,0 +1,47 @@
+{% comment %}
+  U DEL CLOSER — Sección de dolor / agitación
+  Editable: los 4 puntos de dolor (icono + texto).
+{% endcomment %}
+<section class="udc-pain" aria-label="Problemas que resuelve el ebook">
+  <div class="udc-pain__inner">
+    <h2 class="udc-section-title">¿Te suena familiar?</h2>
+    <p class="udc-section-subtitle">La mayoría no pierde ventas por el precio. Las pierde por esto:</p>
+
+    <div class="udc-pain__grid">
+      <div class="udc-pain__card">
+        <span class="udc-pain__icon">😓</span>
+        <p>Hablás con el prospecto, todo va bien... y al final te dice <em>"lo pienso y te aviso"</em>.</p>
+      </div>
+      <div class="udc-pain__card">
+        <span class="udc-pain__icon">🥶</span>
+        <p>Te congelás apenas te dicen <em>"está caro"</em> y no sabés qué responder sin sonar desesperado.</p>
+      </div>
+      <div class="udc-pain__card">
+        <span class="udc-pain__icon">📉</span>
+        <p>Generás conversaciones, pero muy pocas se convierten en ventas cerradas.</p>
+      </div>
+      <div class="udc-pain__card">
+        <span class="udc-pain__icon">🔁</span>
+        <p>Cada cierre depende de la improvisación, no de un proceso que puedas repetir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-pain{background:var(--udc-black,#060606);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-pain__inner{max-width:var(--udc-container,1120px);margin:0 auto;text-align:center}
+  .udc-section-title{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:800;margin:0 0 .5rem}
+  .udc-section-subtitle{color:var(--udc-muted,#b8b8b8);margin:0 0 2.25rem;font-size:1rem}
+  .udc-pain__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
+  .udc-pain__card{
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-border,#2c2c2c);
+    border-top:3px solid var(--udc-red,#ff1b3d);border-radius:var(--udc-radius,14px);
+    padding:1.75rem 1.25rem;text-align:left;
+  }
+  .udc-pain__icon{font-size:1.75rem;display:block;margin-bottom:.75rem}
+  .udc-pain__card p{margin:0;color:var(--udc-white,#f7f7f7);font-size:.92rem;line-height:1.55}
+  .udc-pain__card em{color:var(--udc-red,#ff1b3d);font-style:normal;font-weight:700}
+  @media (max-width:860px){ .udc-pain__grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .udc-pain__grid{grid-template-columns:1fr} }
+</style>

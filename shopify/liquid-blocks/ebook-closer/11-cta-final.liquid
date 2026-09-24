@@ -1,0 +1,83 @@
+{% comment %}
+  U DEL CLOSER — CTA final con cuenta regresiva
+  Requiere estar en la plantilla de PRODUCTO. El contador es "rolling": cuenta
+  hasta las 23:59:59 de HOY en el navegador del visitante y se reinicia solo
+  cada día (clásico de urgencia sin mantenimiento manual).
+{% endcomment %}
+<section class="udc-final" aria-label="Última oportunidad">
+  <div class="udc-final__inner">
+    <span class="udc-final__eyebrow">ÚLTIMA OPORTUNIDAD</span>
+    <h2 class="udc-final__title">No dejes para mañana la venta que podés cerrar hoy</h2>
+    <p class="udc-final__subtitle">El precio de lanzamiento termina en:</p>
+
+    <div class="udc-final__timer" id="udc-timer-{{ section.id }}" role="timer" aria-live="off">
+      <div><span data-udc-h>00</span><small>hs</small></div>
+      <div><span data-udc-m>00</span><small>min</small></div>
+      <div><span data-udc-s>00</span><small>seg</small></div>
+    </div>
+
+    {% form 'product', product, class: 'udc-final__form' %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="udc-btn udc-btn--primary udc-final__cta" data-udc-buy-now>
+        QUIERO EL EBOOK AHORA — {{ product.price | money }} →
+      </button>
+    {% endform %}
+  </div>
+</section>
+
+<style>
+  .udc-final{
+    background:radial-gradient(120% 140% at 20% 100%, var(--udc-red-glow,rgba(255,27,61,.35)) 0%, transparent 55%), var(--udc-black,#060606);
+    color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:4rem 1rem;text-align:center;
+  }
+  .udc-final__inner{max-width:640px;margin:0 auto}
+  .udc-final__eyebrow{color:var(--udc-red,#ff1b3d);font-weight:800;font-size:.75rem;letter-spacing:.08em}
+  .udc-final__title{font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:800;margin:.75rem 0 .5rem;line-height:1.2}
+  .udc-final__subtitle{color:var(--udc-muted,#b8b8b8);margin:0 0 1.5rem}
+  .udc-final__timer{display:flex;justify-content:center;gap:.75rem;margin-bottom:1.75rem}
+  .udc-final__timer div{
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-border,#2c2c2c);
+    border-radius:10px;padding:.75rem 1rem;min-width:64px;
+  }
+  .udc-final__timer span{display:block;font-size:1.5rem;font-weight:800;color:var(--udc-red,#ff1b3d)}
+  .udc-final__timer small{font-size:.65rem;color:var(--udc-muted,#b8b8b8);letter-spacing:.06em}
+  .udc-final__form{margin:0}
+</style>
+
+<script>
+  (function(){
+    var wrap = document.getElementById('udc-timer-{{ section.id }}');
+    if(!wrap) return;
+    var h = wrap.querySelector('[data-udc-h]');
+    var m = wrap.querySelector('[data-udc-m]');
+    var s = wrap.querySelector('[data-udc-s]');
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tick(){
+      var now = new Date();
+      var end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+      var diff = Math.max(0, end - now);
+      var hh = Math.floor(diff / 3600000);
+      var mm = Math.floor((diff % 3600000) / 60000);
+      var ss = Math.floor((diff % 60000) / 1000);
+      if(h) h.textContent = pad(hh);
+      if(m) m.textContent = pad(mm);
+      if(s) s.textContent = pad(ss);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  (function(){
+    var forms = document.querySelectorAll('.udc-final__form');
+    forms.forEach(function(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var formData = new FormData(form);
+        fetch('/cart/add.js', { method:'POST', body:formData, headers:{'Accept':'application/json'} })
+          .then(function(r){ return r.json(); })
+          .then(function(){ window.location.href = '/checkout'; })
+          .catch(function(){ form.submit(); });
+      });
+    });
+  })();
+</script>

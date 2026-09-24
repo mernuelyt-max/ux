@@ -1,0 +1,89 @@
+{% comment %}
+  U DEL CLOSER — Stack de oferta (value stack)
+  Requiere estar en la plantilla de PRODUCTO. Editable: filas del stack y sus
+  "valores" de referencia (udc-stack__value). El total demostrativo es una
+  suma fija en texto: ajustala si cambiás los valores de referencia.
+{% endcomment %}
+<section class="udc-stack" aria-label="Todo lo que incluye tu compra">
+  <div class="udc-stack__inner">
+    <h2 class="udc-section-title">Todo lo que llevás hoy</h2>
+
+    <div class="udc-stack__box">
+      <ul class="udc-stack__list">
+        <li>
+          <span>Ebook "Closer de Ventas" (5 módulos)</span>
+          <span class="udc-stack__value">$45.000</span>
+        </li>
+        <li>
+          <span>Bonus: Plantillas de WhatsApp</span>
+          <span class="udc-stack__value">$12.000</span>
+        </li>
+        <li>
+          <span>Bonus: Guion de manejo de objeciones</span>
+          <span class="udc-stack__value">$15.000</span>
+        </li>
+        <li>
+          <span>Actualizaciones futuras del ebook</span>
+          <span class="udc-stack__value">$8.000</span>
+        </li>
+      </ul>
+
+      <div class="udc-stack__total">
+        <span>Valor total</span>
+        <span class="udc-stack__total-old">$80.000</span>
+      </div>
+
+      <div class="udc-stack__today">
+        <span>Precio de hoy</span>
+        <span class="udc-stack__today-price">{{ product.price | money }}</span>
+      </div>
+
+      {% form 'product', product, class: 'udc-stack__form' %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <button type="submit" class="udc-btn udc-btn--primary udc-stack__cta" data-udc-buy-now>
+          QUIERO MI ACCESO AHORA →
+        </button>
+      {% endform %}
+      <p class="udc-stack__note">Pago 100% seguro · Acceso inmediato por email</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-stack{background:var(--udc-black-soft,#121212);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-stack__inner{max-width:640px;margin:0 auto;text-align:center}
+  .udc-stack__box{
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-red,#ff1b3d);
+    border-radius:var(--udc-radius,14px);padding:2rem;text-align:left;
+    box-shadow:0 0 40px -12px var(--udc-red-glow,rgba(255,27,61,.35));
+  }
+  .udc-stack__list{list-style:none;margin:0 0 1.25rem;padding:0;display:flex;flex-direction:column;gap:.85rem}
+  .udc-stack__list li{display:flex;justify-content:space-between;gap:1rem;font-size:.92rem;padding-bottom:.85rem;border-bottom:1px dashed var(--udc-border,#2c2c2c)}
+  .udc-stack__value{color:var(--udc-muted,#b8b8b8)}
+  .udc-stack__total{display:flex;justify-content:space-between;align-items:center;padding-top:.25rem;font-weight:700}
+  .udc-stack__total-old{text-decoration:line-through;color:var(--udc-muted,#b8b8b8)}
+  .udc-stack__today{
+    display:flex;justify-content:space-between;align-items:center;margin:1rem 0 1.5rem;
+    padding:1rem;background:var(--udc-black,#060606);border-radius:10px;
+  }
+  .udc-stack__today-price{font-size:1.6rem;font-weight:800;color:var(--udc-red,#ff1b3d)}
+  .udc-stack__form{margin:0}
+  .udc-stack__cta{width:100%}
+  .udc-stack__note{text-align:center;color:var(--udc-muted,#b8b8b8);font-size:.78rem;margin:.75rem 0 0}
+</style>
+
+<script>
+  (function(){
+    var forms = document.querySelectorAll('.udc-stack__form');
+    forms.forEach(function(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var formData = new FormData(form);
+        fetch('/cart/add.js', { method:'POST', body:formData, headers:{'Accept':'application/json'} })
+          .then(function(r){ return r.json(); })
+          .then(function(){ window.location.href = '/checkout'; })
+          .catch(function(){ form.submit(); });
+      });
+    });
+  })();
+</script>

@@ -1,0 +1,38 @@
+{% comment %}
+  U DEL CLOSER — Garantía / reversión de riesgo
+  Editable: días de garantía y texto.
+{% endcomment %}
+<section class="udc-guarantee" aria-label="Garantía de satisfacción">
+  <div class="udc-guarantee__inner">
+    <div class="udc-guarantee__seal" aria-hidden="true">
+      <span>7</span>
+      <small>DÍAS</small>
+    </div>
+    <div class="udc-guarantee__copy">
+      <h2>Garantía de 7 días, sin vueltas</h2>
+      <p>
+        Si aplicás el método y sentís que no es para vos, escribinos dentro de los primeros 7 días
+        y te devolvemos el 100% de tu dinero. Sin preguntas incómodas, sin letra chica.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-guarantee{background:var(--udc-black,#060606);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-guarantee__inner{
+    max-width:var(--udc-container,1120px);margin:0 auto;display:flex;align-items:center;gap:2rem;
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-border,#2c2c2c);
+    border-radius:var(--udc-radius,14px);padding:2rem;
+  }
+  .udc-guarantee__seal{
+    flex-shrink:0;width:110px;height:110px;border-radius:50%;
+    border:3px dashed var(--udc-red,#ff1b3d);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;color:var(--udc-red,#ff1b3d);
+  }
+  .udc-guarantee__seal span{font-size:2rem;font-weight:800;line-height:1}
+  .udc-guarantee__seal small{font-size:.65rem;letter-spacing:.1em}
+  .udc-guarantee__copy h2{margin:0 0 .5rem;font-size:1.3rem;font-weight:800}
+  .udc-guarantee__copy p{margin:0;color:var(--udc-muted,#b8b8b8);line-height:1.6;font-size:.95rem}
+  @media (max-width:640px){ .udc-guarantee__inner{flex-direction:column;text-align:center} }
+</style>

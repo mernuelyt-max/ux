@@ -1,0 +1,54 @@
+{% comment %}
+  U DEL CLOSER — Testimonios (scroll horizontal, sin librerías)
+  Editable: nombre, rol y texto de cada testimonio.
+{% endcomment %}
+<section class="udc-testi" aria-label="Testimonios de clientes">
+  <div class="udc-testi__inner">
+    <h2 class="udc-section-title">Resultados reales</h2>
+    <p class="udc-section-subtitle">Esto dicen quienes ya aplicaron el método.</p>
+
+    <div class="udc-testi__track">
+      <article class="udc-testi__card">
+        <div class="udc-testi__stars">★★★★★</div>
+        <p>"Cerré 3 ventas la primera semana usando el guion de objeciones. Antes esas mismas conversaciones se me caían."</p>
+        <footer><strong>Marcos R.</strong><span>Asesor comercial independiente</span></footer>
+      </article>
+      <article class="udc-testi__card">
+        <div class="udc-testi__stars">★★★★★</div>
+        <p>"El módulo de seguimiento solo ya vale el ebook. Recuperé 4 clientes que había dado por perdidos."</p>
+        <footer><strong>Julia P.</strong><span>Coach online</span></footer>
+      </article>
+      <article class="udc-testi__card">
+        <div class="udc-testi__stars">★★★★★</div>
+        <p>"Por fin un sistema, no consejos sueltos. Lo apliqué tal cual y mi tasa de cierre subió notablemente."</p>
+        <footer><strong>Diego S.</strong><span>Freelancer de ventas B2B</span></footer>
+      </article>
+      <article class="udc-testi__card">
+        <div class="udc-testi__stars">★★★★★</div>
+        <p>"Dejé de sonar desesperado cuando me dicen 'está caro'. Eso solo cambió todas mis conversaciones."</p>
+        <footer><strong>Camila V.</strong><span>Emprendedora digital</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-testi{background:var(--udc-black-soft,#121212);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 0}
+  .udc-testi__inner{max-width:var(--udc-container,1120px);margin:0 auto;padding:0 1rem;text-align:center}
+  .udc-testi__track{
+    display:flex;gap:1.25rem;margin-top:2.25rem;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:.25rem .25rem 1rem;-webkit-overflow-scrolling:touch;
+  }
+  .udc-testi__card{
+    flex:0 0 280px;scroll-snap-align:start;background:var(--udc-surface,#1a1a1a);
+    border:1px solid var(--udc-border,#2c2c2c);border-radius:var(--udc-radius,14px);
+    padding:1.75rem;text-align:left;
+  }
+  .udc-testi__stars{color:var(--udc-red,#ff1b3d);letter-spacing:.15em;margin-bottom:.75rem;font-size:.9rem}
+  .udc-testi__card p{margin:0 0 1.25rem;font-size:.92rem;line-height:1.55;color:var(--udc-white,#f7f7f7)}
+  .udc-testi__card footer{display:flex;flex-direction:column;gap:.15rem}
+  .udc-testi__card footer strong{font-size:.9rem}
+  .udc-testi__card footer span{font-size:.78rem;color:var(--udc-muted,#b8b8b8)}
+  .udc-testi__track::-webkit-scrollbar{height:6px}
+  .udc-testi__track::-webkit-scrollbar-thumb{background:var(--udc-red,#ff1b3d);border-radius:999px}
+</style>

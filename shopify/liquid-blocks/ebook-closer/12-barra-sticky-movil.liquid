@@ -1,0 +1,61 @@
+{% comment %}
+  U DEL CLOSER — Barra sticky de compra (solo mobile)
+  Requiere estar en la plantilla de PRODUCTO. Pegar como ÚLTIMO bloque de la
+  página: aparece al hacer scroll pasado el hero y queda fija abajo en
+  pantallas chicas.
+{% endcomment %}
+<div class="udc-sticky" id="udc-sticky-{{ section.id }}" data-udc-sticky>
+  <div class="udc-sticky__info">
+    <span class="udc-sticky__title">{{ product.title | truncate: 28 }}</span>
+    <span class="udc-sticky__price">{{ product.price | money }}</span>
+  </div>
+  {% form 'product', product, class: 'udc-sticky__form' %}
+    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+    <button type="submit" class="udc-btn udc-btn--primary udc-sticky__cta" data-udc-buy-now>
+      Comprar ahora
+    </button>
+  {% endform %}
+</div>
+
+<style>
+  .udc-sticky{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+    align-items:center;justify-content:space-between;gap:1rem;
+    background:var(--udc-black,#060606);border-top:1px solid var(--udc-red,#ff1b3d);
+    padding:.75rem 1rem;font-family:var(--udc-font,sans-serif);
+    transform:translateY(100%);transition:transform .25s ease;
+    box-shadow:0 -10px 30px -12px rgba(0,0,0,.6);
+  }
+  .udc-sticky.is-visible{transform:translateY(0)}
+  .udc-sticky__info{display:flex;flex-direction:column;min-width:0}
+  .udc-sticky__title{color:var(--udc-muted,#b8b8b8);font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .udc-sticky__price{color:var(--udc-white,#f7f7f7);font-weight:800;font-size:1.05rem}
+  .udc-sticky__form{margin:0;flex-shrink:0}
+  .udc-sticky__cta{padding:.7rem 1.25rem;font-size:.85rem;white-space:nowrap}
+  @media (max-width:768px){ .udc-sticky{display:flex} }
+</style>
+
+<script>
+  (function(){
+    var bar = document.getElementById('udc-sticky-{{ section.id }}');
+    if(!bar) return;
+    var hero = document.querySelector('.udc-hero');
+    if(!hero || !('IntersectionObserver' in window)){ return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        bar.classList.toggle('is-visible', !entry.isIntersecting);
+      });
+    }, { rootMargin: '-10% 0px 0px 0px' });
+    io.observe(hero);
+
+    var form = bar.querySelector('.udc-sticky__form');
+    form && form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var formData = new FormData(form);
+      fetch('/cart/add.js', { method:'POST', body:formData, headers:{'Accept':'application/json'} })
+        .then(function(r){ return r.json(); })
+        .then(function(){ window.location.href = '/checkout'; })
+        .catch(function(){ form.submit(); });
+    });
+  })();
+</script>

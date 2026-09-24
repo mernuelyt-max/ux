@@ -1,0 +1,45 @@
+{% comment %}
+  U DEL CLOSER — Autoridad / sobre el mentor
+  Editable: nombre, credenciales y cita. Para usar una foto real en vez del
+  avatar de iniciales, subí una imagen a Archivos y reemplazá el div
+  .udc-auth__avatar por: <img src="{{ 'foto.jpg' | asset_url }}" alt="...">
+{% endcomment %}
+<section class="udc-auth" aria-label="Sobre el autor">
+  <div class="udc-auth__inner">
+    <div class="udc-auth__avatar" aria-hidden="true">UC</div>
+    <div class="udc-auth__copy">
+      <span class="udc-auth__eyebrow">QUIÉN ESTÁ DETRÁS DEL MÉTODO</span>
+      <h2>Creado por alguien que cierra ventas todos los días, no que solo las enseña</h2>
+      <p>
+        Este ebook resume años de conversaciones reales de venta: los errores que cuestan clientes
+        y los ajustes mínimos que multiplican el cierre. Nada de teoría genérica — cada técnica está
+        probada en el día a día.
+      </p>
+      <ul class="udc-auth__creds">
+        <li>Cientos de conversaciones de venta analizadas</li>
+        <li>Método aplicado en ventas de alto ticket</li>
+        <li>Enfoque directo, sin relleno</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-auth{background:var(--udc-black,#060606);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-auth__inner{max-width:var(--udc-container,1120px);margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center}
+  .udc-auth__avatar{
+    width:120px;height:120px;border-radius:50%;flex-shrink:0;
+    background:linear-gradient(135deg,var(--udc-red,#ff1b3d),var(--udc-red-dark,#b4001f));
+    display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;
+    color:var(--udc-white,#f7f7f7);box-shadow:0 0 0 4px var(--udc-border,#2c2c2c);
+  }
+  .udc-auth__eyebrow{display:block;color:var(--udc-red,#ff1b3d);font-weight:800;font-size:.75rem;letter-spacing:.08em;margin-bottom:.75rem}
+  .udc-auth__copy h2{font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:800;margin:0 0 1rem;line-height:1.25}
+  .udc-auth__copy p{color:var(--udc-muted,#b8b8b8);line-height:1.6;margin:0 0 1.25rem}
+  .udc-auth__creds{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+  .udc-auth__creds li{font-size:.88rem;padding-left:1.25rem;position:relative}
+  .udc-auth__creds li::before{content:"✔";position:absolute;left:0;color:var(--udc-red,#ff1b3d)}
+  @media (max-width:640px){
+    .udc-auth__inner{grid-template-columns:1fr;text-align:center;justify-items:center}
+  }
+</style>

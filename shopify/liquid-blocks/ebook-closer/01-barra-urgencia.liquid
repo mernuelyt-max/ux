@@ -1,0 +1,43 @@
+{% comment %}
+  U DEL CLOSER — Barra de urgencia (announcement bar)
+  Editable: texto del mensaje y precio de lanzamiento.
+{% endcomment %}
+<div class="udc-bar" id="udc-bar-{{ section.id }}" role="note">
+  <p class="udc-bar__text">
+    🔥 <strong>OFERTA DE LANZAMIENTO</strong> — Precio especial por tiempo limitado. Acceso inmediato por email.
+  </p>
+  <button type="button" class="udc-bar__close" aria-label="Cerrar aviso">&times;</button>
+</div>
+
+<style>
+  .udc-bar{
+    display:flex;align-items:center;justify-content:center;gap:.75rem;
+    background:var(--udc-red,#ff1b3d);color:var(--udc-black,#060606);
+    padding:.6rem 2.5rem .6rem 1rem;position:relative;
+    font-family:var(--udc-font,sans-serif);text-align:center;
+  }
+  .udc-bar__text{margin:0;font-size:.85rem;font-weight:600;line-height:1.3}
+  .udc-bar__text strong{font-weight:800}
+  .udc-bar__close{
+    position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+    background:transparent;border:0;color:var(--udc-black,#060606);
+    font-size:1.25rem;line-height:1;cursor:pointer;padding:.25rem;
+  }
+  @media (max-width:480px){ .udc-bar__text{font-size:.78rem} }
+</style>
+
+<script>
+  (function(){
+    var wrap = document.getElementById('udc-bar-{{ section.id }}');
+    if(!wrap) return;
+    var KEY = 'udcBarDismissed';
+    try{
+      if(sessionStorage.getItem(KEY) === '1'){ wrap.style.display = 'none'; return; }
+    }catch(e){}
+    var closeBtn = wrap.querySelector('.udc-bar__close');
+    closeBtn && closeBtn.addEventListener('click', function(){
+      wrap.style.display = 'none';
+      try{ sessionStorage.setItem(KEY, '1'); }catch(e){}
+    });
+  })();
+</script>

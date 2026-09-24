@@ -1,0 +1,52 @@
+{% comment %}
+  U DEL CLOSER — FAQ (acordeón nativo <details>, sin JS)
+  Editable: preguntas y respuestas.
+{% endcomment %}
+<section class="udc-faq" aria-label="Preguntas frecuentes">
+  <div class="udc-faq__inner">
+    <h2 class="udc-section-title">Preguntas frecuentes</h2>
+
+    <details class="udc-faq__item" open>
+      <summary>¿En qué formato recibo el ebook?</summary>
+      <p>En PDF, optimizado para leer desde el celular o la computadora. Acceso inmediato apenas se acredita el pago.</p>
+    </details>
+    <details class="udc-faq__item">
+      <summary>¿Funciona si vendo por WhatsApp / redes, no solo en llamadas?</summary>
+      <p>Sí. El método está pensado para conversaciones de venta en general: llamada, WhatsApp, DM o presencial.</p>
+    </details>
+    <details class="udc-faq__item">
+      <summary>¿Y si no tengo experiencia vendiendo?</summary>
+      <p>El ebook arranca desde la base (mentalidad y guion de apertura), así que sirve tanto si empezás como si ya vendés hace años.</p>
+    </details>
+    <details class="udc-faq__item">
+      <summary>¿Qué pasa si no me sirve?</summary>
+      <p>Tenés 7 días de garantía. Si no es para vos, te devolvemos el 100% de tu dinero, sin trámites.</p>
+    </details>
+    <details class="udc-faq__item">
+      <summary>¿El acceso es de por vida?</summary>
+      <p>Sí, pago único. El ebook y las actualizaciones que agreguemos quedan disponibles para siempre.</p>
+    </details>
+    <details class="udc-faq__item">
+      <summary>¿Cómo recibo el ebook después de comprar?</summary>
+      <p>Vas a recibir un email automático con el enlace de descarga apenas se confirme el pago.</p>
+    </details>
+  </div>
+</section>
+
+<style>
+  .udc-faq{background:var(--udc-black-soft,#121212);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-faq__inner{max-width:760px;margin:0 auto}
+  .udc-faq .udc-section-title{text-align:center;margin-bottom:2rem}
+  .udc-faq__item{
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-border,#2c2c2c);
+    border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem;
+  }
+  .udc-faq__item summary{
+    cursor:pointer;font-weight:700;font-size:.95rem;list-style:none;
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  }
+  .udc-faq__item summary::-webkit-details-marker{display:none}
+  .udc-faq__item summary::after{content:"+";color:var(--udc-red,#ff1b3d);font-size:1.3rem;flex-shrink:0}
+  .udc-faq__item[open] summary::after{content:"−"}
+  .udc-faq__item p{margin:.85rem 0 0;color:var(--udc-muted,#b8b8b8);font-size:.9rem;line-height:1.6}
+</style>

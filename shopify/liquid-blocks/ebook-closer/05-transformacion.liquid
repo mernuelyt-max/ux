@@ -1,0 +1,46 @@
+{% comment %}
+  U DEL CLOSER — Antes / Después
+  Editable: filas de la tabla comparativa.
+{% endcomment %}
+<section class="udc-trans" aria-label="Transformación antes y después">
+  <div class="udc-trans__inner">
+    <h2 class="udc-section-title">La diferencia entre vender e improvisar</h2>
+
+    <div class="udc-trans__grid">
+      <div class="udc-trans__col udc-trans__col--before">
+        <h3>❌ Antes</h3>
+        <ul>
+          <li>Improvisás cada conversación de venta</li>
+          <li>Te paralizás con la objeción de precio</li>
+          <li>Perdés ventas por no saber cerrar a tiempo</li>
+          <li>Cada "no" te saca del juego</li>
+        </ul>
+      </div>
+      <div class="udc-trans__col udc-trans__col--after">
+        <h3>✔ Después</h3>
+        <ul>
+          <li>Seguís un sistema probado paso a paso</li>
+          <li>Respondés objeciones con seguridad</li>
+          <li>Cerrás más ventas en menos conversaciones</li>
+          <li>Convertís el "no" en una segunda oportunidad</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-trans{background:var(--udc-black,#060606);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-trans__inner{max-width:var(--udc-container,1120px);margin:0 auto;text-align:center}
+  .udc-trans__grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.25rem;text-align:left}
+  .udc-trans__col{border-radius:var(--udc-radius,14px);padding:2rem;border:1px solid var(--udc-border,#2c2c2c)}
+  .udc-trans__col--before{background:var(--udc-surface,#1a1a1a)}
+  .udc-trans__col--after{background:linear-gradient(155deg,var(--udc-surface-2,#232323),var(--udc-black-soft,#121212));border-color:var(--udc-red,#ff1b3d)}
+  .udc-trans__col h3{margin:0 0 1rem;font-size:1.1rem;font-weight:800}
+  .udc-trans__col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.75rem}
+  .udc-trans__col li{font-size:.92rem;color:var(--udc-muted,#b8b8b8);line-height:1.5;padding-left:1.25rem;position:relative}
+  .udc-trans__col--before li::before{content:"–";position:absolute;left:0;color:var(--udc-muted,#b8b8b8)}
+  .udc-trans__col--after li{color:var(--udc-white,#f7f7f7)}
+  .udc-trans__col--after li::before{content:"→";position:absolute;left:0;color:var(--udc-red,#ff1b3d);font-weight:800}
+  @media (max-width:720px){ .udc-trans__grid{grid-template-columns:1fr} }
+</style>

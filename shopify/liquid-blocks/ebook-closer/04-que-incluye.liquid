@@ -1,0 +1,61 @@
+{% comment %}
+  U DEL CLOSER — Qué incluye el ebook (módulos)
+  Editable: número, título y descripción de cada módulo.
+{% endcomment %}
+<section class="udc-modules" aria-label="Contenido del ebook">
+  <div class="udc-modules__inner">
+    <h2 class="udc-section-title">Qué incluye el ebook</h2>
+    <p class="udc-section-subtitle">Un sistema completo, dividido en 5 módulos + bonus.</p>
+
+    <div class="udc-modules__grid">
+      <article class="udc-modules__card">
+        <span class="udc-modules__num">01</span>
+        <h3>Mentalidad de Closer</h3>
+        <p>Dejá de pedir permiso para vender. La base psicológica de todo cierre efectivo.</p>
+      </article>
+      <article class="udc-modules__card">
+        <span class="udc-modules__num">02</span>
+        <h3>El guion de apertura</h3>
+        <p>Cómo arrancar la conversación para que el prospecto quiera seguir escuchando.</p>
+      </article>
+      <article class="udc-modules__card">
+        <span class="udc-modules__num">03</span>
+        <h3>Manejo de objeciones</h3>
+        <p>Respuestas listas para "está caro", "lo pienso" y "no es el momento".</p>
+      </article>
+      <article class="udc-modules__card">
+        <span class="udc-modules__num">04</span>
+        <h3>El cierre</h3>
+        <p>Las 3 técnicas de cierre que más convierten en ventas de alto ticket.</p>
+      </article>
+      <article class="udc-modules__card">
+        <span class="udc-modules__num">05</span>
+        <h3>Seguimiento que vende</h3>
+        <p>Qué decir después del "no" para reabrir la venta sin sonar insistente.</p>
+      </article>
+      <article class="udc-modules__card udc-modules__card--bonus">
+        <span class="udc-modules__num">BONUS</span>
+        <h3>Plantillas de WhatsApp</h3>
+        <p>Mensajes listos para copiar, pegar y adaptar a tu negocio hoy mismo.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .udc-modules{background:var(--udc-black-soft,#121212);color:var(--udc-white,#f7f7f7);font-family:var(--udc-font,sans-serif);padding:3.5rem 1rem}
+  .udc-modules__inner{max-width:var(--udc-container,1120px);margin:0 auto;text-align:center}
+  .udc-modules__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.25rem;text-align:left}
+  .udc-modules__card{
+    background:var(--udc-surface,#1a1a1a);border:1px solid var(--udc-border,#2c2c2c);
+    border-radius:var(--udc-radius,14px);padding:1.75rem;position:relative;overflow:hidden;
+  }
+  .udc-modules__card--bonus{border-color:var(--udc-red,#ff1b3d)}
+  .udc-modules__num{
+    font-size:2rem;font-weight:800;color:var(--udc-red,#ff1b3d);opacity:.5;display:block;margin-bottom:.5rem;
+  }
+  .udc-modules__card h3{margin:0 0 .5rem;font-size:1.05rem;font-weight:800}
+  .udc-modules__card p{margin:0;color:var(--udc-muted,#b8b8b8);font-size:.9rem;line-height:1.55}
+  @media (max-width:860px){ .udc-modules__grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .udc-modules__grid{grid-template-columns:1fr} }
+</style>
