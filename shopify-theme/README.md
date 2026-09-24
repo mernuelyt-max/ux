@@ -99,3 +99,79 @@ Sin `compareAtPrice` (nunca se definió precio de lista).
 - Faltan 2 reseñas de Trustpilot; TrustScore y cantidad real sin confirmar.
 - 3 bloques de video con placeholder.
 - Typos dentro del mockup dorado: "MERREESÍA ÉLITE" y "ACESO TOTAL".
+
+---
+
+# Rescate 2 — desde el artifact de Claude Design
+
+Artifact **"Landing page membresías VIP afiliados"**
+(`https://claude.ai/artifact/KnsTfWfM4oDBnxnLB9sxPz`). Era un bundle con los
+assets embebidos en base64; se desempaquetó y quedó:
+
+## `design-reference/landing-base.html`
+
+114 KB de HTML estático con **14 secciones**. Es la landing **base**, anterior a
+los cambios que hicimos por chat: no trae membresías, ni facturación de alumnos,
+ni reseñas de Trustpilot.
+
+Secciones, en orden:
+
+1. Hero — "Cerrá ventas por llamada todos los días"
+2. "Todos quieren vender / pocos saben cerrar"
+3. "Adentro de la guía aprendés todo lo que hace un closer"
+4. "Todo lo que vas a encontrar / capítulo por capítulo"
+5. "La guía se apoya en 3 pilares"
+6. "Ya la están aplicando desde cero"
+7. "Resultados que hablan por sí solos..."
+8. "No te llevás solo la guía / te llevás todo el arsenal"
+9. "Por qué esta guía funciona"
+10. "¿Esto es para vos?"
+11. "Esta guía está pensada estratégicamente para..."
+12. (CTA final, sin encabezado)
+13. "Hola, soy Tino Mossu"
+14. "Preguntas frecuentes"
+
+**Vale sobre todo por el sistema visual**, que era la pieza que faltaba:
+tipografías **Anton** (títulos) e **Instrument Serif itálica** (acentos) — las
+mismas de `--udc-anton` y `.udc-serif` —, el acento `--accent: #C11414`, y el
+layout y los espaciados de cada sección. Los `.woff2` de ambas familias están
+en esta misma carpeta.
+
+Ojo: el diseño casi no usa variables CSS (solo `--accent`); el resto de los
+colores están escritos a mano. El set de tokens `--udc-*` había que armarlo.
+
+## `assets-recuperados/`
+
+Las imágenes que dábamos por perdidas con la tienda suspendida:
+
+| Archivo | Medidas | Qué es |
+|---|---|---|
+| `udc-mockup-sistema.png` | 805×836 | El mockup dorado del hero |
+| `udc-tira-social.png` | 794×168 | Avatares + 5 estrellas + "+100 marcas personales" |
+| `udc-conferencia-logo.png` | 236×232 | Foto de conferencia con el logo U del Closer |
+| `udc-shot-01..10.webp` | 214×380 | 10 capturas verticales de Instagram (prueba social) |
+
+**Las capturas verticales sirven directo** para rehacer `udc_12` como
+testimonios en imagen vertical con marquesina y glow.
+
+**Limitación de resolución:** vienen del canvas de diseño, no son las originales.
+214×380 se ve bien a tamaño chico, pero en pantallas retina va a pixelar. Si
+aparecen los archivos originales, conviene reemplazarlas.
+
+**Lo que sigue sin aparecer:** las 5 fotos de facturación de alumnos
+(`udc-facturado-*.jpg`, con Jupiter Marchesani, Franco Potrino, Vanesa Bergamin,
+Adrian Martinez y Fernando Carnero). Los nombres y montos están en `index.json`,
+pero las fotos no estaban en el artifact.
+
+## Cómo se combinan las dos mitades
+
+- **Sistema visual y layout de 14 secciones** → `design-reference/landing-base.html`
+- **Todo el contenido real** (reseñas de Trustpilot, datos de facturación, bonus,
+  FAQ, config de las 3 membresías) → `templates/index.json`
+- **La sección de membresías completa**, con la pestaña del temario → los 4
+  archivos `udc-planes*` + `udc-temario-esencial`
+- **Imágenes** → `assets-recuperados/`
+
+Falta reescribir como Liquid las 14 secciones del diseño: agregarles
+`{% schema %}` para que sean editables, los precios en vivo desde Shopify y el
+carrito. El diseño es HTML estático y no trae nada de eso.
