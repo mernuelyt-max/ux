@@ -1,0 +1,103 @@
+{%- comment -%}
+  UDC — Estilos del temario de los planes: la pestaña (modal) y la jerarquía
+  del contenido (área → módulo → clase).
+
+  Vive fuera de sections/udc-planes.liquid solo por tamaño: con todo adentro la
+  sección roza el límite de lo que se puede escribir de una vez por la API.
+
+  Se renderiza DENTRO del <style> de la sección y necesita el id de la sección,
+  porque render abre un ámbito nuevo y no ve a section:
+    render 'udc-planes-temario-css', sid: section.id
+{%- endcomment -%}
+
+  /* ---------- La pestaña ---------- */
+  #udc-pl-{{ sid }} .udc-pl__modal{
+    width:min(680px,calc(100vw - 22px));
+    max-height:min(86vh,880px);
+    margin:auto;padding:0;overflow:hidden;
+    border:1px solid var(--udc-line2);border-radius:22px;
+    background:var(--udc-bg2);color:var(--udc-text);
+    box-shadow:0 40px 90px rgba(0,0,0,.72),
+               0 0 90px color-mix(in srgb,var(--udc-accent) 16%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__modal[open]{
+    display:flex;flex-direction:column;
+    animation:udcModalIn .28s cubic-bezier(.2,.8,.3,1)}
+  #udc-pl-{{ sid }} .udc-pl__modal::backdrop{
+    background:rgba(6,5,5,.74);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  #udc-pl-{{ sid }} .udc-pl__modal[open]::backdrop{animation:udcModalBack .28s ease}
+
+  @keyframes udcModalIn{
+    from{opacity:0;transform:translateY(12px) scale(.96)}
+    to{opacity:1;transform:none}}
+  @keyframes udcModalBack{from{opacity:0}to{opacity:1}}
+
+  /* Navegador sin <dialog>: se posiciona a mano para que el botón no quede muerto. */
+  #udc-pl-{{ sid }} .udc-pl__modal.is-fallback{
+    display:flex;flex-direction:column;position:fixed;inset:11px;z-index:90;
+    width:auto;max-height:none;margin:0;
+    box-shadow:0 0 0 100vmax rgba(6,5,5,.82)}
+
+  #udc-pl-{{ sid }} .udc-pl__mhead{
+    flex:0 0 auto;display:flex;align-items:flex-start;gap:12px;
+    padding:20px clamp(16px,4vw,22px) 14px;
+    border-bottom:1px solid var(--udc-line2);background:var(--udc-bg2)}
+  #udc-pl-{{ sid }} .udc-pl__mtitle{
+    flex:1 1 auto;min-width:0;margin:0;
+    font-family:var(--udc-anton);font-size:clamp(15px,3.6vw,20px);line-height:1.2;
+    letter-spacing:.02em;text-transform:uppercase}
+  #udc-pl-{{ sid }} .udc-pl__mclose{
+    flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;
+    border:1px solid var(--udc-line2);border-radius:50%;background:transparent;
+    color:var(--udc-muted);cursor:pointer;
+    transition:color .2s,border-color .2s,background .2s}
+  #udc-pl-{{ sid }} .udc-pl__mclose:hover{
+    color:var(--udc-text);border-color:var(--udc-accent);
+    background:color-mix(in srgb,var(--udc-accent) 12%,transparent)}
+
+  #udc-pl-{{ sid }} .udc-pl__mbody{
+    flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding:16px clamp(16px,4vw,22px) 26px}
+  #udc-pl-{{ sid }} .udc-pl__mbody::-webkit-scrollbar{width:3px}
+  #udc-pl-{{ sid }} .udc-pl__mbody::-webkit-scrollbar-thumb{
+    background:#2E2A28;border-radius:999px}
+
+  /* ---------- Contenido del temario ---------- */
+  #udc-pl-{{ sid }} .udc-pl__temgroup + .udc-pl__temgroup{margin-top:22px}
+  #udc-pl-{{ sid }} .udc-pl__temarea{
+    display:block;font-family:var(--udc-anton);font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--udc-accent);margin-bottom:10px;
+    padding-bottom:8px;border-bottom:1px solid var(--udc-line2)}
+  #udc-pl-{{ sid }} .udc-pl__temgift{
+    display:flex;align-items:center;gap:8px;margin:22px 0 16px;
+    border:1px dashed color-mix(in srgb,var(--udc-accent) 55%,transparent);
+    border-radius:10px;padding:10px 12px;
+    font-size:11.5px;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--udc-accent)}
+
+  /* Sin numerar: el texto de cada módulo ya dice "Módulo N". */
+  #udc-pl-{{ sid }} .udc-pl__temlist{list-style:none;margin:0;padding:0}
+  #udc-pl-{{ sid }} .udc-pl__temlist > li{position:relative;padding:10px 0 10px 24px}
+  #udc-pl-{{ sid }} .udc-pl__temlist > li + li{border-top:1px solid var(--udc-line)}
+  #udc-pl-{{ sid }} .udc-pl__temlist > li::before{
+    content:'★';position:absolute;left:0;top:11px;
+    font-size:11px;line-height:1.35;color:var(--udc-accent);
+    text-shadow:0 0 12px color-mix(in srgb,var(--udc-accent) 70%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__temlist > li:first-child{padding-top:0}
+  #udc-pl-{{ sid }} .udc-pl__temlist > li:first-child::before{top:1px}
+  #udc-pl-{{ sid }} .udc-pl__temlist b{
+    display:block;font-size:13px;font-weight:600;color:var(--udc-text);line-height:1.35}
+
+  #udc-pl-{{ sid }} .udc-pl__temsub{list-style:none;margin:7px 0 0;padding:0}
+  #udc-pl-{{ sid }} .udc-pl__temsub li{
+    position:relative;padding:4px 0 4px 14px;
+    font-size:12px;color:var(--udc-muted);line-height:1.5}
+  #udc-pl-{{ sid }} .udc-pl__temsub li::before{
+    content:'';position:absolute;left:0;top:11px;width:4px;height:4px;
+    border-radius:50%;background:color-mix(in srgb,var(--udc-accent) 70%,transparent)}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-pl-{{ sid }} .udc-pl__modal[open],
+    #udc-pl-{{ sid }} .udc-pl__modal[open]::backdrop{animation:none}
+  }

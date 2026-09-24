@@ -1,0 +1,339 @@
+{%- comment -%}
+  UDC — Planes / membresías
+
+  Escalera acumulativa: cada tarjeta incluye lo de la anterior. Estructura
+  tomada de la referencia: descripción corta, caja de regalo, etiqueta +
+  checklist, dos botones (Temario / contratar) y nota de acceso.
+
+  Los precios NO se escriben a mano: cada bloque apunta a un producto real y
+  el precio sale en vivo de Shopify. Eso vale también cuando el botón va a un
+  link de pago externo: el producto sigue siendo la única fuente del precio,
+  así que si cambiás el precio en Mercado Pago hay que cambiarlo también en el
+  producto o la página miente.
+
+  Adónde va el botón de compra lo decide cta_action:
+   · cart    — agrega la variante al carrito de Shopify y va al carrito.
+   · product — va a la página del producto.
+   · pay     — va a pay_url, el link de pago de Mercado Pago.
+  Si elegís pay y dejás pay_url vacío, el botón vuelve solo al carrito: nunca
+  queda un link muerto. OJO: con pay la venta ocurre fuera de Shopify, o sea
+  que no se crea pedido ni se dispara la entrega automática.
+
+  El botón "Temario" abre una pestaña (un <dialog> modal a pantalla casi
+  completa), no un acordeón: los temarios pasan de 100 clases y desplegarlos
+  dentro de la tarjeta empujaba media página hacia abajo.
+
+  El temario sale de dos lugares posibles:
+   · temario_ref — uno de los snippets udc-temario-*, para los temarios largos
+     con jerarquía de área → módulo → clase. Están en archivos propios porque
+     son miles de caracteres y se encadenan entre sí (Premium incluye Esencial,
+     Experto incluye Premium).
+   · temario — un textarea simple, una línea por ítem, para temarios cortos.
+  Si los dos están vacíos, el botón no aparece: no queda un botón muerto.
+
+  El CSS y el JS viven en snippets propios (udc-planes-css, udc-planes-js y
+  udc-planes-temario-css). Están separados solo por tamaño: con todo adentro
+  este archivo pasa el límite de lo que se puede escribir de una vez por la
+  API y la escritura se trunca a mitad de camino.
+{%- endcomment -%}
+
+{%- assign fmq = section.settings.flags_speed | default: 26 -%}
+
+<section class="udc udc-top udc-pl" id="udc-pl-{{ section.id }}">
+  <span class="udc-glow udc-pl__glow" aria-hidden="true"></span>
+
+  <div class="udc-pl__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-pl__title">
+      {{ section.settings.title_1 }}<br>
+      <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>
+    </h2>
+    {%- if section.settings.intro != blank -%}
+      <p class="udc-pl__intro">{{ section.settings.intro }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="udc-pl__grid">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign h = block.settings.product_handle
+        if block.settings.product != blank
+          assign picked = block.settings.product
+          if picked.handle
+            assign h = picked.handle
+          else
+            assign h = picked
+          endif
+        endif
+        assign prod = all_products[h]
+        assign v = prod.selected_or_first_available_variant
+
+        assign name = block.settings.name
+        if name == blank
+          assign name = prod.title
+        endif
+
+        assign act = block.settings.cta_action | default: 'cart'
+        assign pay = block.settings.pay_url
+        assign is_ext = false
+
+        assign url = '/products/' | append: h
+        if act != 'product' and v != blank and v.available
+          assign url = '/cart/' | append: v.id | append: ':1'
+        endif
+        if act == 'pay' and pay != blank
+          assign url = pay
+          assign is_ext = true
+        endif
+
+        assign ref = block.settings.temario_ref | default: 'none'
+        assign has_tem = false
+        if ref != 'none' or block.settings.temario != blank
+          assign has_tem = true
+        endif
+
+        assign tem_id = 'udc-tem-' | append: section.id | append: '-' | append: block.id
+        assign tem_tid = tem_id | append: '-t'
+      -%}
+
+      <article class="udc-pl__card{% if block.settings.featured %} is-top{% endif %}"
+               data-udc-reveal {{ block.shopify_attributes }}>
+        {%- if block.settings.featured -%}
+          <span class="udc-glow udc-pl__cardglow" aria-hidden="true"></span>
+        {%- endif -%}
+
+        {%- if block.settings.badge != blank -%}
+          <span class="udc-tag udc-pl__badge">{{ block.settings.badge }}</span>
+        {%- endif -%}
+
+        {%- if block.settings.kicker != blank -%}
+          <span class="udc-pl__kicker">{{ block.settings.kicker }}</span>
+        {%- endif -%}
+
+        <h3 class="udc-pl__name">{{ name }}</h3>
+
+        {%- if block.settings.description != blank -%}
+          <p class="udc-pl__desc">{{ block.settings.description }}</p>
+        {%- endif -%}
+
+        {%- if v != blank -%}
+          <div class="udc-pl__price">
+            <span class="udc-pl__now">{{ v.price | money_without_trailing_zeros }}</span>
+            <span class="udc-pl__cur">{{ cart.currency.iso_code }}</span>
+          </div>
+          {%- if v.compare_at_price > v.price -%}
+            {%- assign diff = v.compare_at_price | minus: v.price -%}
+            {%- assign pct = diff | times: 100 | divided_by: v.compare_at_price -%}
+            <div class="udc-pl__was">
+              <s>{{ v.compare_at_price | money_without_trailing_zeros }}</s>
+              <span class="udc-pl__off">-{{ pct }}%</span>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if block.settings.alt_price != blank -%}
+          <p class="udc-pl__alt">
+            <span aria-hidden="true">◉</span> {{ block.settings.alt_price }}
+          </p>
+        {%- endif -%}
+
+        {%- if block.settings.show_flags and section.settings.flags != blank -%}
+          <div class="udc-pl__flags">
+            <div class="udc-marquee udc-pl__fmq">
+              {%- for pass in (1..2) -%}
+                <div class="udc-marquee__row udc-pl__fset"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+                  {%- assign fl = section.settings.flags | split: ' ' -%}
+                  {%- for f in fl -%}
+                    {%- if f != blank -%}<span>{{ f }}</span>{%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.gift != blank -%}
+          <div class="udc-pl__gift">
+            <span class="udc-pl__gifticon" aria-hidden="true">🎁</span>
+            <span>{{ block.settings.gift }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.features_label != blank -%}
+          <span class="udc-pl__flabel">{{ block.settings.features_label }}</span>
+        {%- endif -%}
+
+        {%- assign feats = block.settings.features | newline_to_br | split: '<br />' -%}
+        <ul class="udc-pl__list">
+          {%- for raw in feats -%}
+            {%- assign f = raw | strip -%}
+            {%- if f != blank -%}
+              <li><span class="udc-pl__tick" aria-hidden="true">✓</span>{{ f }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        <div class="udc-pl__actions{% if has_tem %} has-two{% endif %}">
+          {%- if has_tem -%}
+            <button type="button" class="udc-pl__cta udc-pl__cta--ghost"
+                    data-udc-temario
+                    aria-haspopup="dialog"
+                    aria-controls="{{ tem_id }}">
+              {{ block.settings.temario_cta | default: 'Temario' }}
+            </button>
+          {%- endif -%}
+
+          {%- comment -%}
+            Agotado solo cuando la venta pasa por Shopify. Con un link de pago
+            externo el stock de Shopify no manda sobre nada.
+          {%- endcomment -%}
+          {%- if is_ext == false and v != blank and v.available == false -%}
+            <span class="udc-pl__cta udc-pl__cta--buy is-off">Agotado</span>
+          {%- else -%}
+            <a class="udc-pl__cta udc-pl__cta--buy" href="{{ url }}"{% if is_ext %} rel="noopener"{% endif %}>
+              {{ block.settings.cta | default: 'Contratar' }}
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- if has_tem -%}
+          <dialog class="udc-pl__modal" id="{{ tem_id }}" aria-labelledby="{{ tem_tid }}">
+            <div class="udc-pl__mhead">
+              <h4 class="udc-pl__mtitle" id="{{ tem_tid }}">
+                {{ block.settings.temario_title | default: 'Temario completo' }}
+              </h4>
+              <button type="button" class="udc-pl__mclose"
+                      data-udc-temario-close aria-label="Cerrar el temario">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     aria-hidden="true" focusable="false">
+                  <path d="M5 5l14 14M19 5L5 19"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="udc-pl__mbody">
+              {%- case ref -%}
+                {%- when 'esencial' -%}
+                  {% render 'udc-temario-esencial' %}
+                {%- when 'premium' -%}
+                  {% render 'udc-temario-premium' %}
+                {%- when 'experto' -%}
+                  {% render 'udc-temario-experto' %}
+                {%- else -%}
+                  {%- assign rows = block.settings.temario | newline_to_br | split: '<br />' -%}
+                  <div class="udc-pl__temgroup">
+                    <ol class="udc-pl__temlist">
+                      {%- for raw in rows -%}
+                        {%- assign t = raw | strip -%}
+                        {%- if t != blank -%}
+                          {%- assign tp = t | split: '|' -%}
+                          <li>
+                            <b>{{ tp[0] | strip }}</b>
+                            {%- if tp[1] != blank -%}
+                              <ul class="udc-pl__temsub"><li>{{ tp[1] | strip }}</li></ul>
+                            {%- endif -%}
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ol>
+                  </div>
+              {%- endcase -%}
+            </div>
+          </dialog>
+        {%- endif -%}
+
+        {%- if block.settings.access_note != blank -%}
+          <p class="udc-pl__access">{{ block.settings.access_note }}</p>
+        {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.settings.foot != blank -%}
+    <p class="udc-pl__foot">{{ section.settings.foot }}</p>
+  {%- endif -%}
+</section>
+
+<style>
+{% render 'udc-planes-css', sid: section.id, fmq: fmq %}
+{% render 'udc-planes-temario-css', sid: section.id %}
+</style>
+
+{% render 'udc-planes-js', sid: section.id %}
+
+{% schema %}
+{
+  "name": "UDC · Planes",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Membresías" },
+    { "type": "text", "id": "title_1", "label": "Línea 1", "default": "Elegí el camino" },
+    { "type": "text", "id": "title_2", "label": "Línea 2 (serif itálica con glow)", "default": "que mejor encaja" },
+    { "type": "textarea", "id": "intro", "label": "Texto de apoyo", "default": "Cada membresía incluye la anterior de regalo. Empezá por donde quieras y subí cuando lo necesites." },
+
+    { "type": "header", "content": "Tira de banderas" },
+    { "type": "text", "id": "flags", "label": "Banderas", "info": "Emoji separados por espacio. En Windows el navegador muestra las letras del país en vez de la bandera.", "default": "🇦🇷 🇲🇽 🇨🇴 🇨🇱 🇵🇪 🇪🇸 🇺🇾 🇵🇾 🇧🇴 🇪🇨 🇻🇪 🇨🇷 🇵🇦 🇩🇴 🇸🇻 🇬🇹" },
+    { "type": "range", "id": "flags_speed", "label": "Velocidad de la tira", "min": 10, "max": 60, "step": 2, "unit": "s", "default": 26 },
+
+    { "type": "header", "content": "Pie" },
+    { "type": "textarea", "id": "foot", "label": "Nota al pie", "default": "Pago único, sin renovación automática. El cobro se hace en pesos argentinos: el valor en USD es de referencia." }
+  ],
+  "blocks": [
+    {
+      "type": "plan",
+      "name": "Plan",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Producto" },
+        { "type": "text", "id": "product_handle", "label": "Handle de respaldo", "info": "Se usa solo si arriba no elegís producto. El precio siempre sale de Shopify, incluso si el botón va a Mercado Pago." },
+        { "type": "text", "id": "kicker", "label": "Antetítulo de la tarjeta", "default": "Membresía" },
+        { "type": "text", "id": "name", "label": "Nombre", "info": "Vacío = usa el nombre del producto." },
+        { "type": "textarea", "id": "description", "label": "Descripción corta" },
+        { "type": "text", "id": "alt_price", "label": "Línea de precio alternativo", "info": "Ej: 90 USD. Es solo texto: el cobro se hace en la moneda de la tienda." },
+        { "type": "checkbox", "id": "show_flags", "label": "Mostrar la tira de banderas", "default": true },
+
+        { "type": "header", "content": "Lo que incluye" },
+        { "type": "text", "id": "gift", "label": "Caja de regalo", "info": "Ej: Con acceso al Esencial de regalo. Vacío = no aparece." },
+        { "type": "text", "id": "features_label", "label": "Etiqueta de la lista", "default": "Qué incluye" },
+        { "type": "textarea", "id": "features", "label": "Beneficios", "info": "Uno por línea." },
+
+        { "type": "header", "content": "Temario (se abre en una pestaña)" },
+        { "type": "text", "id": "temario_cta", "label": "Texto del botón", "default": "Temario" },
+        { "type": "text", "id": "temario_title", "label": "Título de la pestaña", "default": "Temario completo" },
+        {
+          "type": "select", "id": "temario_ref", "label": "Temario largo", "default": "none",
+          "info": "Los temarios completos viven en snippets/udc-temario-*.liquid. Premium ya incluye el Esencial y Experto incluye el Premium.",
+          "options": [
+            { "value": "none", "label": "Ninguno (uso el campo de abajo)" },
+            { "value": "esencial", "label": "Esencial · Marketing de Afiliados" },
+            { "value": "premium", "label": "Premium · + Esencial de regalo" },
+            { "value": "experto", "label": "Experto · + Premium y Esencial de regalo" }
+          ]
+        },
+        { "type": "textarea", "id": "temario", "label": "Temario corto", "info": "Solo si arriba elegíste Ninguno. Uno por línea, formato: Título | Detalle." },
+
+        { "type": "header", "content": "Compra" },
+        { "type": "text", "id": "cta", "label": "Texto del botón de compra", "default": "Contratar" },
+        {
+          "type": "select", "id": "cta_action", "label": "Al tocar el botón", "default": "cart",
+          "options": [
+            { "value": "cart", "label": "Agregar al carrito e ir al carrito" },
+            { "value": "product", "label": "Ir a la página del producto" },
+            { "value": "pay", "label": "Ir al link de pago (Mercado Pago)" }
+          ]
+        },
+        { "type": "url", "id": "pay_url", "label": "Link de pago de Mercado Pago", "info": "Pegá acá el link de pago de ESTA membresía. Solo se usa si arriba elegíste 'Ir al link de pago'. Si lo dejás vacío el botón vuelve al carrito de Shopify. La venta pasa fuera de Shopify: no se crea pedido ni se envía el acceso solo." },
+        { "type": "text", "id": "access_note", "label": "Nota debajo de los botones", "info": "Ej: Pago seguro con Mercado Pago. Vacío = no aparece." },
+
+        { "type": "header", "content": "Destacado" },
+        { "type": "checkbox", "id": "featured", "label": "Destacar este plan", "default": false },
+        { "type": "text", "id": "badge", "label": "Etiqueta superior", "info": "Ej: Acceso total" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "UDC · Planes" } ]
+}
+{% endschema %}

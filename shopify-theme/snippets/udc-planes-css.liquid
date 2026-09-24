@@ -1,0 +1,142 @@
+{%- comment -%}
+  UDC — Estilos de las tarjetas de la sección de membresías.
+
+  Vive fuera de sections/udc-planes.liquid solo por tamaño: con el CSS, el JS
+  y el schema adentro, la sección pasaba el límite de lo que se puede escribir
+  de una vez por la API y la escritura se truncaba.
+
+  Se renderiza DENTRO del <style> de la sección y necesita dos parámetros,
+  porque render abre un ámbito nuevo y no ve a section:
+    render 'udc-planes-css', sid: section.id, fmq: fmq
+
+  NO SAQUES los min-width:0. .udc-marquee trae width:max-content (~920px) y el
+  overflow:hidden de .udc-pl__flags solo anula el mínimo automático en el EJE
+  PRINCIPAL del flex — la tarjeta es column, o sea el vertical. Sin min-width:0
+  esos 920px se propagan como ancho mínimo, la grilla se desborda y los botones
+  quedan fuera de pantalla.
+{%- endcomment -%}
+
+  #udc-pl-{{ sid }}{
+    padding:clamp(52px,8vh,88px) clamp(16px,4vw,48px);position:relative;overflow:hidden;
+    background:var(--udc-bg)}
+  #udc-pl-{{ sid }} .udc-pl__glow{
+    top:6%;left:50%;translate:-50% 0;width:620px;height:520px;filter:blur(110px);opacity:.2}
+
+  #udc-pl-{{ sid }} .udc-pl__head{text-align:center;position:relative;z-index:2}
+  #udc-pl-{{ sid }} .udc-pl__title{margin-top:14px}
+  #udc-pl-{{ sid }} .udc-pl__intro{
+    margin:16px auto 0;max-width:480px;color:var(--udc-muted);font-size:14px;line-height:1.55}
+
+  #udc-pl-{{ sid }} .udc-pl__grid{
+    position:relative;z-index:2;display:grid;gap:clamp(16px,2.4vw,20px);
+    grid-template-columns:1fr;max-width:1080px;margin:clamp(34px,5vw,46px) auto 0}
+  @media (min-width:900px){
+    #udc-pl-{{ sid }} .udc-pl__grid{grid-template-columns:repeat(3,1fr);align-items:start}
+  }
+
+  /* min-width:0 es obligatorio: ver el comentario de arriba del archivo. */
+  #udc-pl-{{ sid }} .udc-pl__card{
+    min-width:0;
+    position:relative;border:1px solid var(--udc-border);border-radius:22px;
+    background:var(--udc-bg2);padding:clamp(22px,3vw,28px);
+    display:flex;flex-direction:column;
+    transition:border-color .35s ease,box-shadow .35s ease}
+  #udc-pl-{{ sid }} .udc-pl__card.is-top{
+    border-color:var(--udc-accent);
+    box-shadow:0 0 70px color-mix(in srgb,var(--udc-accent) 26%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__cardglow{
+    left:50%;bottom:-120px;translate:-50% 0;width:340px;height:220px;
+    filter:blur(80px);opacity:.4}
+
+  #udc-pl-{{ sid }} .udc-pl__badge{
+    align-self:flex-start;margin-bottom:14px;
+    box-shadow:0 0 26px color-mix(in srgb,var(--udc-accent) 55%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__kicker{
+    display:block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--udc-accent);margin-bottom:6px}
+  #udc-pl-{{ sid }} .udc-pl__name{
+    font-family:var(--udc-anton);text-transform:uppercase;
+    font-size:clamp(20px,2.4vw,28px);line-height:1.05}
+  #udc-pl-{{ sid }} .udc-pl__desc{
+    margin-top:8px;font-size:13px;line-height:1.5;color:var(--udc-muted)}
+
+  #udc-pl-{{ sid }} .udc-pl__price{
+    display:flex;align-items:baseline;gap:8px;margin-top:14px;flex-wrap:wrap}
+  #udc-pl-{{ sid }} .udc-pl__now{
+    font-family:var(--udc-anton);font-size:clamp(28px,4vw,40px);line-height:1;
+    text-shadow:0 0 34px color-mix(in srgb,var(--udc-accent) 38%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__cur{font-size:12px;color:var(--udc-dim);letter-spacing:.08em}
+  #udc-pl-{{ sid }} .udc-pl__was{
+    display:flex;align-items:center;gap:9px;margin-top:6px;flex-wrap:wrap}
+  #udc-pl-{{ sid }} .udc-pl__was s{font-size:12.5px;color:var(--udc-dim)}
+  #udc-pl-{{ sid }} .udc-pl__off{
+    background:var(--udc-accent);color:#fff;border-radius:999px;
+    font-family:var(--udc-anton);font-size:10px;letter-spacing:.06em;padding:4px 9px}
+  #udc-pl-{{ sid }} .udc-pl__alt{
+    margin-top:8px;font-size:12px;color:var(--udc-muted)}
+  #udc-pl-{{ sid }} .udc-pl__alt span{color:var(--udc-accent)}
+
+  #udc-pl-{{ sid }} .udc-pl__flags{
+    min-width:0;width:100%;
+    margin-top:14px;overflow:hidden;border-radius:999px;
+    border:1px solid var(--udc-line2);background:var(--udc-bg);padding:6px 0;
+    -webkit-mask-image:linear-gradient(to right,transparent,black 9%,black 91%,transparent);
+    mask-image:linear-gradient(to right,transparent,black 9%,black 91%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__fmq{
+    animation:udcMarquee {{ fmq }}s linear infinite;will-change:transform}
+  #udc-pl-{{ sid }} .udc-pl__fset{gap:10px;padding-right:10px;font-size:14px;line-height:1}
+
+  #udc-pl-{{ sid }} .udc-pl__gift{
+    min-width:0;display:flex;align-items:center;gap:9px;margin-top:14px;
+    border:1px solid color-mix(in srgb,var(--udc-accent) 50%,transparent);
+    border-radius:12px;padding:10px 12px;
+    background:color-mix(in srgb,var(--udc-accent) 9%,transparent);
+    font-size:12.5px;line-height:1.35;font-weight:600;color:var(--udc-accent)}
+  #udc-pl-{{ sid }} .udc-pl__gifticon{flex:0 0 auto;font-size:14px}
+
+  #udc-pl-{{ sid }} .udc-pl__flabel{
+    display:block;margin-top:18px;font-size:10px;letter-spacing:.26em;
+    text-transform:uppercase;color:var(--udc-dim)}
+  #udc-pl-{{ sid }} .udc-pl__list{
+    list-style:none;margin:10px 0 0;padding:0;flex:1 1 auto;min-width:0}
+  #udc-pl-{{ sid }} .udc-pl__list li{
+    display:flex;align-items:flex-start;gap:9px;padding:5px 0;
+    font-size:13px;line-height:1.4;color:#D9D9CF}
+  #udc-pl-{{ sid }} .udc-pl__tick{
+    color:var(--udc-accent);font-size:12.5px;line-height:1.45;flex:0 0 auto;
+    text-shadow:0 0 12px color-mix(in srgb,var(--udc-accent) 70%,transparent)}
+
+  #udc-pl-{{ sid }} .udc-pl__actions{
+    display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px;min-width:0}
+  #udc-pl-{{ sid }} .udc-pl__actions.has-two{grid-template-columns:1fr 1fr}
+  #udc-pl-{{ sid }} .udc-pl__cta{
+    min-width:0;display:block;width:100%;text-align:center;cursor:pointer;
+    border:1px solid #3A3A34;border-radius:999px;padding:12px 14px;
+    background:transparent;font-family:var(--udc-anton);font-size:12.5px;
+    letter-spacing:.07em;text-transform:uppercase;color:var(--udc-text);
+    transition:border-color .25s,background .25s,color .25s,box-shadow .25s}
+  #udc-pl-{{ sid }} .udc-pl__cta--ghost{
+    border-color:color-mix(in srgb,var(--udc-accent) 55%,transparent);
+    color:var(--udc-accent)}
+  #udc-pl-{{ sid }} .udc-pl__cta--ghost:hover{
+    border-color:var(--udc-accent);
+    background:color-mix(in srgb,var(--udc-accent) 12%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__cta--buy{
+    background:var(--udc-accent);border-color:var(--udc-accent);color:#fff;
+    box-shadow:0 0 34px color-mix(in srgb,var(--udc-accent) 45%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__cta--buy:hover{
+    color:#fff;box-shadow:0 0 50px color-mix(in srgb,var(--udc-accent) 65%,transparent)}
+  #udc-pl-{{ sid }} .udc-pl__cta.is-off{
+    background:transparent;border-color:#3A3A34;color:var(--udc-dim);
+    box-shadow:none;cursor:default;border-style:dashed}
+
+  #udc-pl-{{ sid }} .udc-pl__access{
+    margin-top:12px;text-align:center;font-size:11.5px;color:var(--udc-dim)}
+
+  #udc-pl-{{ sid }} .udc-pl__foot{
+    position:relative;z-index:2;margin:clamp(22px,3vw,30px) auto 0;max-width:620px;
+    text-align:center;font-size:11.5px;line-height:1.55;color:#6E6A64}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-pl-{{ sid }} .udc-pl__fmq{animation:none}
+  }

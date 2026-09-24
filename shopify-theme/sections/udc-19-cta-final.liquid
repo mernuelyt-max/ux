@@ -1,0 +1,78 @@
+{%- comment -%} BLOQUE 19 — CTA final con marquesina gigante {%- endcomment -%}
+
+{%- assign wa = section.settings.whatsapp -%}
+{%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
+{%- if wa == blank -%}{%- assign wa = '+54 9 11 0000 0000' -%}{%- endif -%}
+{%- assign wa_link = wa | remove: ' ' | remove: '+' | remove: '-' | remove: '(' | remove: ')' | prepend: 'https://wa.me/' -%}
+
+{%- if section.settings.link_type == 'custom' and section.settings.custom_url != blank -%}
+  {%- assign btn_href = section.settings.custom_url -%}
+{%- else -%}
+  {%- assign btn_href = wa_link -%}
+{%- endif -%}
+
+<section class="udc udc-top udc-cta udc-clip" id="udc-cta-{{ section.id }}">
+  <span class="udc-glow udc-cta__glow"></span>
+
+  <div class="udc-clip">
+    <div class="udc-marquee udc-cta__mq">
+      {%- for pass in (1..2) -%}
+        <div class="udc-cta__line" {% if pass == 2 %}aria-hidden="true"{% endif %}>
+          {{ section.settings.marquee_1 }}
+          <span class="udc-accent">—</span>
+          <span class="udc-serif udc-accent">{{ section.settings.marquee_2 }}</span>
+          <span class="udc-accent">—</span>&nbsp;
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="udc-cta__box" data-udc-reveal>
+    {%- if section.settings.text != blank -%}
+      <p class="udc-cta__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    <a href="{{ btn_href }}"
+       {% if section.settings.link_type == 'whatsapp' %}target="_blank" rel="noopener"{% endif %}
+       class="udc-btn">{{ section.settings.cta_text }}</a>
+  </div>
+</section>
+
+<style>
+  #udc-cta-{{ section.id }}{padding:clamp(52px,8vh,88px) 0;position:relative}
+  #udc-cta-{{ section.id }} .udc-cta__glow{
+    top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;
+    filter:blur(110px);opacity:.2}
+  #udc-cta-{{ section.id }} .udc-cta__mq{
+    animation:udcMarquee {{ section.settings.speed | default: 14 }}s linear infinite}
+  #udc-cta-{{ section.id }} .udc-cta__line{
+    font-family:var(--udc-anton);font-size:clamp(36px,5vw,76px);text-transform:uppercase;
+    white-space:nowrap;padding-right:.5em;line-height:1}
+  #udc-cta-{{ section.id }} .udc-cta__box{
+    display:flex;flex-direction:column;align-items:center;gap:24px;margin-top:56px;position:relative}
+  #udc-cta-{{ section.id }} .udc-cta__text{
+    text-align:center;color:var(--udc-muted);font-size:15px;max-width:440px;line-height:1.55}
+</style>
+
+{% schema %}
+{
+  "name": "UDC 19 · CTA final",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "marquee_1", "label": "Marquesina (Anton)", "default": "Convertite en closer" },
+    { "type": "text", "id": "marquee_2", "label": "Marquesina (serif itálica)", "default": "convertite en closer" },
+    { "type": "range", "id": "speed", "label": "Velocidad", "min": 6, "max": 40, "step": 2, "unit": "s", "default": 14 },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Descargá la guía y arrancá hoy. Un mensaje te separa de tenerla." },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Descargar la guía →" },
+    {
+      "type": "select", "id": "link_type", "label": "El botón lleva a", "default": "whatsapp",
+      "options": [
+        { "value": "whatsapp", "label": "WhatsApp" },
+        { "value": "custom", "label": "Link personalizado" }
+      ]
+    },
+    { "type": "url", "id": "custom_url", "label": "Link personalizado" },
+    { "type": "text", "id": "whatsapp", "label": "Número de WhatsApp", "info": "Vacío = usa el número global del tema." }
+  ],
+  "presets": [{ "name": "UDC 19 · CTA final" }]
+}
+{% endschema %}

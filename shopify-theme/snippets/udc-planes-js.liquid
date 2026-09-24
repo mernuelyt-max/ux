@@ -1,0 +1,61 @@
+{%- comment -%}
+  UDC — Comportamiento de la pestaña del temario.
+
+  Vive fuera de sections/udc-planes.liquid por tamaño (ver el comentario de
+  udc-planes-css.liquid). Necesita el id de la sección:
+    render 'udc-planes-js', sid: section.id
+{%- endcomment -%}
+
+<script>
+(function(){
+  var root = document.getElementById('udc-pl-{{ sid }}');
+  if (!root || root.dataset.udcInit) return;
+  root.dataset.udcInit = '1';
+
+  function shut(dlg){
+    if (!dlg) return;
+    if (dlg.open && typeof dlg.close === 'function') {
+      dlg.close();
+    } else {
+      dlg.removeAttribute('open');
+    }
+    dlg.classList.remove('is-fallback');
+  }
+
+  root.addEventListener('click', function(ev){
+    var opener = ev.target.closest('[data-udc-temario]');
+    if (opener) {
+      var dlg = document.getElementById(opener.getAttribute('aria-controls'));
+      if (!dlg) return;
+      if (typeof dlg.showModal === 'function') {
+        dlg.showModal();
+      } else {
+        dlg.classList.add('is-fallback');
+        dlg.setAttribute('open', '');
+      }
+      return;
+    }
+
+    if (ev.target.closest('[data-udc-temario-close]')) {
+      shut(ev.target.closest('dialog'));
+      return;
+    }
+
+    // Tocar fuera del panel cierra. El fondo del <dialog> nativo dispara el
+    // click sobre el propio <dialog>, asi que alcanza con ver si el punto
+    // cayo fuera de su caja. Con teclado clientX/Y vienen en 0: se ignora.
+    if (ev.target.tagName === 'DIALOG' && (ev.clientX || ev.clientY)) {
+      var r = ev.target.getBoundingClientRect();
+      var out = ev.clientX < r.left || ev.clientX > r.right ||
+                ev.clientY < r.top  || ev.clientY > r.bottom;
+      if (out) shut(ev.target);
+    }
+  });
+
+  // Escape solo para el fallback: con <dialog> nativo lo maneja el navegador.
+  document.addEventListener('keydown', function(ev){
+    if (ev.key !== 'Escape') return;
+    shut(root.querySelector('dialog.is-fallback[open]'));
+  });
+})();
+</script>
