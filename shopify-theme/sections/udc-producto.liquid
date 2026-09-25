@@ -15,12 +15,13 @@
   no tiene selector de variante, solo un input oculto con el id de la
   variante seleccionada.
 
-  Dos botones de compra:
-   · "Agregar al carrito" — POST normal a /cart/add, va al carrito (udc-cart).
-   · Botón de pago dinámico ({{ form | payment_button }}) — el widget nativo
-     de Shopify (Shop Pay / tarjeta / etc.), va directo a checkout. Es un
-     iframe de Shopify: no se puede re-skinear a los colores del tema, es
-     esperable que se vea distinto al resto de los botones.
+  Un solo botón de compra: "Agregar al carrito" (POST normal a /cart/add,
+  va al carrito → udc-cart). Se probó también el botón de pago dinámico de
+  Shopify ({{ form | payment_button }}, "Comprar ahora" / Shop Pay) pero se
+  sacó: es un iframe que Shopify renderiza con su propia tipografía de
+  sistema y forma rectangular — no hay CSS del tema que lo pueda repintar
+  al pill rojo + Anton del resto del sitio, así que quedaba pegado y
+  rompía el estilo en vez de sumar un segundo camino de compra.
 
   Igual que udc-03-hero, oculta el header/footer nativos de Horizon (ver
   udc-hide-chrome.liquid): mantiene la misma estética "sin distracciones"
@@ -76,10 +77,6 @@
             {{ section.settings.sold_out_text | default: 'Agotado' }}
           {%- endif -%}
         </button>
-
-        {%- if current_variant.available -%}
-          <div class="udc-pp__paybtn">{{ form | payment_button }}</div>
-        {%- endif -%}
       {%- endform -%}
 
       {%- if section.settings.support_text != blank -%}
