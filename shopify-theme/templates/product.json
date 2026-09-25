@@ -317,6 +317,7 @@
   "order": [
     "main",
     "udc_04",
+    "facturacion",
     "udc_05",
     "udc_06",
     "udc_07",
@@ -324,7 +325,6 @@
     "resenas",
     "udc_11",
     "udc_12",
-    "facturacion",
     "udc_13",
     "udc_15",
     "udc_16",
