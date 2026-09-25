@@ -267,7 +267,7 @@ nada se rompe al cargar el tema.
 | `sections/udc-12-casos-exito.liquid` | Sin diseño de referencia — contenido real `udc_12` (4 casos), título nuevo |
 | `sections/udc-14-packs.liquid` | "Tres formas de arrancar hoy" del artifact; 3 packs reales, ya `disabled` (legacy, lo reemplazó `udc-planes`) |
 | `sections/udc-facturacion.liquid` | Sin diseño de referencia — contenido real (5 alumnos), dos layouts (`carousel`/`wall`) igual que preveían los settings ya grabados |
-| `sections/udc-cart.liquid` | Sin referencia — carrito nuevo, funciona sin JS (`<form action="/cart">`) y se mejora con Ajax |
+| `sections/udc-cart.liquid` | Carrito con el mismo lenguaje que `udc-producto` (logo arriba, sin header/footer, tarjetas con glow, resumen con ahorro real y botón con brillo); funciona sin JS y se mejora con Ajax |
 | `sections/udc-cart-social.liquid` | Sin referencia — tira de confianza para la página de carrito |
 | `sections/udc-prod-testimonios.liquid` | Sin contenido recuperado — bloques vacíos, se completan a mano |
 | `sections/udc-prod-video.liquid` | Sin contenido recuperado — usa el setting nativo `video_url` de Shopify (YouTube/Vimeo), reemplaza el `embedUrl()` a mano que tenía el artifact |
@@ -280,7 +280,8 @@ nada se rompe al cargar el tema.
 | `snippets/udc-testimonio-card.liquid` | Tarjeta de un testimonio, la usa `udc-prod-testimonios` |
 | `snippets/udc-video-card.liquid` | Tarjeta de un video adicional, la usa `udc-prod-video` |
 | `snippets/udc-cart-css.liquid` / `udc-cart-js.liquid` | Estilos y comportamiento (Ajax) del carrito, separados del markup como ya hacía `udc-planes-css`/`js` |
-| `snippets/udc-hide-chrome.liquid` | Oculta header/footer/announcement-bar en páginas tipo landing sin distracciones |
+| `snippets/udc-hide-chrome.liquid` | Oculta la announcement bar de ejemplo; con `full: true` también header y footer (producto y carrito) |
+| `snippets/udc-brand-bar.liquid` | Barra mínima con el logo para las páginas sin header (producto y carrito) |
 | `snippets/udc-temario-premium.liquid`, `udc-temario-experto.liquid` | Ver más abajo — **contenido parcial a propósito** |
 
 ## Lo que NO se inventó (importante)
@@ -311,9 +312,10 @@ nada se rompe al cargar el tema.
 
 - `udc-cart.liquid` funciona sin JavaScript (`<form action="/cart">`,
   `updates[]`, botones `name="update"` / `name="checkout"`) y
-  `udc-cart-js.liquid` lo mejora con la Cart AJAX API (`/cart/change.js`)
-  para que +/- y quitar actualicen sin recargar. Si el fetch falla, cae al
-  `submit()` normal del formulario.
+  `udc-cart-js.liquid` lo mejora con la Cart AJAX API (`/cart/change.js`,
+  pidiendo la sección re-renderizada con el parámetro `sections`) para que
+  +/− y quitar actualicen totales y ahorro sin recargar. Si el fetch falla,
+  cae al `submit()` normal del formulario.
 - `udc-facturacion.liquid` implementa los dos layouts que sus settings ya
   preveían (`layout: "carousel"` con `interval`, o `"wall"` con
   `wall_speed`) aunque el artifact nunca mostró ninguno de los dos.
@@ -330,11 +332,8 @@ nada se rompe al cargar el tema.
 - Falta `layout/theme.liquid` y `config/settings_schema.json` (de ahí sale
   `settings.udc_whatsapp`, el fallback global de WhatsApp que ya usan varias
   secciones).
-- Faltan `templates/product.json` y `templates/cart.json`: sin esos
-  archivos, `udc-cart`/`udc-cart-social` y `udc-prod-testimonios`/
-  `udc-prod-video` no tienen página donde vivir todavía. Son plantillas
-  chicas (una lista de `sections` + un `order`, como `templates/index.json`)
-  y quedan como siguiente paso natural.
+- `templates/cart.json` usa `udc-cart` + `udc-relacionados`;
+  `udc-cart-social` no se usa (su WhatsApp de ejemplo no es un número real).
 - El temario real de Premium y Experto (ver arriba).
 - Contenido real para `udc-prod-testimonios`, `udc-prod-video` y los medios
   de pago de `udc-cart-social`.

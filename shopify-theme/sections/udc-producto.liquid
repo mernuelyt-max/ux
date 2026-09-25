@@ -38,24 +38,8 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 {%- assign tier1 = product.variants.first -%}
 
-{%- comment -%}
-  Barra mínima con el logo: el header nativo está oculto (udc-hide-chrome,
-  full: true), pero el usuario quiere conservar el logo arriba. Usa la
-  imagen de la sección (brand_logo), si no el logo de la configuración del
-  tema (settings.logo) y, si tampoco hay, el nombre de la tienda como texto.
-{%- endcomment -%}
-{%- assign brand_logo = section.settings.brand_logo | default: settings.logo -%}
 {%- if section.settings.show_brand -%}
-  <header class="udc udc-pp-brand" id="udc-pp-brand-{{ section.id }}">
-    <a href="{{ routes.root_url }}" class="udc-pp-brand__link">
-      {%- if brand_logo != blank -%}
-        <img src="{{ brand_logo | image_url: height: 240 }}" alt="{{ brand_logo.alt | default: shop.name | escape }}"
-             width="{{ brand_logo.width }}" height="{{ brand_logo.height }}" class="udc-pp-brand__img">
-      {%- else -%}
-        <span class="udc-pp-brand__name">{{ shop.name }}</span>
-      {%- endif -%}
-    </a>
-  </header>
+  {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height %}
 {%- endif -%}
 
 <section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
@@ -273,17 +257,6 @@
 </section>
 
 <style>
-  #udc-pp-brand-{{ section.id }}{
-    display:flex;justify-content:center;align-items:center;padding:18px 20px}
-  #udc-pp-brand-{{ section.id }} .udc-pp-brand__link{display:inline-flex;align-items:center;color:var(--udc-text);text-decoration:none}
-  #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{
-    display:block;width:auto;height:{{ section.settings.brand_height | times: 0.8 | round }}px;object-fit:contain}
-  @media (min-width:750px){
-    #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{height:{{ section.settings.brand_height }}px}
-  }
-  #udc-pp-brand-{{ section.id }} .udc-pp-brand__name{
-    font-family:var(--udc-anton);font-size:20px;letter-spacing:.06em;text-transform:uppercase}
-
   #udc-pp-{{ section.id }}{overflow:hidden}
 
   #udc-pp-{{ section.id }} .udc-pp__grid{

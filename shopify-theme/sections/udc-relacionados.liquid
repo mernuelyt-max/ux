@@ -6,8 +6,9 @@
 
   Los productos salen de settings.products (selector de productos del
   editor). Si la lista está vacía, usa todos los productos de la tienda.
-  En ambos casos se excluye el producto que se está viendo y los que no
-  están disponibles, y se muestran como máximo settings.limit.
+  En ambos casos se excluyen el producto que se está viendo, los que ya
+  están en el carrito y los que no están disponibles, y se muestran como
+  máximo settings.limit. Se usa en producto y en carrito.
 
   Precio, precio tachado y -% salen en vivo de la primera variante
   disponible de cada producto (en los productos con selector de cantidad,
@@ -23,11 +24,15 @@
   {%- assign source = collections.all.products -%}
 {%- endif -%}
 
+{%- assign in_cart = cart.items | map: 'product_id' | join: ',' | prepend: ',' | append: ',' -%}
+
 {%- capture cards -%}
   {%- assign shown = 0 -%}
   {%- for p in source -%}
     {%- if shown >= section.settings.limit -%}{%- break -%}{%- endif -%}
     {%- if p.id == product.id or p.available == false -%}{%- continue -%}{%- endif -%}
+    {%- assign needle = ',' | append: p.id | append: ',' -%}
+    {%- if in_cart contains needle -%}{%- continue -%}{%- endif -%}
     {%- assign v = p.selected_or_first_available_variant -%}
     {%- assign shown = shown | plus: 1 -%}
     <article class="udc-rl__card">
@@ -143,7 +148,7 @@
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Seguí avanzando" },
     { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "También te puede" },
     { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "interesar" },
-    { "type": "product_list", "id": "products", "label": "Productos", "limit": 8, "info": "Vacío = todos los productos de la tienda. El producto que se está viendo se excluye solo." },
+    { "type": "product_list", "id": "products", "label": "Productos", "limit": 8, "info": "Vacío = todos los productos de la tienda. El producto que se está viendo y los que ya están en el carrito se excluyen solos." },
     { "type": "range", "id": "limit", "label": "Máximo a mostrar", "min": 2, "max": 8, "step": 1, "default": 4 },
     { "type": "text", "id": "add_text", "label": "Texto del botón", "default": "+ Agregar" }
   ],

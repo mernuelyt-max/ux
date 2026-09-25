@@ -1,103 +1,192 @@
 {%- comment -%}
   UDC — Carrito
 
-  Sin diseño de referencia recuperado (no estaba en el artifact ni en
-  ningún archivo rescatado): se construye nueva, siguiendo el mismo sistema
-  visual --udc-* que el resto del tema. Pensada para templates/cart.json
-  (que tampoco existe todavía, ver README).
+  Sin diseño de referencia propio: sigue el mismo lenguaje que la página de
+  producto (sections/udc-producto.liquid), que sí sale de un video de
+  referencia del usuario — sin header ni footer del tema (udc-hide-chrome,
+  full: true) y con el logo arriba (udc-brand-bar), tarjetas oscuras con
+  borde y glow, Anton + serif itálica, botón rojo con glow, píldoras de
+  medios de pago y badges de confianza con los mismos textos por defecto.
+
+  Todo lo que muestra sale del carrito real:
+  · Precio tachado y -% por línea = compare_at_price de la variante (el
+    mismo "antes" que muestra la página de producto).
+  · "Ahorrás" = suma de (compare_at − precio final) × cantidad; solo
+    aparece si es mayor a 0.
+  · "Impuestos incluidos" solo si cart.taxes_included.
 
   Funciona sin JS: es un <form action="/cart"> con inputs de cantidad y un
-  botón "Actualizar" que hace un POST normal a /cart/update.js — el patrón
-  estándar de Shopify. snippets/udc-cart-js.liquid progresivamente mejora
-  eso con +/- que actualiza por Ajax (Cart API) sin recargar la página,
-  y cae solo al form si algo falla.
-
-  El CSS y el JS viven en snippets propios (mismo motivo que
-  udc-planes-css/js: no encoger este archivo con estilos no ayuda a nadie
-  a mantenerlo, y separa lo que es markup de lo que es comportamiento).
+  botón "Actualizar" (POST normal a /cart/update). snippets/udc-cart-js
+  mejora eso con +/− y quitar por Ajax, re-renderizando esta misma sección
+  (Section Rendering API) para que totales y ahorro queden siempre bien.
 {%- endcomment -%}
 
 {% render 'udc-base' %}
+{% render 'udc-hide-chrome', full: true %}
+
+{%- if section.settings.show_brand -%}
+  {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height %}
+{%- endif -%}
+
+{%- assign saved = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.variant.compare_at_price > item.final_price -%}
+    {%- assign line_saved = item.variant.compare_at_price | minus: item.final_price | times: item.quantity -%}
+    {%- assign saved = saved | plus: line_saved -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign before_total = cart.total_price | plus: saved -%}
 
 <section class="udc udc-top udc-ct" id="udc-ct-{{ section.id }}">
+  <span class="udc-glow udc-ct__glow" aria-hidden="true"></span>
+
   <div class="udc-ct__head" data-udc-reveal>
-    <h1 class="udc-h2">{{ section.settings.title | default: 'Tu carrito' }}</h1>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h1 class="udc-h2 udc-ct__title">
+      {{ section.settings.title_1 }}
+      {%- if section.settings.title_2 != blank %} <span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>{%- endif -%}
+    </h1>
     {%- if cart.item_count > 0 -%}
-      <span class="udc-ct__count">{{ cart.item_count }} {% if cart.item_count == 1 %}producto{% else %}productos{% endif %}</span>
+      <span class="udc-ct__count" data-udc-cart-count>{{ cart.item_count }} {% if cart.item_count == 1 %}producto{% else %}productos{% endif %}</span>
     {%- endif -%}
   </div>
 
   {%- if cart.item_count == 0 -%}
     <div class="udc-ct__empty" data-udc-reveal>
-      <p>{{ section.settings.empty_text | default: 'Todavía no agregaste nada al carrito.' }}</p>
-      <a href="{{ section.settings.empty_url | default: '/' }}" class="udc-btn">{{ section.settings.empty_cta | default: 'Ver membresías →' }}</a>
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+      </svg>
+      <p>{{ section.settings.empty_text }}</p>
+      <a href="{{ section.settings.empty_url | default: routes.root_url }}" class="udc-btn">{{ section.settings.empty_cta }}</a>
     </div>
   {%- else -%}
     {%- assign cart_form_id = 'udc-ct-form-' | append: section.id -%}
     {%- form 'cart', cart, class: 'udc-ct__form', id: cart_form_id -%}
-      <div class="udc-ct__lines">
-        {%- for item in cart.items -%}
-          <div class="udc-ct__line" data-udc-cart-line="{{ forloop.index }}">
-            <a href="{{ item.url }}" class="udc-ct__thumb">
-              {%- if item.image != blank -%}
-                <img src="{{ item.image | image_url: width: 160 }}" loading="lazy"
-                     width="80" height="80" alt="{{ item.image.alt | default: item.product.title | escape }}">
-              {%- endif -%}
-            </a>
+      <div class="udc-ct__grid">
+        <div class="udc-ct__lines">
+          {%- for item in cart.items -%}
+            {%- assign compare = item.variant.compare_at_price -%}
+            <div class="udc-ct__line" style="--i:{{ forloop.index0 }}" data-udc-cart-line="{{ forloop.index }}">
+              <a href="{{ item.url }}" class="udc-ct__thumb">
+                {%- if item.image != blank -%}
+                  <img src="{{ item.image | image_url: width: 240 }}" loading="lazy"
+                       width="96" height="96" alt="{{ item.image.alt | default: item.product.title | escape }}">
+                {%- endif -%}
+                {%- if compare > item.final_price -%}
+                  {%- assign pct = item.final_price | times: 100 | divided_by: compare -%}
+                  {%- assign pct = 100 | minus: pct -%}
+                  <span class="udc-ct__off">-{{ pct }}%</span>
+                {%- endif -%}
+              </a>
 
-            <div class="udc-ct__info">
-              <a href="{{ item.url }}" class="udc-ct__title">{{ item.product.title }}</a>
-              {%- unless item.variant.title == 'Default Title' -%}
-                <span class="udc-ct__variant">{{ item.variant.title }}</span>
-              {%- endunless -%}
-              {%- if item.selling_plan_allocation == nil and item.original_price != item.final_price -%}
+              <div class="udc-ct__info">
+                <a href="{{ item.url }}" class="udc-ct__name">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}
+                  <span class="udc-ct__variant">{{ item.variant.title }}</span>
+                {%- endunless -%}
                 <span class="udc-ct__price">
-                  <s>{{ item.original_price | money }}</s> {{ item.final_price | money }}
+                  {{ item.final_price | money }}
+                  {%- if compare > item.final_price %} <s>{{ compare | money }}</s>{%- endif -%}
                 </span>
-              {%- else -%}
-                <span class="udc-ct__price">{{ item.final_price | money }}</span>
-              {%- endif -%}
+
+                <div class="udc-ct__row">
+                  <div class="udc-ct__qty">
+                    <button type="button" class="udc-ct__qtybtn" data-udc-cart-decrease aria-label="Restar una unidad">−</button>
+                    <input type="number"
+                           class="udc-ct__qtyinput"
+                           name="updates[]"
+                           value="{{ item.quantity }}"
+                           min="0"
+                           data-udc-cart-qty
+                           data-line="{{ forloop.index }}"
+                           aria-label="Cantidad de {{ item.product.title | escape }}">
+                    <button type="button" class="udc-ct__qtybtn" data-udc-cart-increase aria-label="Sumar una unidad">+</button>
+                  </div>
+                  <a href="{{ item.url_to_remove }}" class="udc-ct__remove" data-udc-cart-remove="{{ forloop.index }}" aria-label="Quitar {{ item.product.title | escape }}">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>
+                    </svg>
+                    <span>{{ section.settings.remove_text }}</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="udc-ct__linetotal">{{ item.final_line_price | money }}</div>
             </div>
+          {%- endfor -%}
 
-            <div class="udc-ct__qty">
-              <button type="button" class="udc-ct__qtybtn" data-udc-cart-decrease aria-label="Restar una unidad">−</button>
-              <input type="number"
-                     class="udc-ct__qtyinput"
-                     name="updates[]"
-                     value="{{ item.quantity }}"
-                     min="0"
-                     data-udc-cart-qty
-                     data-line="{{ forloop.index }}"
-                     aria-label="Cantidad de {{ item.product.title | escape }}">
-              <button type="button" class="udc-ct__qtybtn" data-udc-cart-increase aria-label="Sumar una unidad">+</button>
-            </div>
+          <noscript>
+            <button type="submit" name="update" class="udc-ct__update">{{ section.settings.update_text }}</button>
+          </noscript>
 
-            <div class="udc-ct__linetotal">{{ item.final_line_price | money }}</div>
-
-            <a href="{{ item.url_to_remove }}" class="udc-ct__remove" data-udc-cart-remove="{{ forloop.index }}" aria-label="Quitar {{ item.product.title | escape }}">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-                <path d="M5 5l14 14M19 5L5 19"/>
-              </svg>
-            </a>
-          </div>
-        {%- endfor -%}
-      </div>
-
-      <div class="udc-ct__foot">
-        <button type="submit" name="update" class="udc-ct__update">{{ section.settings.update_text | default: 'Actualizar carrito' }}</button>
-
-        <div class="udc-ct__totals">
-          <span>{{ section.settings.subtotal_label | default: 'Subtotal' }}</span>
-          <span class="udc-ct__subtotal">{{ cart.total_price | money }}</span>
+          <a href="{{ section.settings.continue_url | default: routes.root_url }}" class="udc-ct__continue">← {{ section.settings.continue_text }}</a>
         </div>
 
-        {%- if section.settings.note != blank -%}
-          <p class="udc-ct__note">{{ section.settings.note }}</p>
-        {%- endif -%}
+        <aside class="udc-ct__summary">
+          <div class="udc-ct__card">
+            <span class="udc-ct__cardtitle">{{ section.settings.summary_title }}</span>
 
-        <button type="submit" name="checkout" class="udc-btn udc-ct__checkout">
-          {{ section.settings.checkout_text | default: 'Finalizar compra →' }}
-        </button>
+            {%- if saved > 0 -%}
+              <div class="udc-ct__sumrow">
+                <span>{{ section.settings.before_label }}</span>
+                <s>{{ before_total | money }}</s>
+              </div>
+              <div class="udc-ct__sumrow udc-ct__sumrow--save">
+                <span>{{ section.settings.saved_label }}</span>
+                <span>−{{ saved | money }}</span>
+              </div>
+            {%- endif -%}
+
+            <div class="udc-ct__sumrow udc-ct__sumrow--total">
+              <span>{{ section.settings.total_label }}</span>
+              <span class="udc-ct__total">{{ cart.total_price | money_with_currency }}</span>
+            </div>
+
+            {%- if cart.taxes_included -%}
+              <p class="udc-ct__note">{{ section.settings.taxes_text }}</p>
+            {%- endif -%}
+
+            <button type="submit" name="checkout" class="udc-btn udc-ct__checkout">
+              <span class="udc-ct__shine" aria-hidden="true"></span>
+              {{ section.settings.checkout_text }}
+            </button>
+
+            {%- if section.settings.secure_text != blank -%}
+              <p class="udc-ct__secure">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                </svg>
+                {{ section.settings.secure_text }}
+              </p>
+            {%- endif -%}
+
+            {%- if section.settings.payment_row != blank -%}
+              <div class="udc-ct__pay">
+                {%- assign pays = section.settings.payment_row | split: ',' -%}
+                {%- for p in pays -%}
+                  {%- assign p = p | strip -%}
+                  {%- if p != blank -%}<span>{{ p }}</span>{%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.badge1_text != blank or section.settings.badge2_text != blank or section.settings.badge3_text != blank -%}
+            <div class="udc-ct__badges">
+              {%- if section.settings.badge1_text != blank -%}
+                <span><span aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
+              {%- endif -%}
+              {%- if section.settings.badge2_text != blank -%}
+                <span><span aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
+              {%- endif -%}
+              {%- if section.settings.badge3_text != blank -%}
+                <span><span aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </aside>
       </div>
     {%- endform -%}
   {%- endif -%}
@@ -112,20 +201,45 @@
 {% schema %}
 {
   "name": "UDC · Carrito",
-  "tag": "section",
+  "tag": "div",
   "settings": [
-    { "type": "text", "id": "title", "label": "Título", "default": "Tu carrito" },
+    { "type": "checkbox", "id": "show_brand", "label": "Mostrar logo arriba", "default": true, "info": "El header y el footer del tema están ocultos en el carrito." },
+    { "type": "image_picker", "id": "brand_logo", "label": "Logo", "info": "Vacío = logo de Configuración del tema." },
+    { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
+
+    { "type": "header", "content": "Título" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Último paso" },
+    { "type": "text", "id": "title_1", "label": "Título", "default": "Tu" },
+    { "type": "text", "id": "title_2", "label": "Título (serif itálica)", "default": "carrito" },
+
+    { "type": "header", "content": "Productos" },
+    { "type": "text", "id": "remove_text", "label": "Texto de quitar", "default": "Quitar" },
+    { "type": "text", "id": "update_text", "label": "Botón actualizar (sin JS)", "default": "Actualizar carrito" },
+    { "type": "text", "id": "continue_text", "label": "Link seguir comprando", "default": "Seguir comprando" },
+    { "type": "url", "id": "continue_url", "label": "Destino de seguir comprando", "info": "Vacío = home." },
+
+    { "type": "header", "content": "Resumen" },
+    { "type": "text", "id": "summary_title", "label": "Título del resumen", "default": "Resumen del pedido" },
+    { "type": "text", "id": "before_label", "label": "Etiqueta precio antes", "default": "Precio regular" },
+    { "type": "text", "id": "saved_label", "label": "Etiqueta de ahorro", "default": "Ahorrás" },
+    { "type": "text", "id": "total_label", "label": "Etiqueta del total", "default": "Total" },
+    { "type": "text", "id": "taxes_text", "label": "Nota de impuestos", "default": "Impuestos incluidos.", "info": "Se muestra solo si la tienda tiene impuestos incluidos en los precios." },
+    { "type": "text", "id": "checkout_text", "label": "Botón de compra", "default": "Finalizar compra →" },
+    { "type": "text", "id": "secure_text", "label": "Texto bajo el botón", "default": "Pago Seguro En Línea" },
+    { "type": "text", "id": "payment_row", "label": "Medios de pago (separados por coma)", "default": "Mercado Pago, Visa, Mastercard, Amex" },
+
+    { "type": "header", "content": "Badges de confianza" },
+    { "type": "text", "id": "badge1_icon", "label": "Badge 1 · ícono", "default": "⚡" },
+    { "type": "text", "id": "badge1_text", "label": "Badge 1 · texto", "default": "Entrega inmediata" },
+    { "type": "text", "id": "badge2_icon", "label": "Badge 2 · ícono", "default": "🎧" },
+    { "type": "text", "id": "badge2_text", "label": "Badge 2 · texto", "default": "Soporte directo" },
+    { "type": "text", "id": "badge3_icon", "label": "Badge 3 · ícono", "default": "✅" },
+    { "type": "text", "id": "badge3_text", "label": "Badge 3 · texto", "default": "Garantía 7 días" },
 
     { "type": "header", "content": "Carrito vacío" },
     { "type": "text", "id": "empty_text", "label": "Texto", "default": "Todavía no agregaste nada al carrito." },
-    { "type": "text", "id": "empty_cta", "label": "Texto del botón", "default": "Ver membresías →" },
-    { "type": "url", "id": "empty_url", "label": "Link del botón" },
-
-    { "type": "header", "content": "Pie" },
-    { "type": "text", "id": "update_text", "label": "Texto del botón actualizar", "default": "Actualizar carrito" },
-    { "type": "text", "id": "subtotal_label", "label": "Etiqueta del subtotal", "default": "Subtotal" },
-    { "type": "textarea", "id": "note", "label": "Nota (impuestos, envío, etc.)" },
-    { "type": "text", "id": "checkout_text", "label": "Texto del botón de compra", "default": "Finalizar compra →" }
+    { "type": "text", "id": "empty_cta", "label": "Texto del botón", "default": "Ver la guía →" },
+    { "type": "url", "id": "empty_url", "label": "Link del botón", "info": "Vacío = home." }
   ],
   "presets": [{ "name": "UDC · Carrito" }]
 }
