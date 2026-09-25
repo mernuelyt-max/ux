@@ -1,35 +1,33 @@
 {%- comment -%}
-  UDC — Ocultar el chrome del tema (header, footer, anuncios) en páginas de
-  landing tipo "sin distracciones", donde la única salida es el botón de
-  WhatsApp o el checkout.
+  UDC — Ocultar el chrome del tema Horizon (header, announcement bar,
+  footer) en páginas de landing tipo "sin distracciones", donde la única
+  salida es el botón de WhatsApp o el checkout — igual que hacía el
+  artifact original, que nunca tenía header/footer del tema alrededor.
 
-  No hay layout/theme.liquid en este rescate (ver README, "Lo que todavía
-  falta"), así que no se sabe todavía qué selectores usa el header/footer
-  reales del tema. Por eso los selectores de acá abajo son los nombres
-  estándar de Shopify (Dawn y la mayoría de los temas basados en secciones:
-  #shopify-section-header, #shopify-section-footer, .shopify-section
-  header/footer del layout, la announcement-bar) más las clases obvias
-  (header, footer, .site-header, .site-footer). Cuando exista el
-  layout.liquid real, conviene revisar esta lista contra los ids que ese
-  layout genere.
+  Selectores confirmados contra el layout.liquid real de la "Copia de
+  Horizon" (layout/theme.liquid, sections/header-group.json y
+  sections/footer-group.json del tema borrador):
+
+    <div class="page-wrapper">
+      <div id="header-group">{% sections 'header-group' %}</div>   ← header + announcement bar
+      <main id="MainContent">{{ content_for_layout }}</main>
+      <footer>{% sections 'footer-group' %}</footer>               ← footer, sin id/clase propia
+    </div>
+
+  Antes acá había selectores "genéricos" tipo Dawn (#shopify-section-header,
+  .site-header, etc.) que no existen en Horizon y por lo tanto no ocultaban
+  nada: el header claro con "Welcome to our store" y el footer con "Join
+  our email list" (contenido de ejemplo de Horizon, no de UDC) quedaban
+  visibles arriba y abajo del diseño oscuro, rompiendo el estilo.
 
   Uso: {% render 'udc-hide-chrome' %} al principio de la sección que
-  necesita la página limpia (por ejemplo udc-03-hero, si la landing va sin
-  header). No oculta udc-02-nav ni las demás secciones udc-*: esas se
-  controlan activándolas o no desde el editor del tema.
+  necesita la página limpia (ver sections/udc-03-hero.liquid). No oculta
+  udc-02-nav ni udc-22-footer: esas se activan o no desde el editor del
+  tema, igual que siempre.
 {%- endcomment -%}
 
 <style>
-  #shopify-section-header,
-  #shopify-section-announcement-bar,
-  #shopify-section-footer,
-  .shopify-section-header,
-  .shopify-section-footer,
-  header.site-header,
-  footer.site-footer,
-  .announcement-bar{
+  #header-group,
+  .page-wrapper > footer{
     display:none !important}
-
-  body{
-    margin-top:0 !important}
 </style>

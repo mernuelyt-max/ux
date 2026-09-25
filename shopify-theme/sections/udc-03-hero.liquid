@@ -13,6 +13,7 @@
 {%- endcomment -%}
 
 {% render 'udc-base' %}
+{% render 'udc-hide-chrome' %}
 
 {%- assign wa = section.settings.whatsapp -%}
 {%- if wa == blank -%}{%- assign wa = settings.udc_whatsapp -%}{%- endif -%}
