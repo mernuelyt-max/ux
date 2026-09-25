@@ -6,8 +6,9 @@
   real: un video de otra tienda (tinomrkt.myshopify.com) que ya tiene esta
   misma landing construida, mostrando el diseño exacto a seguir:
 
-  · Header nativo de Horizon VISIBLE (logo/buscador/cuenta/carrito) — no se
-    oculta, solo la announcement bar de ejemplo (ver udc-hide-chrome).
+  · (El video mostraba el header nativo de Horizon visible, pero después el
+    usuario pidió la página de producto sin header ni footer: se ocultan
+    con udc-hide-chrome, full: true.)
   · Título + precio con -% OFF, 4 beneficios con ícono, separador
     "LLEVÁ MÁS & AHORRÁ", countdown de oferta, selector "Llevando 1/2/3"
     con descuento por cantidad, order-bump, botón, "Pago Seguro En Línea",
@@ -32,7 +33,7 @@
 {%- endcomment -%}
 
 {% render 'udc-base' %}
-{% render 'udc-hide-chrome' %}
+{% render 'udc-hide-chrome', full: true %}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 {%- assign tier1 = product.variants.first -%}

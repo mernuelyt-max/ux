@@ -14,10 +14,22 @@
   Shopify envuelve en <div id="shopify-section-header_announcements_9jGBFp">.
 
   Uso: {% render 'udc-hide-chrome' %} al principio de la sección que la
-  necesite (ver sections/udc-03-hero.liquid y sections/udc-producto.liquid).
+  necesite (ver sections/udc-03-hero.liquid).
+
+  Con full: true oculta además el header y el footer completos — lo usa
+  sections/udc-producto.liquid, porque el usuario pidió la página de
+  producto sin header ni footer (la landing los sigue mostrando).
+  Selectores confirmados contra layout/theme.liquid del tema borrador:
+    <div id="header-group">{% sections 'header-group' %}</div>
+    <footer>{% sections 'footer-group' %}</footer>  (hijo de .page-wrapper)
 {%- endcomment -%}
 
 <style>
   #shopify-section-header_announcements_9jGBFp{
     display:none !important}
+  {%- if full %}
+  #header-group,
+  .page-wrapper > footer{
+    display:none !important}
+  {%- endif %}
 </style>
