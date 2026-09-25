@@ -2,7 +2,7 @@
   UDC — Comportamiento de sections/udc-producto.liquid.
   Se renderiza con render 'udc-producto-js', sid: section.id
 
-  Tres cosas, todas opcionales/progresivas:
+  Cuatro cosas, todas opcionales/progresivas:
    · Countdown de oferta (localStorage propio, mismo patrón que
      udc-01-temporizador — no se reinicia en cada visita).
    · Selector de cantidad: clickear una tarjeta la marca como seleccionada
@@ -12,6 +12,9 @@
      está tildado, en un solo pedido, y se redirige a /cart. Si el fetch
      falla, se deja que el <form action="/cart/add"> normal siga su curso
      (agrega solo la variante principal, sin el bump).
+   · Tabs Descripción/Entrega/Garantía: sin JS se ve solo "Descripción"
+     (el panel con is-active de entrada); con JS, clickear un botón
+     cambia cuál panel tiene is-active y por lo tanto cuál se ve.
 {%- endcomment -%}
 
 <script>
@@ -78,5 +81,17 @@
           .catch(function () { form.submit(); });
       });
     }
+
+    var tabBtns = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tabbtn]'));
+    var tabPanels = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tabpanel]'));
+    tabBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-udc-pp-tabbtn');
+        tabBtns.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        tabPanels.forEach(function (p) {
+          p.classList.toggle('is-active', p.getAttribute('data-udc-pp-tabpanel') === target);
+        });
+      });
+    });
   })();
 </script>

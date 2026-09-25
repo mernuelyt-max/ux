@@ -1,9 +1,5 @@
 {
   "sections": {
-    "nav": {
-      "type": "udc-02-nav",
-      "settings": {}
-    },
     "main": {
       "type": "udc-producto",
       "blocks": {
@@ -316,14 +312,9 @@
         "eyebrow": "Mirá cómo funciona",
         "title": "Conocé el sistema por dentro"
       }
-    },
-    "footer": {
-      "type": "udc-22-footer",
-      "settings": {}
     }
   },
   "order": [
-    "nav",
     "main",
     "udc_04",
     "udc_05",
@@ -342,7 +333,6 @@
     "udc_20",
     "udc_21",
     "testimonios",
-    "video",
-    "footer"
+    "video"
   ]
 }

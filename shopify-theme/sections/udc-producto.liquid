@@ -2,32 +2,33 @@
   UDC — Página de producto (buy box con selector de cantidad + order bump)
 
   Sin diseño de referencia recuperado (el artifact original era una landing
-  de una sola página, sin página de producto), pero SÍ hay una captura real
-  de referencia que el usuario mandó de una versión anterior del proyecto:
-  título + precio con -% OFF, 4 beneficios con ícono, separador "LLEVÁ MÁS
-  & AHORRÁ", countdown de oferta, selector "Llevando 1/2/3" con descuento
-  por cantidad, un order-bump ("Asesoría 1 a 1 con Tino") y "Pago Seguro
-  En Línea". Se reconstruye ese mismo diseño acá, con datos 100% reales:
+  de una sola página, sin página de producto), pero SÍ hay una referencia
+  real: un video de otra tienda (tinomrkt.myshopify.com) que ya tiene esta
+  misma landing construida, mostrando el diseño exacto a seguir:
 
+  · Header nativo de Horizon VISIBLE (logo/buscador/cuenta/carrito) — no se
+    oculta, solo la announcement bar de ejemplo (ver udc-hide-chrome).
+  · Título + precio con -% OFF, 4 beneficios con ícono, separador
+    "LLEVÁ MÁS & AHORRÁ", countdown de oferta, selector "Llevando 1/2/3"
+    con descuento por cantidad, order-bump, botón, "Pago Seguro En Línea",
+    medios de pago (píldoras), 3 badges de confianza y, debajo, tabs
+    Descripción / Entrega / Garantía (la descripción del producto vive ahí,
+    no arriba del precio).
+
+  Todo con datos 100% reales:
   · El descuento por cantidad NO es un descuento automático de Shopify: es
-    el producto real "Guía Digital Convertite en Closer de Ventas" con un
-    option "Cantidad" de 3 variantes (1/2/3 copias), cada una con su propio
-    price/compareAtPrice ya cargado (85.000/97.000, 153.000/194.000,
-    216.750/291.000 ARS). Así el precio que se ve acá es EXACTAMENTE el
-    que se cobra en el checkout — no hay riesgo de que el precio mostrado
-    no coincida con el real.
+    el producto real con un option "Cantidad" de 3 variantes (1/2/3), cada
+    una con su propio price/compareAtPrice ya cargado en Shopify. El precio
+    que se ve acá es EXACTAMENTE el que se cobra en el checkout.
   · El "+10%/+15% OFF EXTRA" de las tarjetas 2 y 3 se calcula en vivo
     comparando el precio unitario de cada variante contra el de la
-    variante 1 — no está hardcodeado, así que si el comerciante cambia
-    los precios de las variantes el badge se actualiza solo.
-  · El order bump apunta a un producto real (settings.bump_product,
-    "Asesoría 1 a 1 con Tino", 380.000/580.000 ARS) elegido desde el
-    editor del tema — su precio también sale en vivo de Shopify.
-  · El botón "Agregar al carrito" hace un POST normal a /cart/add (funciona
-    sin JS, solo agrega la variante de cantidad seleccionada). Con JS,
-    snippets/udc-producto-js.liquid intercepta el submit y usa la Cart
-    AJAX API (/cart/add.js) para agregar en un solo paso la variante
-    elegida + el bump si está tildado, sin recargar la página.
+    variante 1 — no está hardcodeado.
+  · El order bump apunta a un producto real (settings.bump_product)
+    elegido desde el editor del tema — su precio sale en vivo de Shopify.
+  · "Entrega" y "Garantía" son texto editable (settings): no hay ninguna
+    política de envío/garantía real recuperada todavía, así que quedan con
+    un texto por defecto razonable para un producto digital, listo para
+    que el comerciante lo ajuste.
 {%- endcomment -%}
 
 {% render 'udc-base' %}
@@ -54,10 +55,6 @@
       {%- endif -%}
 
       <h1 class="udc-h2 udc-pp__title">{{ product.title }}</h1>
-
-      {%- if product.description != blank -%}
-        <div class="udc-pp__desc">{{ product.description }}</div>
-      {%- endif -%}
 
       <div class="udc-pp__price">
         {%- if tier1.compare_at_price > tier1.price -%}
@@ -180,7 +177,50 @@
         {%- if section.settings.trust_bold != blank or section.settings.trust_rest != blank -%}
           <p class="udc-pp__trust"><strong>{{ section.settings.trust_bold }}</strong> {{ section.settings.trust_rest }}</p>
         {%- endif -%}
+
+        {%- if section.settings.payment_row != blank -%}
+          <div class="udc-pp__pay">
+            {%- assign pays = section.settings.payment_row | split: ',' -%}
+            {%- for p in pays -%}
+              {%- assign p = p | strip -%}
+              {%- if p != blank -%}<span>{{ p }}</span>{%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.badge1_text != blank or section.settings.badge2_text != blank or section.settings.badge3_text != blank -%}
+          <div class="udc-pp__badges">
+            {%- if section.settings.badge1_text != blank -%}
+              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
+            {%- endif -%}
+            {%- if section.settings.badge2_text != blank -%}
+              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
+            {%- endif -%}
+            {%- if section.settings.badge3_text != blank -%}
+              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       {%- endform -%}
+
+      <div class="udc-pp__tabs" data-udc-pp-tabs>
+        <div class="udc-pp__tabbar" role="tablist">
+          <button type="button" class="udc-pp__tabbtn is-active" data-udc-pp-tabbtn="descripcion">{{ section.settings.tab_desc_label | default: 'Descripción' }}</button>
+          <button type="button" class="udc-pp__tabbtn" data-udc-pp-tabbtn="entrega">{{ section.settings.tab_entrega_label | default: 'Entrega' }}</button>
+          <button type="button" class="udc-pp__tabbtn" data-udc-pp-tabbtn="garantia">{{ section.settings.tab_garantia_label | default: 'Garantía' }}</button>
+        </div>
+        <div class="udc-pp__tabpanel is-active" data-udc-pp-tabpanel="descripcion">
+          {%- if product.description != blank -%}
+            {{ product.description }}
+          {%- endif -%}
+        </div>
+        <div class="udc-pp__tabpanel" data-udc-pp-tabpanel="entrega">
+          {{ section.settings.tab_entrega_text }}
+        </div>
+        <div class="udc-pp__tabpanel" data-udc-pp-tabpanel="garantia">
+          {{ section.settings.tab_garantia_text }}
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -203,11 +243,6 @@
     display:block;width:100%;height:100%;object-fit:cover}
 
   #udc-pp-{{ section.id }} .udc-pp__title{margin:14px 0 0}
-
-  #udc-pp-{{ section.id }} .udc-pp__desc{
-    margin:18px 0 0;font-size:15px;line-height:1.6;color:#D9D9CF}
-  #udc-pp-{{ section.id }} .udc-pp__desc p{margin:0 0 12px}
-  #udc-pp-{{ section.id }} .udc-pp__desc p:last-child{margin-bottom:0}
 
   #udc-pp-{{ section.id }} .udc-pp__price{
     display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 0}
@@ -287,6 +322,34 @@
   #udc-pp-{{ section.id }} .udc-pp__trust{
     margin:16px 0 0;text-align:center;font-size:13px;color:var(--udc-dim)}
   #udc-pp-{{ section.id }} .udc-pp__trust strong{color:var(--udc-text)}
+
+  #udc-pp-{{ section.id }} .udc-pp__pay{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px}
+  #udc-pp-{{ section.id }} .udc-pp__pay span{
+    font-size:12px;letter-spacing:.04em;color:var(--udc-muted);
+    border:1px solid var(--udc-border);border-radius:8px;padding:8px 14px}
+
+  #udc-pp-{{ section.id }} .udc-pp__badges{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:16px}
+  #udc-pp-{{ section.id }} .udc-pp__miniBadge{
+    display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--udc-text);
+    border:1px solid var(--udc-border);border-radius:999px;padding:10px 18px}
+
+  #udc-pp-{{ section.id }} .udc-pp__tabs{margin:36px 0 0}
+  #udc-pp-{{ section.id }} .udc-pp__tabbar{
+    display:flex;gap:clamp(20px,4vw,36px);border-bottom:1px solid var(--udc-line)}
+  #udc-pp-{{ section.id }} .udc-pp__tabbtn{
+    background:none;border:0;padding:0 0 14px;font-family:var(--udc-anton);font-size:13px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--udc-dim);cursor:pointer;
+    position:relative;transition:color .2s ease}
+  #udc-pp-{{ section.id }} .udc-pp__tabbtn.is-active{color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__tabbtn.is-active::after{
+    content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--udc-accent)}
+  #udc-pp-{{ section.id }} .udc-pp__tabpanel{
+    display:none;margin-top:22px;font-size:15px;line-height:1.6;color:#D9D9CF}
+  #udc-pp-{{ section.id }} .udc-pp__tabpanel.is-active{display:block}
+  #udc-pp-{{ section.id }} .udc-pp__tabpanel p{margin:0 0 12px}
+  #udc-pp-{{ section.id }} .udc-pp__tabpanel p:last-child{margin-bottom:0}
 </style>
 
 {% render 'udc-producto-js', sid: section.id %}
@@ -298,7 +361,6 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
 
-    { "type": "header", "content": "Beneficios" },
     { "type": "header", "content": "Cuenta regresiva" },
     { "type": "range", "id": "countdown_hours", "label": "Horas de la oferta", "min": 0, "max": 168, "step": 6, "default": 24 },
     { "type": "text", "id": "countdown_label", "label": "Texto (vacío = ocultar)", "default": "OFERTA DE LANZAMIENTO — FINALIZA EN:" },
@@ -324,7 +386,23 @@
 
     { "type": "header", "content": "Confianza" },
     { "type": "text", "id": "trust_bold", "label": "Texto en negrita", "default": "Pago Seguro" },
-    { "type": "text", "id": "trust_rest", "label": "Resto del texto", "default": "En Línea" }
+    { "type": "text", "id": "trust_rest", "label": "Resto del texto", "default": "En Línea" },
+    { "type": "text", "id": "payment_row", "label": "Medios de pago (separados por coma)", "default": "Mercado Pago, Visa, Mastercard, Amex" },
+
+    { "type": "header", "content": "Badges de confianza" },
+    { "type": "text", "id": "badge1_icon", "label": "Ícono 1", "default": "⚡" },
+    { "type": "text", "id": "badge1_text", "label": "Texto 1", "default": "Entrega inmediata" },
+    { "type": "text", "id": "badge2_icon", "label": "Ícono 2", "default": "🎧" },
+    { "type": "text", "id": "badge2_text", "label": "Texto 2", "default": "Soporte directo" },
+    { "type": "text", "id": "badge3_icon", "label": "Ícono 3", "default": "✅" },
+    { "type": "text", "id": "badge3_text", "label": "Texto 3", "default": "Garantía 7 días" },
+
+    { "type": "header", "content": "Tabs" },
+    { "type": "text", "id": "tab_desc_label", "label": "Etiqueta · Descripción", "default": "Descripción" },
+    { "type": "text", "id": "tab_entrega_label", "label": "Etiqueta · Entrega", "default": "Entrega" },
+    { "type": "richtext", "id": "tab_entrega_text", "label": "Contenido · Entrega", "default": "<p>Acceso inmediato: apenas confirmamos el pago recibís el link de descarga por email y WhatsApp.</p>" },
+    { "type": "text", "id": "tab_garantia_label", "label": "Etiqueta · Garantía", "default": "Garantía" },
+    { "type": "richtext", "id": "tab_garantia_text", "label": "Contenido · Garantía", "default": "<p>7 días de garantía: si no es para vos, te devolvemos el 100% de tu dinero.</p>" }
   ],
   "blocks": [
     {
