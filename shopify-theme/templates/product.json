@@ -3,12 +3,41 @@
     "main": {
       "type": "udc-producto",
       "blocks": {
-        "b1": { "type": "benefit", "settings": { "icon": "📱", "text": "Leela desde tu celular" } },
-        "b2": { "type": "benefit", "settings": { "icon": "⚡", "text": "Descarga inmediata" } },
-        "b3": { "type": "benefit", "settings": { "icon": "🧠", "text": "Sin experiencia previa" } },
-        "b4": { "type": "benefit", "settings": { "icon": "♾️", "text": "Actualizaciones incluidas" } }
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "📱",
+            "text": "Leela desde tu celular"
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "⚡",
+            "text": "Descarga inmediata"
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "🧠",
+            "text": "Sin experiencia previa"
+          }
+        },
+        "b4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "♾️",
+            "text": "Actualizaciones incluidas"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {
         "eyebrow": "U del Closer",
         "bump_product": "shopify://products/asesoria-1-a-1-con-tino",
@@ -19,67 +48,286 @@
     "udc_04": {
       "type": "udc-04-marquesina",
       "blocks": {
-        "b1": { "type": "item", "settings": { "text": "Guía digital en PDF", "style": "normal" } },
-        "b2": { "type": "item", "settings": { "text": "Leela desde tu celular", "style": "italic" } },
-        "b3": { "type": "item", "settings": { "text": "Sin experiencia previa", "style": "normal" } },
-        "b4": { "type": "item", "settings": { "text": "Descarga inmediata", "style": "normal" } },
-        "b5": { "type": "item", "settings": { "text": "Guiones y plantillas incluidas", "style": "italic" } }
+        "b1": {
+          "type": "item",
+          "settings": {
+            "text": "Guía digital en PDF",
+            "style": "normal"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "text": "Leela desde tu celular",
+            "style": "italic"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "text": "Sin experiencia previa",
+            "style": "normal"
+          }
+        },
+        "b4": {
+          "type": "item",
+          "settings": {
+            "text": "Descarga inmediata",
+            "style": "normal"
+          }
+        },
+        "b5": {
+          "type": "item",
+          "settings": {
+            "text": "Guiones y plantillas incluidas",
+            "style": "italic"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ],
       "settings": {}
     },
     "udc_05": {
       "type": "udc-05-statement",
       "blocks": {
-        "b1": { "type": "chip", "settings": { "text": "48 páginas" } },
-        "b2": { "type": "chip", "settings": { "text": "Formato PDF" } },
-        "b3": { "type": "chip", "settings": { "text": "Guiones editables" } }
+        "b1": {
+          "type": "chip",
+          "settings": {
+            "text": "48 páginas"
+          }
+        },
+        "b2": {
+          "type": "chip",
+          "settings": {
+            "text": "Formato PDF"
+          }
+        },
+        "b3": {
+          "type": "chip",
+          "settings": {
+            "text": "Guiones editables"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
       "settings": {}
     },
     "udc_06": {
       "type": "udc-06-que-aprendes",
       "blocks": {
-        "b1": { "type": "chip", "settings": { "text": "Prospección en frío", "row": "r1" } },
-        "b2": { "type": "chip", "settings": { "text": "Ventas por WhatsApp", "row": "r1" } },
-        "b3": { "type": "chip", "settings": { "text": "Guiones de llamada", "row": "r1" } },
-        "b4": { "type": "chip", "settings": { "text": "Manejo de objeciones", "row": "r1" } },
-        "b5": { "type": "chip", "settings": { "text": "Seguimiento", "row": "r1" } },
-        "b6": { "type": "chip", "settings": { "text": "Técnicas de cierre", "row": "r1" } },
-        "b7": { "type": "chip", "settings": { "text": "Escucha activa", "row": "r2" } },
-        "b8": { "type": "chip", "settings": { "text": "Preguntas de calificación", "row": "r2" } },
-        "b9": { "type": "chip", "settings": { "text": "Mentalidad", "row": "r2" } },
-        "b10": { "type": "chip", "settings": { "text": "Agenda y organización", "row": "r2" } },
-        "b11": { "type": "chip", "settings": { "text": "Métricas de un closer", "row": "r2" } },
-        "b12": { "type": "chip", "settings": { "text": "Postventa", "row": "r2" } }
+        "b1": {
+          "type": "chip",
+          "settings": {
+            "text": "Prospección en frío",
+            "row": "r1"
+          }
+        },
+        "b2": {
+          "type": "chip",
+          "settings": {
+            "text": "Ventas por WhatsApp",
+            "row": "r1"
+          }
+        },
+        "b3": {
+          "type": "chip",
+          "settings": {
+            "text": "Guiones de llamada",
+            "row": "r1"
+          }
+        },
+        "b4": {
+          "type": "chip",
+          "settings": {
+            "text": "Manejo de objeciones",
+            "row": "r1"
+          }
+        },
+        "b5": {
+          "type": "chip",
+          "settings": {
+            "text": "Seguimiento",
+            "row": "r1"
+          }
+        },
+        "b6": {
+          "type": "chip",
+          "settings": {
+            "text": "Técnicas de cierre",
+            "row": "r1"
+          }
+        },
+        "b7": {
+          "type": "chip",
+          "settings": {
+            "text": "Escucha activa",
+            "row": "r2"
+          }
+        },
+        "b8": {
+          "type": "chip",
+          "settings": {
+            "text": "Preguntas de calificación",
+            "row": "r2"
+          }
+        },
+        "b9": {
+          "type": "chip",
+          "settings": {
+            "text": "Mentalidad",
+            "row": "r2"
+          }
+        },
+        "b10": {
+          "type": "chip",
+          "settings": {
+            "text": "Agenda y organización",
+            "row": "r2"
+          }
+        },
+        "b11": {
+          "type": "chip",
+          "settings": {
+            "text": "Métricas de un closer",
+            "row": "r2"
+          }
+        },
+        "b12": {
+          "type": "chip",
+          "settings": {
+            "text": "Postventa",
+            "row": "r2"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11", "b12"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10",
+        "b11",
+        "b12"
+      ],
       "settings": {}
     },
     "udc_07": {
       "type": "udc-07-contenido",
       "blocks": {
-        "b1": { "type": "chapter", "settings": { "title": "La mentalidad del closer", "text": "Cómo piensa quien cierra ventas todos los días y por qué la actitud vende antes que la técnica." } },
-        "b2": { "type": "chapter", "settings": { "title": "Prospección inteligente", "text": "Dónde encontrar personas que ya quieren comprar y cómo abrir conversaciones sin sonar a vendedor." } },
-        "b3": { "type": "chapter", "settings": { "title": "La llamada de venta", "text": "La estructura completa: apertura, diagnóstico y control de la conversación de principio a fin." } },
-        "b4": { "type": "chapter", "settings": { "title": "Preguntas que califican", "text": "Cómo detectar si tenés a un comprador real adelante antes de gastar tu tiempo." } },
-        "b5": { "type": "chapter", "settings": { "title": "Manejo de objeciones", "text": "Respuestas listas para \"es caro\", \"lo tengo que pensar\" y \"ahora no puedo\"." } },
-        "b6": { "type": "chapter", "settings": { "title": "El cierre", "text": "Cómo pedir la venta, sostener el precio y no dejar la decisión para después." } },
-        "b7": { "type": "chapter", "settings": { "title": "Seguimiento que convierte", "text": "El sistema de mensajes que recupera a los indecisos sin ser pesado." } },
-        "b8": { "type": "chapter", "settings": { "title": "Tu agenda de closer", "text": "Cómo organizar tu día para cerrar más sin trabajar más horas." } }
+        "b1": {
+          "type": "chapter",
+          "settings": {
+            "title": "La mentalidad del closer",
+            "text": "Cómo piensa quien cierra ventas todos los días y por qué la actitud vende antes que la técnica."
+          }
+        },
+        "b2": {
+          "type": "chapter",
+          "settings": {
+            "title": "Prospección inteligente",
+            "text": "Dónde encontrar personas que ya quieren comprar y cómo abrir conversaciones sin sonar a vendedor."
+          }
+        },
+        "b3": {
+          "type": "chapter",
+          "settings": {
+            "title": "La llamada de venta",
+            "text": "La estructura completa: apertura, diagnóstico y control de la conversación de principio a fin."
+          }
+        },
+        "b4": {
+          "type": "chapter",
+          "settings": {
+            "title": "Preguntas que califican",
+            "text": "Cómo detectar si tenés a un comprador real adelante antes de gastar tu tiempo."
+          }
+        },
+        "b5": {
+          "type": "chapter",
+          "settings": {
+            "title": "Manejo de objeciones",
+            "text": "Respuestas listas para \"es caro\", \"lo tengo que pensar\" y \"ahora no puedo\"."
+          }
+        },
+        "b6": {
+          "type": "chapter",
+          "settings": {
+            "title": "El cierre",
+            "text": "Cómo pedir la venta, sostener el precio y no dejar la decisión para después."
+          }
+        },
+        "b7": {
+          "type": "chapter",
+          "settings": {
+            "title": "Seguimiento que convierte",
+            "text": "El sistema de mensajes que recupera a los indecisos sin ser pesado."
+          }
+        },
+        "b8": {
+          "type": "chapter",
+          "settings": {
+            "title": "Tu agenda de closer",
+            "text": "Cómo organizar tu día para cerrar más sin trabajar más horas."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8"
+      ],
       "settings": {}
     },
     "udc_08": {
       "type": "udc-08-pilares",
       "blocks": {
-        "b1": { "type": "pilar", "settings": { "title": "Prospección", "text": "Cómo encontrar personas que ya quieren comprar y abrir conversaciones sin sonar a vendedor. Incluye mensajes de primer contacto y cómo calificar antes de agendar." } },
-        "b2": { "type": "pilar", "settings": { "title": "Llamada", "text": "La estructura completa de una llamada de venta: preguntas de diagnóstico, escucha activa y cómo manejar las objeciones más comunes sin discutir." } },
-        "b3": { "type": "pilar", "settings": { "title": "Cierre", "text": "Cómo pedir la venta, sostener el precio y hacer el seguimiento que convierte a los indecisos en clientes. Con guiones listos para copiar." } }
+        "b1": {
+          "type": "pilar",
+          "settings": {
+            "title": "Prospección",
+            "text": "Cómo encontrar personas que ya quieren comprar y abrir conversaciones sin sonar a vendedor. Incluye mensajes de primer contacto y cómo calificar antes de agendar."
+          }
+        },
+        "b2": {
+          "type": "pilar",
+          "settings": {
+            "title": "Llamada",
+            "text": "La estructura completa de una llamada de venta: preguntas de diagnóstico, escucha activa y cómo manejar las objeciones más comunes sin discutir."
+          }
+        },
+        "b3": {
+          "type": "pilar",
+          "settings": {
+            "title": "Cierre",
+            "text": "Cómo pedir la venta, sostener el precio y hacer el seguimiento que convierte a los indecisos en clientes. Con guiones listos para copiar."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
       "settings": {}
     },
     "resenas": {
@@ -158,7 +406,14 @@
           }
         }
       },
-      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
       "settings": {
         "eyebrow": "Opiniones en Trustpilot",
         "title_1": "Lo que dicen",
@@ -181,46 +436,225 @@
     "udc_11": {
       "type": "udc-11-prueba-social",
       "blocks": {
-        "b1": { "type": "stat", "settings": { "prefix": "+", "number": "120", "label": "Copias entregadas", "accent": false } },
-        "b2": { "type": "stat", "settings": { "prefix": "", "number": "48", "label": "Páginas de contenido", "accent": true } },
-        "b3": { "type": "stat", "settings": { "prefix": "+", "number": "8", "label": "Países que ya la leen", "accent": false } },
-        "b4": { "type": "shot", "settings": { "image": "shopify://shop_images/528636479_18301745335217635_6753767247189593359_n.jpg" } },
-        "b5": { "type": "shot", "settings": { "image": "shopify://shop_images/529980550_18301744987217635_2265782137072011016_n.jpg" } },
-        "b6": { "type": "shot", "settings": { "image": "shopify://shop_images/435988760_18249230107217635_6212012918725214631_n.jpg" } },
-        "b7": { "type": "shot", "settings": { "image": "shopify://shop_images/472853656_18279769975217635_250981189526388962_n.jpg" } },
-        "b8": { "type": "shot", "settings": { "image": "shopify://shop_images/458476377_18265897861217635_1750282033224139171_n.jpg" } },
-        "b9": { "type": "shot", "settings": { "image": "shopify://shop_images/584385230_18315938461217635_5968530133479637627_n.jpg" } },
-        "b10": { "type": "shot", "settings": { "image": "shopify://shop_images/548013174_17915047425056630_4737303061471721168_n.jpg" } },
-        "b11": { "type": "shot", "settings": { "image": "shopify://shop_images/541202369_18303956299217635_23745974498731281_n.jpg" } },
-        "b12": { "type": "shot", "settings": { "image": "shopify://shop_images/587290410_18317650555217635_3118883550968712209_n.jpg" } },
-        "b13": { "type": "shot", "settings": { "image": "shopify://shop_images/588763559_18315938497217635_2154315528679328589_n.jpg" } },
-        "b14": { "type": "shot", "settings": { "image": "shopify://shop_images/543739645_18304556641217635_678708304264507966_n.jpg" } },
-        "b15": { "type": "shot", "settings": { "image": "shopify://shop_images/541089802_18303956323217635_1103330165706974148_n.jpg" } }
+        "b1": {
+          "type": "stat",
+          "settings": {
+            "prefix": "+",
+            "number": "120",
+            "label": "Copias entregadas",
+            "accent": false
+          }
+        },
+        "b2": {
+          "type": "stat",
+          "settings": {
+            "prefix": "",
+            "number": "48",
+            "label": "Páginas de contenido",
+            "accent": true
+          }
+        },
+        "b3": {
+          "type": "stat",
+          "settings": {
+            "prefix": "+",
+            "number": "8",
+            "label": "Países que ya la leen",
+            "accent": false
+          }
+        },
+        "b4": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/528636479_18301745335217635_6753767247189593359_n.jpg"
+          }
+        },
+        "b5": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/529980550_18301744987217635_2265782137072011016_n.jpg"
+          }
+        },
+        "b6": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/435988760_18249230107217635_6212012918725214631_n.jpg"
+          }
+        },
+        "b7": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/472853656_18279769975217635_250981189526388962_n.jpg"
+          }
+        },
+        "b8": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/458476377_18265897861217635_1750282033224139171_n.jpg"
+          }
+        },
+        "b9": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/584385230_18315938461217635_5968530133479637627_n.jpg"
+          }
+        },
+        "b10": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/548013174_17915047425056630_4737303061471721168_n.jpg"
+          }
+        },
+        "b11": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/541202369_18303956299217635_23745974498731281_n.jpg"
+          }
+        },
+        "b12": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/587290410_18317650555217635_3118883550968712209_n.jpg"
+          }
+        },
+        "b13": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/588763559_18315938497217635_2154315528679328589_n.jpg"
+          }
+        },
+        "b14": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/543739645_18304556641217635_678708304264507966_n.jpg"
+          }
+        },
+        "b15": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/541089802_18303956323217635_1103330165706974148_n.jpg"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11", "b12", "b13", "b14", "b15"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10",
+        "b11",
+        "b12",
+        "b13",
+        "b14",
+        "b15"
+      ],
       "settings": {}
     },
     "udc_12": {
       "type": "udc-12-casos-exito",
       "blocks": {
-        "b1": { "type": "caso", "settings": { "stat": "+30", "stat_label": "ventas en su primer mes", "text": "Leyó la guía en dos días y aplicó los guiones tal cual están escritos. Cerró sus primeras llamadas antes de terminar el mes." } },
-        "b2": { "type": "caso", "settings": { "stat": "x2", "stat_label": "su tasa de cierre", "text": "Ya trabajaba como vendedor, pero sin método. Con el paso a paso de la guía duplicó su tasa de cierre en tres meses." } },
-        "b3": { "type": "caso", "settings": { "stat": "7 días", "stat_label": "para su primer cliente", "text": "No sabía nada de ventas. Siguió el capítulo de prospección al pie de la letra y consiguió su primer cliente en una semana." } },
-        "b4": { "type": "caso", "settings": { "stat": "100%", "stat_label": "desde el celular", "text": "Trabaja como closer 100% desde el celular: prospecta, agenda y cierra sin computadora y desde cualquier lugar." } }
+        "b1": {
+          "type": "caso",
+          "settings": {
+            "stat": "+30",
+            "stat_label": "ventas en su primer mes",
+            "text": "Leyó la guía en dos días y aplicó los guiones tal cual están escritos. Cerró sus primeras llamadas antes de terminar el mes."
+          }
+        },
+        "b2": {
+          "type": "caso",
+          "settings": {
+            "stat": "x2",
+            "stat_label": "su tasa de cierre",
+            "text": "Ya trabajaba como vendedor, pero sin método. Con el paso a paso de la guía duplicó su tasa de cierre en tres meses."
+          }
+        },
+        "b3": {
+          "type": "caso",
+          "settings": {
+            "stat": "7 días",
+            "stat_label": "para su primer cliente",
+            "text": "No sabía nada de ventas. Siguió el capítulo de prospección al pie de la letra y consiguió su primer cliente en una semana."
+          }
+        },
+        "b4": {
+          "type": "caso",
+          "settings": {
+            "stat": "100%",
+            "stat_label": "desde el celular",
+            "text": "Trabaja como closer 100% desde el celular: prospecta, agenda y cierra sin computadora y desde cualquier lugar."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {}
     },
     "facturacion": {
       "type": "udc-facturacion",
       "blocks": {
-        "f1": { "type": "caso", "settings": { "image": "shopify://shop_images/udc-facturado-jupiter-marchesani-200k.jpg", "amount": "200K", "period": "Closer de ventas · 2025", "name": "Jupiter Marchesani" } },
-        "f2": { "type": "caso", "settings": { "image": "shopify://shop_images/udc-facturado-franco-potrino-130k.jpg", "amount": "130K", "period": "Closer de ventas", "name": "Franco Potrino" } },
-        "f3": { "type": "caso", "settings": { "image": "shopify://shop_images/udc-facturado-vanesa-bergamin-200k.jpg", "amount": "200K", "period": "Closer de ventas", "name": "Vanesa Bergamin" } },
-        "f4": { "type": "caso", "settings": { "image": "shopify://shop_images/udc-facturado-adrian-martinez-70k.jpg", "amount": "70K", "period": "Closer de ventas · 2025", "name": "Adrian Martinez" } },
-        "f5": { "type": "caso", "settings": { "image": "shopify://shop_images/udc-facturado-fernando-carnero-200k.jpg", "amount": "200K", "period": "Closer de ventas · 2025", "name": "Fernando Carnero" } }
+        "f1": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-jupiter-marchesani-200k.jpg",
+            "amount": "200K",
+            "period": "Closer de ventas · 2025",
+            "name": "Jupiter Marchesani"
+          }
+        },
+        "f2": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-franco-potrino-130k.jpg",
+            "amount": "130K",
+            "period": "Closer de ventas",
+            "name": "Franco Potrino"
+          }
+        },
+        "f3": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-vanesa-bergamin-200k.jpg",
+            "amount": "200K",
+            "period": "Closer de ventas",
+            "name": "Vanesa Bergamin"
+          }
+        },
+        "f4": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-adrian-martinez-70k.jpg",
+            "amount": "70K",
+            "period": "Closer de ventas · 2025",
+            "name": "Adrian Martinez"
+          }
+        },
+        "f5": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-fernando-carnero-200k.jpg",
+            "amount": "200K",
+            "period": "Closer de ventas · 2025",
+            "name": "Fernando Carnero"
+          }
+        }
       },
-      "block_order": ["f1", "f2", "f3", "f4", "f5"],
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5"
+      ],
       "settings": {
         "eyebrow": "Facturación de alumnos",
         "title_1": "Lo que están facturando",
@@ -238,12 +672,49 @@
     "udc_13": {
       "type": "udc-13-bonus",
       "blocks": {
-        "b1": { "type": "bonus", "settings": { "tag": "Bonus 1", "title": "Masterclass: mis primeros clientes", "text": "Te muestro cómo conseguí mis primeros clientes como closer, paso a paso y sin agencia.", "value": "Valor: 197 USD" } },
-        "b2": { "type": "bonus", "settings": { "tag": "Bonus 2", "title": "Guiones editables listos para copiar", "text": "Plantillas de prospección, llamada y seguimiento para editar y usar hoy mismo.", "value": "Valor: 47 USD" } },
-        "b3": { "type": "bonus", "settings": { "tag": "Bonus 3", "title": "Checklist previo a cada llamada", "text": "Los puntos que reviso antes de cada llamada para no improvisar y cerrar más.", "value": "Valor: 27 USD" } },
-        "b4": { "type": "bonus", "settings": { "tag": "Bonus 4", "title": "Biblioteca de objeciones", "text": "Respuestas probadas a las objeciones más comunes: precio, tiempo y \"lo pienso\".", "value": "Valor: 37 USD" } }
+        "b1": {
+          "type": "bonus",
+          "settings": {
+            "tag": "Bonus 1",
+            "title": "Masterclass: mis primeros clientes",
+            "text": "Te muestro cómo conseguí mis primeros clientes como closer, paso a paso y sin agencia.",
+            "value": "Valor: 197 USD"
+          }
+        },
+        "b2": {
+          "type": "bonus",
+          "settings": {
+            "tag": "Bonus 2",
+            "title": "Guiones editables listos para copiar",
+            "text": "Plantillas de prospección, llamada y seguimiento para editar y usar hoy mismo.",
+            "value": "Valor: 47 USD"
+          }
+        },
+        "b3": {
+          "type": "bonus",
+          "settings": {
+            "tag": "Bonus 3",
+            "title": "Checklist previo a cada llamada",
+            "text": "Los puntos que reviso antes de cada llamada para no improvisar y cerrar más.",
+            "value": "Valor: 27 USD"
+          }
+        },
+        "b4": {
+          "type": "bonus",
+          "settings": {
+            "tag": "Bonus 4",
+            "title": "Biblioteca de objeciones",
+            "text": "Respuestas probadas a las objeciones más comunes: precio, tiempo y \"lo pienso\".",
+            "value": "Valor: 37 USD"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {}
     },
     "udc_15": {
@@ -253,35 +724,128 @@
     "udc_16": {
       "type": "udc-16-ventajas",
       "blocks": {
-        "b1": { "type": "ventaja", "settings": { "title": "Descarga inmediata", "text": "Pagás y la recibís al instante en PDF. La leés desde el celular, la tablet o la computadora, sin conexión." } },
-        "b2": { "type": "ventaja", "settings": { "title": "Sin experiencia previa", "text": "Arranca desde qué hace un closer y termina en el cierre de la llamada. No hace falta saber vender." } },
-        "b3": { "type": "ventaja", "settings": { "title": "Guiones listos para usar", "text": "Incluye guiones de llamada, preguntas de calificación y respuestas a las objeciones más comunes." } },
-        "b4": { "type": "ventaja", "settings": { "title": "Actualizaciones gratis", "text": "Cada vez que la guía se actualiza, recibís la nueva versión sin pagar de nuevo." } }
+        "b1": {
+          "type": "ventaja",
+          "settings": {
+            "title": "Descarga inmediata",
+            "text": "Pagás y la recibís al instante en PDF. La leés desde el celular, la tablet o la computadora, sin conexión."
+          }
+        },
+        "b2": {
+          "type": "ventaja",
+          "settings": {
+            "title": "Sin experiencia previa",
+            "text": "Arranca desde qué hace un closer y termina en el cierre de la llamada. No hace falta saber vender."
+          }
+        },
+        "b3": {
+          "type": "ventaja",
+          "settings": {
+            "title": "Guiones listos para usar",
+            "text": "Incluye guiones de llamada, preguntas de calificación y respuestas a las objeciones más comunes."
+          }
+        },
+        "b4": {
+          "type": "ventaja",
+          "settings": {
+            "title": "Actualizaciones gratis",
+            "text": "Cada vez que la guía se actualiza, recibís la nueva versión sin pagar de nuevo."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {}
     },
     "udc_17": {
       "type": "udc-17-niveles",
       "blocks": {
-        "b1": { "type": "nivel", "settings": { "level": "Nivel 1", "title": "Arrancás de cero", "text": "Nunca vendiste nada y no sabés por dónde empezar. Querés un paso a paso que no dé nada por sentado." } },
-        "b2": { "type": "nivel", "settings": { "level": "Nivel 2", "title": "Vendés a veces", "text": "Cerrás alguna venta pero sin método: dependés de la suerte y no sabés por qué a veces sí y a veces no." } },
-        "b3": { "type": "nivel", "settings": { "level": "Nivel 3", "title": "Ya trabajás en ventas", "text": "Tenés experiencia pero te falta un sistema para calificar, manejar objeciones y cerrar en frío." } },
-        "b4": { "type": "nivel", "settings": { "level": "Nivel 4", "title": "Querés vivir de esto", "text": "Buscás convertir el cierre en tu ingreso principal, trabajando 100% remoto y desde el celular." } }
+        "b1": {
+          "type": "nivel",
+          "settings": {
+            "level": "Nivel 1",
+            "title": "Arrancás de cero",
+            "text": "Nunca vendiste nada y no sabés por dónde empezar. Querés un paso a paso que no dé nada por sentado."
+          }
+        },
+        "b2": {
+          "type": "nivel",
+          "settings": {
+            "level": "Nivel 2",
+            "title": "Vendés a veces",
+            "text": "Cerrás alguna venta pero sin método: dependés de la suerte y no sabés por qué a veces sí y a veces no."
+          }
+        },
+        "b3": {
+          "type": "nivel",
+          "settings": {
+            "level": "Nivel 3",
+            "title": "Ya trabajás en ventas",
+            "text": "Tenés experiencia pero te falta un sistema para calificar, manejar objeciones y cerrar en frío."
+          }
+        },
+        "b4": {
+          "type": "nivel",
+          "settings": {
+            "level": "Nivel 4",
+            "title": "Querés vivir de esto",
+            "text": "Buscás convertir el cierre en tu ingreso principal, trabajando 100% remoto y desde el celular."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {}
     },
     "udc_18": {
       "type": "udc-18-pensada-para",
       "blocks": {
-        "b1": { "type": "punto", "settings": { "text": "Que consigas tu primer cliente como closer lo antes posible" } },
-        "b2": { "type": "punto", "settings": { "text": "Trabajar desde tu celular, sin horarios fijos ni jefe" } },
-        "b3": { "type": "punto", "settings": { "text": "Dejar de improvisar en las llamadas y seguir un método" } },
-        "b4": { "type": "punto", "settings": { "text": "Que aprendas aplicando, no acumulando teoría" } },
-        "b5": { "type": "punto", "settings": { "text": "Cobrar por comisión, sin stock ni inversión inicial" } }
+        "b1": {
+          "type": "punto",
+          "settings": {
+            "text": "Que consigas tu primer cliente como closer lo antes posible"
+          }
+        },
+        "b2": {
+          "type": "punto",
+          "settings": {
+            "text": "Trabajar desde tu celular, sin horarios fijos ni jefe"
+          }
+        },
+        "b3": {
+          "type": "punto",
+          "settings": {
+            "text": "Dejar de improvisar en las llamadas y seguir un método"
+          }
+        },
+        "b4": {
+          "type": "punto",
+          "settings": {
+            "text": "Que aprendas aplicando, no acumulando teoría"
+          }
+        },
+        "b5": {
+          "type": "punto",
+          "settings": {
+            "text": "Cobrar por comisión, sin stock ni inversión inicial"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ],
       "settings": {}
     },
     "udc_20": {
@@ -291,13 +855,49 @@
     "udc_21": {
       "type": "udc-21-faq",
       "blocks": {
-        "b1": { "type": "faq", "settings": { "question": "¿En qué formato recibo la guía?", "answer": "<p>En PDF, lista para leer y descargar. Funciona en celular, tablet y computadora, y podés leerla sin conexión.</p>" } },
-        "b2": { "type": "faq", "settings": { "question": "¿Cuánto tardo en recibirla?", "answer": "<p>La entrega es inmediata: me escribís por WhatsApp, coordinamos el pago y te llega el archivo en el momento.</p>" } },
-        "b3": { "type": "faq", "settings": { "question": "¿Necesito experiencia previa en ventas?", "answer": "<p>No. La guía arranca explicando qué hace un closer y cómo conseguir tus primeras conversaciones, desde cero.</p>" } },
-        "b4": { "type": "faq", "settings": { "question": "¿Sirve si ya vendo hace años?", "answer": "<p>Sí. La parte de calificación, objeciones y cierre es la que más usan los que ya venden pero trabajan sin un método fijo.</p>" } },
-        "b5": { "type": "faq", "settings": { "question": "¿El pago es por única vez?", "answer": "<p>Sí. Pagás una sola vez y la guía queda tuya. El Pack VIP además incluye las actualizaciones futuras sin costo.</p>" } }
+        "b1": {
+          "type": "faq",
+          "settings": {
+            "question": "¿En qué formato recibo la guía?",
+            "answer": "<p>En PDF, lista para leer y descargar. Funciona en celular, tablet y computadora, y podés leerla sin conexión.</p>"
+          }
+        },
+        "b2": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cuánto tardo en recibirla?",
+            "answer": "<p>La entrega es inmediata: me escribís por WhatsApp, coordinamos el pago y te llega el archivo en el momento.</p>"
+          }
+        },
+        "b3": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Necesito experiencia previa en ventas?",
+            "answer": "<p>No. La guía arranca explicando qué hace un closer y cómo conseguir tus primeras conversaciones, desde cero.</p>"
+          }
+        },
+        "b4": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Sirve si ya vendo hace años?",
+            "answer": "<p>Sí. La parte de calificación, objeciones y cierre es la que más usan los que ya venden pero trabajan sin un método fijo.</p>"
+          }
+        },
+        "b5": {
+          "type": "faq",
+          "settings": {
+            "question": "¿El pago es por única vez?",
+            "answer": "<p>Sí. Pagás una sola vez y la guía queda tuya. El Pack VIP además incluye las actualizaciones futuras sin costo.</p>"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ],
       "settings": {}
     },
     "testimonios": {
@@ -315,6 +915,22 @@
       "settings": {
         "eyebrow": "Mirá cómo funciona",
         "title": "Conocé el sistema por dentro"
+      }
+    },
+    "relacionados": {
+      "type": "udc-relacionados",
+      "settings": {
+        "eyebrow": "Seguí avanzando",
+        "title_1": "También te puede",
+        "title_2": "interesar",
+        "products": [
+          "shopify://products/guia-digital-convertite-en-closer-de-ventas",
+          "shopify://products/guia-digital-acompanamento-1-1",
+          "shopify://products/asesoria-1-a-1-con-tino",
+          "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc"
+        ],
+        "limit": 3,
+        "add_text": "+ Agregar"
       }
     }
   },
@@ -337,6 +953,7 @@
     "udc_18",
     "udc_20",
     "udc_21",
+    "relacionados",
     "testimonios",
     "video"
   ]
