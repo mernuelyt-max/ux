@@ -1,0 +1,82 @@
+{%- comment -%}
+  UDC — Comportamiento de sections/udc-producto.liquid.
+  Se renderiza con render 'udc-producto-js', sid: section.id
+
+  Tres cosas, todas opcionales/progresivas:
+   · Countdown de oferta (localStorage propio, mismo patrón que
+     udc-01-temporizador — no se reinicia en cada visita).
+   · Selector de cantidad: clickear una tarjeta la marca como seleccionada
+     y cambia el input oculto "id" del form al variant_id de esa tarjeta.
+   · Al enviar el form, si hay JS, se intercepta y se agrega al carrito
+     por Cart AJAX API (/cart/add.js) la variante elegida + el bump si
+     está tildado, en un solo pedido, y se redirige a /cart. Si el fetch
+     falla, se deja que el <form action="/cart/add"> normal siga su curso
+     (agrega solo la variante principal, sin el bump).
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-pp-{{ sid }}');
+    if (!root) return;
+
+    var countdown = root.querySelector('[data-udc-pp-countdown]');
+    if (countdown) {
+      var hours = parseFloat(countdown.getAttribute('data-hours')) || 24;
+      var key = 'udc-pp-countdown-end-{{ sid }}';
+      var end = parseInt(localStorage.getItem(key) || '0', 10);
+      if (!end || end < Date.now()) {
+        end = Date.now() + hours * 3600 * 1000;
+        try { localStorage.setItem(key, String(end)); } catch (e) {}
+      }
+      var clock = countdown.querySelector('[data-udc-pp-clock]');
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+      var tick = function () {
+        var left = Math.max(0, end - Date.now());
+        var total = Math.floor(left / 1000);
+        var h = Math.floor(total / 3600);
+        var m = Math.floor((total % 3600) / 60);
+        var s = total % 60;
+        if (clock) clock.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    var tierInput = root.querySelector('[data-udc-pp-variant-input]');
+    var tiers = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tier-radio]'));
+    tiers.forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        tiers.forEach(function (r) { r.closest('.udc-pp__tier').classList.remove('is-selected'); });
+        radio.closest('.udc-pp__tier').classList.add('is-selected');
+        if (tierInput) tierInput.value = radio.value;
+      });
+    });
+
+    var form = root.querySelector('.udc-pp__form');
+    var bumpToggle = root.querySelector('[data-udc-pp-bump-toggle]');
+    var bumpVariantInput = root.querySelector('[data-udc-pp-bump-variant-id]');
+
+    if (form) {
+      form.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+        if (!tierInput) return;
+        var items = [{ id: tierInput.value, quantity: 1 }];
+        if (bumpToggle && bumpToggle.checked && bumpVariantInput) {
+          items.push({ id: bumpVariantInput.value, quantity: 1 });
+        }
+
+        var submitBtn = form.querySelector('.udc-pp__add');
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: items })
+        })
+          .then(function (res) { if (!res.ok) throw new Error('cart add failed'); return res.json(); })
+          .then(function () { window.location.href = '/cart'; })
+          .catch(function () { form.submit(); });
+      });
+    }
+  })();
+</script>

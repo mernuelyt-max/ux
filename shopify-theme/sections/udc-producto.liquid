@@ -1,38 +1,40 @@
 {%- comment -%}
-  UDC — Página de producto (buy box)
+  UDC — Página de producto (buy box con selector de cantidad + order bump)
 
-  Sin diseño de referencia recuperado: el artifact original era una landing
-  de una sola página, nunca tuvo una página de producto propia. Se construye
-  nueva, siguiendo el mismo sistema visual --udc-* que el resto del tema.
+  Sin diseño de referencia recuperado (el artifact original era una landing
+  de una sola página, sin página de producto), pero SÍ hay una captura real
+  de referencia que el usuario mandó de una versión anterior del proyecto:
+  título + precio con -% OFF, 4 beneficios con ícono, separador "LLEVÁ MÁS
+  & AHORRÁ", countdown de oferta, selector "Llevando 1/2/3" con descuento
+  por cantidad, un order-bump ("Asesoría 1 a 1 con Tino") y "Pago Seguro
+  En Línea". Se reconstruye ese mismo diseño acá, con datos 100% reales:
 
-  Todo el contenido (imagen, título, descripción, precio) sale en vivo del
-  objeto `product` de Shopify — nada se escribe a mano acá. Pensada para
-  templates/product.json, junto con udc-prod-resenas / udc-prod-testimonios /
-  udc-prod-video.
-
-  Los productos reales (ver Shopify admin) son todos de variante única
-  ("Default Title"), sin opciones ni planes de venta — por eso el formulario
-  no tiene selector de variante, solo un input oculto con el id de la
-  variante seleccionada.
-
-  Un solo botón de compra: "Agregar al carrito" (POST normal a /cart/add,
-  va al carrito → udc-cart). Se probó también el botón de pago dinámico de
-  Shopify ({{ form | payment_button }}, "Comprar ahora" / Shop Pay) pero se
-  sacó: es un iframe que Shopify renderiza con su propia tipografía de
-  sistema y forma rectangular — no hay CSS del tema que lo pueda repintar
-  al pill rojo + Anton del resto del sitio, así que quedaba pegado y
-  rompía el estilo en vez de sumar un segundo camino de compra.
-
-  Igual que udc-03-hero, oculta el header/footer nativos de Horizon (ver
-  udc-hide-chrome.liquid): mantiene la misma estética "sin distracciones"
-  del resto del sitio en vez de volver a mostrar el header claro de Horizon
-  encima de una página oscura.
+  · El descuento por cantidad NO es un descuento automático de Shopify: es
+    el producto real "Guía Digital Convertite en Closer de Ventas" con un
+    option "Cantidad" de 3 variantes (1/2/3 copias), cada una con su propio
+    price/compareAtPrice ya cargado (85.000/97.000, 153.000/194.000,
+    216.750/291.000 ARS). Así el precio que se ve acá es EXACTAMENTE el
+    que se cobra en el checkout — no hay riesgo de que el precio mostrado
+    no coincida con el real.
+  · El "+10%/+15% OFF EXTRA" de las tarjetas 2 y 3 se calcula en vivo
+    comparando el precio unitario de cada variante contra el de la
+    variante 1 — no está hardcodeado, así que si el comerciante cambia
+    los precios de las variantes el badge se actualiza solo.
+  · El order bump apunta a un producto real (settings.bump_product,
+    "Asesoría 1 a 1 con Tino", 380.000/580.000 ARS) elegido desde el
+    editor del tema — su precio también sale en vivo de Shopify.
+  · El botón "Agregar al carrito" hace un POST normal a /cart/add (funciona
+    sin JS, solo agrega la variante de cantidad seleccionada). Con JS,
+    snippets/udc-producto-js.liquid intercepta el submit y usa la Cart
+    AJAX API (/cart/add.js) para agregar en un solo paso la variante
+    elegida + el bump si está tildado, sin recargar la página.
 {%- endcomment -%}
 
 {% render 'udc-base' %}
 {% render 'udc-hide-chrome' %}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign tier1 = product.variants.first -%}
 
 <section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
   <div class="udc-pp__grid">
@@ -58,14 +60,111 @@
       {%- endif -%}
 
       <div class="udc-pp__price">
-        {%- if current_variant.compare_at_price > current_variant.price -%}
-          <s class="udc-pp__compare">{{ current_variant.compare_at_price | money }}</s>
+        {%- if tier1.compare_at_price > tier1.price -%}
+          <s class="udc-pp__compare">{{ tier1.compare_at_price | money }}</s>
         {%- endif -%}
-        <span class="udc-pp__pricenow">{{ current_variant.price | money }}</span>
+        <span class="udc-pp__pricenow">{{ tier1.price | money }}</span>
+        {%- if tier1.compare_at_price > tier1.price -%}
+          {%- assign off_pct = tier1.price | times: 100 | divided_by: tier1.compare_at_price -%}
+          {%- assign off_pct = 100 | minus: off_pct -%}
+          <span class="udc-pp__offbadge">-{{ off_pct }}% OFF</span>
+        {%- endif -%}
       </div>
 
-      {%- form 'product', product, class: 'udc-pp__form' -%}
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- if section.blocks.size > 0 -%}
+        <div class="udc-pp__benefits">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit' -%}
+              <div class="udc-pp__benefit" {{ block.shopify_attributes }}>
+                <span class="udc-pp__benefiticon" aria-hidden="true">{{ block.settings.icon }}</span>
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.divider_text != blank -%}
+        <div class="udc-pp__divider"><span>{{ section.settings.divider_text }}</span></div>
+      {%- endif -%}
+
+      {%- if section.settings.countdown_label != blank -%}
+        <div class="udc-pp__countdown" data-udc-pp-countdown data-hours="{{ section.settings.countdown_hours | default: 24 }}">
+          <span aria-hidden="true">🔥</span>
+          {{ section.settings.countdown_label }}
+          <span class="udc-pp__countdown-clock" data-udc-pp-clock>00:00:00</span>
+        </div>
+      {%- endif -%}
+
+      {%- assign pp_form_id = 'udc-pp-form-' | append: section.id -%}
+      {%- form 'product', product, class: 'udc-pp__form', id: pp_form_id -%}
+        <div class="udc-pp__tiers" data-udc-pp-tiers>
+          {%- for variant in product.variants -%}
+            {%- assign qty = forloop.index -%}
+            {%- assign unit_price = variant.price | divided_by: qty -%}
+            {%- assign unit_compare = variant.compare_at_price | divided_by: qty -%}
+            {%- assign savings = variant.compare_at_price | minus: variant.price -%}
+
+            <label class="udc-pp__tier{% if forloop.first %} is-selected{% endif %}">
+              <input type="radio" name="udc-pp-tier-{{ section.id }}" value="{{ variant.id }}"
+                     data-udc-pp-tier-radio {% if forloop.first %}checked{% endif %}>
+              <span class="udc-pp__tier__radio" aria-hidden="true"></span>
+
+              <span class="udc-pp__tier__main">
+                <span class="udc-pp__tier__row">
+                  <span class="udc-pp__tier__name">{{ section.settings.tier_label | default: 'Llevando' }} {{ qty }}</span>
+                  {%- if forloop.first -%}
+                    {%- if section.settings.tier1_badge != blank -%}
+                      <span class="udc-pp__tier__badge">{{ section.settings.tier1_badge }}</span>
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- assign ratio = unit_price | times: 100 | divided_by: tier1.price -%}
+                    {%- assign extra_pct = 100 | minus: ratio -%}
+                    {%- if extra_pct > 0 -%}
+                      <span class="udc-pp__tier__badge udc-pp__tier__badge--extra">+{{ extra_pct }}% OFF EXTRA</span>
+                    {%- endif -%}
+                  {%- endif -%}
+                </span>
+                {%- if savings > 0 -%}
+                  <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ savings | money }}</span>
+                {%- endif -%}
+              </span>
+
+              <span class="udc-pp__tier__prices">
+                <span class="udc-pp__tier__pricenow">{{ unit_price | money }}</span>
+                {%- if unit_compare > unit_price -%}
+                  <s class="udc-pp__tier__pricecompare">{{ unit_compare | money }}</s>
+                {%- endif -%}
+              </span>
+            </label>
+          {%- endfor -%}
+        </div>
+
+        <input type="hidden" name="id" value="{{ tier1.id }}" data-udc-pp-variant-input>
+
+        {%- if section.settings.bump_product != blank and section.settings.bump_product.selected_or_first_available_variant.available -%}
+          {%- assign bump_variant = section.settings.bump_product.selected_or_first_available_variant -%}
+          <label class="udc-pp__bump">
+            <input type="checkbox" data-udc-pp-bump-toggle>
+            {%- if section.settings.bump_product.featured_image != blank -%}
+              <span class="udc-pp__bump__thumb">
+                <img src="{{ section.settings.bump_product.featured_image | image_url: width: 160 }}" loading="lazy" alt="{{ section.settings.bump_product.title | escape }}">
+              </span>
+            {%- endif -%}
+            <span class="udc-pp__bump__title">{{ section.settings.bump_label | default: '+ Sumá' }} {{ section.settings.bump_product.title }}</span>
+            <span class="udc-pp__bump__prices">
+              <span class="udc-pp__bump__pricenow">{{ bump_variant.price | money }}</span>
+              {%- if bump_variant.compare_at_price > bump_variant.price -%}
+                <s class="udc-pp__bump__pricecompare">{{ bump_variant.compare_at_price | money }}</s>
+              {%- endif -%}
+            </span>
+          </label>
+          <input type="hidden" data-udc-pp-bump-variant-id value="{{ bump_variant.id }}">
+        {%- endif -%}
+
+        {%- if section.settings.gift_text != blank -%}
+          <p class="udc-serif udc-pp__gift">{{ section.settings.gift_text }}</p>
+        {%- endif -%}
 
         <button type="submit"
                 name="add"
@@ -77,21 +176,11 @@
             {{ section.settings.sold_out_text | default: 'Agotado' }}
           {%- endif -%}
         </button>
+
+        {%- if section.settings.trust_bold != blank or section.settings.trust_rest != blank -%}
+          <p class="udc-pp__trust"><strong>{{ section.settings.trust_bold }}</strong> {{ section.settings.trust_rest }}</p>
+        {%- endif -%}
       {%- endform -%}
-
-      {%- if section.settings.support_text != blank -%}
-        <p class="udc-serif udc-pp__support">{{ section.settings.support_text }}</p>
-      {%- endif -%}
-
-      {%- if section.settings.payment_row != blank -%}
-        <div class="udc-pp__pay">
-          {%- assign pays = section.settings.payment_row | split: ',' -%}
-          {%- for p in pays -%}
-            {%- assign p = p | strip -%}
-            {%- if p != blank -%}<span>{{ p }}</span>{%- endif -%}
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
     </div>
   </div>
 </section>
@@ -121,36 +210,131 @@
   #udc-pp-{{ section.id }} .udc-pp__desc p:last-child{margin-bottom:0}
 
   #udc-pp-{{ section.id }} .udc-pp__price{
-    display:flex;align-items:baseline;gap:12px;margin:22px 0 0}
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 0}
   #udc-pp-{{ section.id }} .udc-pp__compare{font-size:16px;color:var(--udc-dim)}
   #udc-pp-{{ section.id }} .udc-pp__pricenow{
     font-family:var(--udc-anton);font-weight:400;font-size:clamp(26px,3vw,36px);color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__offbadge{
+    background:var(--udc-accent);color:#fff;font-family:var(--udc-anton);font-size:12px;
+    letter-spacing:.06em;padding:6px 14px;border-radius:999px}
 
-  #udc-pp-{{ section.id }} .udc-pp__form{margin:24px 0 0;display:flex;flex-direction:column;gap:14px}
-  #udc-pp-{{ section.id }} .udc-pp__add{width:100%}
-  #udc-pp-{{ section.id }} .udc-pp__add:disabled{
-    opacity:.5;cursor:not-allowed;box-shadow:none}
+  #udc-pp-{{ section.id }} .udc-pp__benefits{
+    display:grid;grid-template-columns:1fr 1fr;gap:20px 16px;margin:28px 0 0}
+  #udc-pp-{{ section.id }} .udc-pp__benefit{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--udc-text);font-weight:700}
+  #udc-pp-{{ section.id }} .udc-pp__benefiticon{font-size:22px;line-height:1;flex:0 0 auto}
+
+  #udc-pp-{{ section.id }} .udc-pp__divider{
+    display:flex;align-items:center;gap:16px;margin:36px 0 0;
+    font-family:var(--udc-anton);font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__divider::before,
+  #udc-pp-{{ section.id }} .udc-pp__divider::after{content:'';flex:1 1 auto;height:1px;background:var(--udc-line)}
+
+  #udc-pp-{{ section.id }} .udc-pp__countdown{
+    margin:22px 0 0;padding:16px 20px;border-radius:14px;text-align:center;font-size:14px;
+    font-weight:700;color:#fff;background:linear-gradient(135deg,var(--udc-accent),#7A0D0D)}
+  #udc-pp-{{ section.id }} .udc-pp__countdown-clock{
+    display:inline-block;margin-left:6px;font-family:var(--udc-anton);letter-spacing:.04em}
+
+  #udc-pp-{{ section.id }} .udc-pp__tiers{display:flex;flex-direction:column;gap:14px;margin:24px 0 0}
+  #udc-pp-{{ section.id }} .udc-pp__tier{
+    position:relative;display:flex;align-items:center;gap:14px;cursor:pointer;
+    border:1px solid var(--udc-border);border-radius:14px;padding:16px 18px;
+    transition:border-color .2s ease,box-shadow .2s ease}
+  #udc-pp-{{ section.id }} .udc-pp__tier input{position:absolute;opacity:0;pointer-events:none}
+  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected{
+    border-color:var(--udc-accent);box-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 25%, transparent)}
+
+  #udc-pp-{{ section.id }} .udc-pp__tier__radio{
+    flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid #3A3A34;position:relative}
+  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__radio{border-color:var(--udc-accent)}
+  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__radio::after{
+    content:'';position:absolute;inset:3px;border-radius:50%;background:var(--udc-accent)}
+
+  #udc-pp-{{ section.id }} .udc-pp__tier__main{flex:1 1 auto;display:flex;flex-direction:column;gap:6px;min-width:0}
+  #udc-pp-{{ section.id }} .udc-pp__tier__row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  #udc-pp-{{ section.id }} .udc-pp__tier__name{font-size:15px;font-weight:700;color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__tier__badge{
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--udc-accent);
+    border:1px solid var(--udc-accent);border-radius:999px;padding:3px 10px}
+  #udc-pp-{{ section.id }} .udc-pp__tier__badge--extra{background:var(--udc-accent);color:#fff}
+  #udc-pp-{{ section.id }} .udc-pp__tier__save{font-size:12px;color:var(--udc-dim)}
+
+  #udc-pp-{{ section.id }} .udc-pp__tier__prices{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;gap:2px}
+  #udc-pp-{{ section.id }} .udc-pp__tier__pricenow{
+    font-family:var(--udc-anton);font-size:19px;color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__tier__pricecompare{font-size:12px;color:var(--udc-dim)}
+
+  #udc-pp-{{ section.id }} .udc-pp__bump{
+    margin:20px 0 0;display:flex;align-items:center;gap:14px;cursor:pointer;
+    border:1px dashed #443B3B;border-radius:14px;padding:14px 16px}
+  #udc-pp-{{ section.id }} .udc-pp__bump input{flex:0 0 auto;width:18px;height:18px;accent-color:var(--udc-accent)}
+  #udc-pp-{{ section.id }} .udc-pp__bump__thumb{
+    flex:0 0 auto;width:48px;height:48px;border-radius:10px;overflow:hidden;background:var(--udc-bg2)}
+  #udc-pp-{{ section.id }} .udc-pp__bump__thumb img{display:block;width:100%;height:100%;object-fit:cover}
+  #udc-pp-{{ section.id }} .udc-pp__bump__title{flex:1 1 auto;font-size:13px;color:var(--udc-text);min-width:0}
+  #udc-pp-{{ section.id }} .udc-pp__bump__prices{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;gap:2px}
+  #udc-pp-{{ section.id }} .udc-pp__bump__pricenow{font-family:var(--udc-anton);font-size:15px;color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__bump__pricecompare{font-size:11px;color:var(--udc-dim)}
+
+  #udc-pp-{{ section.id }} .udc-pp__gift{
+    margin:16px 0 0;text-align:center;font-size:14px;color:var(--udc-muted)}
+
+  #udc-pp-{{ section.id }} .udc-pp__form{margin-top:6px;display:flex;flex-direction:column}
+  #udc-pp-{{ section.id }} .udc-pp__add{margin-top:20px;width:100%}
+  #udc-pp-{{ section.id }} .udc-pp__add:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
   #udc-pp-{{ section.id }} .udc-pp__add:disabled:hover{transform:none}
 
-  #udc-pp-{{ section.id }} .udc-pp__support{
-    margin:18px 0 0;font-size:15px;color:var(--udc-muted)}
-
-  #udc-pp-{{ section.id }} .udc-pp__pay{
-    display:flex;flex-wrap:wrap;gap:clamp(14px,3vw,28px);margin-top:20px}
-  #udc-pp-{{ section.id }} .udc-pp__pay span{
-    font-size:13px;letter-spacing:.06em;color:var(--udc-dim);font-weight:700}
+  #udc-pp-{{ section.id }} .udc-pp__trust{
+    margin:16px 0 0;text-align:center;font-size:13px;color:var(--udc-dim)}
+  #udc-pp-{{ section.id }} .udc-pp__trust strong{color:var(--udc-text)}
 </style>
+
+{% render 'udc-producto-js', sid: section.id %}
 
 {% schema %}
 {
   "name": "UDC · Producto",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Antetítulo" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
+
+    { "type": "header", "content": "Beneficios" },
+    { "type": "header", "content": "Cuenta regresiva" },
+    { "type": "range", "id": "countdown_hours", "label": "Horas de la oferta", "min": 0, "max": 168, "step": 6, "default": 24 },
+    { "type": "text", "id": "countdown_label", "label": "Texto (vacío = ocultar)", "default": "OFERTA DE LANZAMIENTO — FINALIZA EN:" },
+
+    { "type": "header", "content": "Separador" },
+    { "type": "text", "id": "divider_text", "label": "Texto (vacío = ocultar)", "default": "LLEVÁ MÁS & AHORRÁ" },
+
+    { "type": "header", "content": "Selector de cantidad" },
+    { "type": "text", "id": "tier_label", "label": "Etiqueta", "default": "Llevando" },
+    { "type": "text", "id": "tier1_badge", "label": "Badge de la 1ª opción", "default": "Entrega inmediata" },
+    { "type": "text", "id": "savings_label", "label": "Etiqueta de ahorro", "default": "Ahorrá" },
+
+    { "type": "header", "content": "Order bump" },
+    { "type": "product", "id": "bump_product", "label": "Producto adicional (opcional)" },
+    { "type": "text", "id": "bump_label", "label": "Texto antes del nombre", "default": "+ Sumá" },
+
+    { "type": "header", "content": "Regalo" },
+    { "type": "text", "id": "gift_text", "label": "Texto (vacío = ocultar)", "default": "Comprando más de una unidad te llevás un bonus de regalo 🎁" },
+
+    { "type": "header", "content": "Botón" },
     { "type": "text", "id": "add_text", "label": "Texto del botón", "default": "Agregar al carrito →" },
     { "type": "text", "id": "sold_out_text", "label": "Texto sin stock", "default": "Agotado" },
-    { "type": "textarea", "id": "support_text", "label": "Texto de apoyo bajo el botón" },
-    { "type": "text", "id": "payment_row", "label": "Métodos de pago (separados por coma)", "info": "Vacío = no aparece." }
+
+    { "type": "header", "content": "Confianza" },
+    { "type": "text", "id": "trust_bold", "label": "Texto en negrita", "default": "Pago Seguro" },
+    { "type": "text", "id": "trust_rest", "label": "Resto del texto", "default": "En Línea" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Beneficio",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Ícono (emoji)", "default": "✦" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Beneficio" }
+      ]
+    }
   ],
   "presets": [{ "name": "UDC · Producto" }]
 }

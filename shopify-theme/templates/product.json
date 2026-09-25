@@ -6,8 +6,16 @@
     },
     "main": {
       "type": "udc-producto",
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "icon": "📱", "text": "Leela desde tu celular" } },
+        "b2": { "type": "benefit", "settings": { "icon": "⚡", "text": "Descarga inmediata" } },
+        "b3": { "type": "benefit", "settings": { "icon": "🧠", "text": "Sin experiencia previa" } },
+        "b4": { "type": "benefit", "settings": { "icon": "♾️", "text": "Actualizaciones incluidas" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"],
       "settings": {
         "eyebrow": "U del Closer",
+        "bump_product": "shopify://products/asesoria-1-a-1-con-tino",
         "add_text": "Agregar al carrito →",
         "sold_out_text": "Agotado"
       }
