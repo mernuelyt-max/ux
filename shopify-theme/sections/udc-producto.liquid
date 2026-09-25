@@ -54,6 +54,13 @@
         <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
       {%- endif -%}
 
+      {%- if section.settings.rating_score != blank -%}
+        <div class="udc-pp__rating">
+          <span class="udc-pp__stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></span>
+          <span>{{ section.settings.rating_label }} <strong>{{ section.settings.rating_score }}/5</strong> {{ section.settings.rating_source }}</span>
+        </div>
+      {%- endif -%}
+
       <h1 class="udc-h2 udc-pp__title">{{ product.title }}</h1>
 
       <div class="udc-pp__price">
@@ -104,6 +111,7 @@
 
             <label class="udc-pp__tier{% if forloop.first %} is-selected{% endif %}">
               <input type="radio" name="udc-pp-tier-{{ section.id }}" value="{{ variant.id }}"
+                     data-price="{{ variant.price | money | escape }}"
                      data-udc-pp-tier-radio {% if forloop.first %}checked{% endif %}>
               <span class="udc-pp__tier__radio" aria-hidden="true"></span>
 
@@ -223,6 +231,24 @@
       </div>
     </div>
   </div>
+
+  {%- if section.settings.sticky_enabled and current_variant.available -%}
+    <div class="udc-pp__sticky" id="udc-pp-sticky-{{ section.id }}" data-udc-pp-sticky>
+      <div class="udc-pp__sticky-inner">
+        {%- if product.featured_image != blank -%}
+          <img class="udc-pp__sticky-img" src="{{ product.featured_image | image_url: width: 120 }}"
+               width="48" height="48" loading="lazy" alt="">
+        {%- endif -%}
+        <div class="udc-pp__sticky-info">
+          <span class="udc-pp__sticky-title">{{ product.title }}</span>
+          <span class="udc-pp__sticky-price" data-udc-pp-sticky-price>{{ tier1.price | money }}</span>
+        </div>
+        <button type="button" class="udc-btn udc-pp__sticky-btn" data-udc-pp-sticky-btn tabindex="-1">
+          {{ section.settings.sticky_text | default: 'Agregar al carrito' }}
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
 </section>
 
 <style>
@@ -243,6 +269,39 @@
     display:block;width:100%;height:100%;object-fit:cover}
 
   #udc-pp-{{ section.id }} .udc-pp__title{margin:14px 0 0}
+
+  #udc-pp-{{ section.id }} .udc-pp__rating{
+    display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin:16px 0 0;font-size:13px;color:var(--udc-muted)}
+  #udc-pp-{{ section.id }} .udc-pp__rating strong{color:var(--udc-text)}
+  #udc-pp-{{ section.id }} .udc-pp__stars{display:inline-flex;gap:3px}
+  #udc-pp-{{ section.id }} .udc-pp__stars span{
+    display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;
+    background:var(--udc-accent);color:#fff;font-size:11px;line-height:1}
+
+  #udc-pp-sticky-{{ section.id }}{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:10px clamp(12px,4vw,24px) calc(10px + env(safe-area-inset-bottom));
+    background:rgba(8,8,8,.92);border-top:1px solid var(--udc-line);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 -20px 50px rgba(0,0,0,.55);
+    transform:translateY(115%);transition:transform .45s cubic-bezier(.2,.7,.2,1);
+    font-family:var(--udc-sans);color:var(--udc-text)}
+  #udc-pp-sticky-{{ section.id }}.is-visible{transform:none}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-inner{
+    display:flex;align-items:center;gap:12px;max-width:1080px;margin:0 auto}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-img{
+    flex:0 0 auto;width:48px;height:48px;border-radius:10px;object-fit:cover;border:1px solid var(--udc-border)}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-info{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-title{
+    font-size:13px;line-height:1.3;color:var(--udc-text);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-price{font-family:var(--udc-anton);font-size:16px;color:var(--udc-text)}
+  #udc-pp-sticky-{{ section.id }} .udc-pp__sticky-btn{
+    flex:0 0 auto;font-size:14px;padding:13px 20px;
+    box-shadow:0 0 36px color-mix(in srgb, var(--udc-accent) 45%, transparent)}
+  @media (prefers-reduced-motion: reduce){
+    #udc-pp-sticky-{{ section.id }}{transition:none}
+  }
 
   #udc-pp-{{ section.id }} .udc-pp__price{
     display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:22px 0 0}
@@ -360,6 +419,15 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
+
+    { "type": "header", "content": "Calificación bajo el título" },
+    { "type": "text", "id": "rating_label", "label": "Texto antes de la nota", "default": "Calificado" },
+    { "type": "text", "id": "rating_score", "label": "Nota (vacío = ocultar)", "default": "4,8", "info": "La misma nota de Trustpilot que muestra la sección de reseñas." },
+    { "type": "text", "id": "rating_source", "label": "Texto después de la nota", "default": "basado en opiniones en Trustpilot" },
+
+    { "type": "header", "content": "Barra fija de compra" },
+    { "type": "checkbox", "id": "sticky_enabled", "label": "Mostrar barra fija abajo al pasar el botón", "default": true },
+    { "type": "text", "id": "sticky_text", "label": "Texto del botón", "default": "Agregar al carrito" },
 
     { "type": "header", "content": "Cuenta regresiva" },
     { "type": "range", "id": "countdown_hours", "label": "Horas de la oferta", "min": 0, "max": 168, "step": 6, "default": 24 },

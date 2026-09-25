@@ -208,6 +208,10 @@
       "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11", "b12", "b13", "b14", "b15"],
       "settings": {}
     },
+    "cinta": {
+      "type": "udc-cinta",
+      "settings": {}
+    },
     "udc_12": {
       "type": "udc-12-casos-exito",
       "blocks": {
@@ -447,6 +451,7 @@
     "planes",
     "resenas",
     "udc_11",
+    "cinta",
     "udc_12",
     "facturacion",
     "udc_13",

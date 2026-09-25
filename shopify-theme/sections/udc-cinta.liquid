@@ -1,0 +1,115 @@
+{%- comment -%}
+  UDC — Banner animado (cintas cruzadas)
+
+  Inspirado en la franja de texto en movimiento de voltra.com.ar (referencia
+  que mandó el usuario), llevado al sistema visual de UDC: dos cintas que
+  cruzan la pantalla levemente giradas y se mueven en sentidos opuestos.
+   · Cinta 1: roja con glow, Anton en mayúsculas.
+   · Cinta 2: clara, alternando Anton y serif itálica.
+  Con estilo "single" se muestra solo la cinta 1, recta.
+
+  El texto sale de dos textareas (una frase por línea). Las frases por
+  defecto son copy que ya existe en el resto de la landing — no se inventó
+  ningún claim nuevo.
+
+  Usa .udc-marquee / .udc-marquee__row y los keyframes udcMarquee /
+  udcMarqueeR de udc-base. Cada fila repite las frases 3 veces para que
+  siempre cubra el ancho de pantalla, y va duplicada para el loop perfecto.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign lines_1 = section.settings.line_1 | newline_to_br | split: '<br />' -%}
+{%- assign lines_2 = section.settings.line_2 | newline_to_br | split: '<br />' -%}
+{%- assign speed = section.settings.speed | default: 30 -%}
+
+<section class="udc udc-ct2 udc-ct2--{{ section.settings.style }}" id="udc-ct2-{{ section.id }}" aria-label="{{ lines_1 | join: ' · ' | strip_newlines | escape }}">
+  <div class="udc-ct2__band udc-ct2__band--1" aria-hidden="true">
+    <div class="udc-marquee udc-ct2__mq" style="animation-duration:{{ speed }}s">
+      {%- for pass in (1..2) -%}
+        <div class="udc-marquee__row udc-ct2__row">
+          {%- for rep in (1..3) -%}
+            {%- for line in lines_1 -%}
+              {%- assign t = line | strip -%}
+              {%- if t != blank -%}
+                <span class="udc-ct2__item">{{ t }}</span><span class="udc-ct2__sep">✦</span>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if section.settings.style == 'cross' -%}
+    <div class="udc-ct2__band udc-ct2__band--2" aria-hidden="true">
+      <div class="udc-marquee udc-ct2__mq udc-ct2__mq--rev" style="animation-duration:{{ speed | times: 1.2 }}s">
+        {%- for pass in (1..2) -%}
+          <div class="udc-marquee__row udc-ct2__row">
+            {%- for rep in (1..3) -%}
+              {%- for line in lines_2 -%}
+                {%- assign t = line | strip -%}
+                {%- if t != blank -%}
+                  {%- assign odd = forloop.index | modulo: 2 -%}
+                  <span class="udc-ct2__item{% if odd == 0 %} udc-ct2__item--serif{% endif %}">{{ t }}</span><span class="udc-ct2__sep">✦</span>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-ct2-{{ section.id }}{
+    position:relative;overflow:hidden;padding:clamp(56px,9vw,96px) 0;
+    --tilt:{{ section.settings.tilt | default: 3 }}deg}
+  #udc-ct2-{{ section.id }}.udc-ct2--single{padding:clamp(28px,5vw,48px) 0;--tilt:0deg}
+
+  #udc-ct2-{{ section.id }} .udc-ct2__band{
+    position:relative;width:112%;margin-left:-6%;padding:16px 0;overflow:hidden}
+  #udc-ct2-{{ section.id }} .udc-ct2__band--1{
+    z-index:2;background:var(--udc-accent);color:#fff;transform:rotate(calc(var(--tilt) * -1));
+    box-shadow:0 0 60px color-mix(in srgb, var(--udc-accent) 55%, transparent),0 20px 50px rgba(0,0,0,.6)}
+  #udc-ct2-{{ section.id }} .udc-ct2__band--2{
+    z-index:1;margin-top:calc(-1 * clamp(38px,6vw,56px));
+    background:var(--udc-text);color:var(--udc-bg);transform:rotate(var(--tilt));
+    box-shadow:0 20px 50px rgba(0,0,0,.6)}
+
+  #udc-ct2-{{ section.id }} .udc-ct2__mq{
+    animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-ct2-{{ section.id }} .udc-ct2__mq--rev{animation-name:udcMarqueeR}
+  #udc-ct2-{{ section.id }} .udc-ct2__row{gap:22px;padding-right:22px;align-items:center}
+
+  #udc-ct2-{{ section.id }} .udc-ct2__item{
+    font-family:var(--udc-anton);font-size:clamp(20px,3.2vw,34px);line-height:1;
+    text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+  #udc-ct2-{{ section.id }} .udc-ct2__item--serif{
+    font-family:var(--udc-serif-font);font-style:italic;text-transform:none;letter-spacing:0;
+    font-size:clamp(22px,3.4vw,36px)}
+  #udc-ct2-{{ section.id }} .udc-ct2__sep{font-size:clamp(14px,2vw,20px);line-height:1;opacity:.85}
+  #udc-ct2-{{ section.id }} .udc-ct2__band--2 .udc-ct2__sep{color:var(--udc-accent);opacity:1}
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Banner animado",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select", "id": "style", "label": "Estilo", "default": "cross",
+      "options": [
+        { "value": "cross", "label": "Dos cintas cruzadas" },
+        { "value": "single", "label": "Una cinta recta" }
+      ]
+    },
+    { "type": "textarea", "id": "line_1", "label": "Cinta roja (una frase por línea)", "default": "Cerrá ventas por llamada\nTodos los días\nDesde tu celular" },
+    { "type": "textarea", "id": "line_2", "label": "Cinta clara (una frase por línea)", "default": "Sin experiencia previa\nguiones listos para usar\nDescarga inmediata\nactualizaciones incluidas" },
+    { "type": "range", "id": "speed", "label": "Duración de una vuelta", "min": 10, "max": 60, "step": 2, "unit": "s", "default": 30 },
+    { "type": "range", "id": "tilt", "label": "Inclinación (cruzadas)", "min": 0, "max": 6, "step": 1, "unit": "°", "default": 3 }
+  ],
+  "presets": [{ "name": "UDC · Banner animado" }]
+}
+{% endschema %}

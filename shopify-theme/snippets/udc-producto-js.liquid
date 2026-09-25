@@ -45,6 +45,9 @@
       setInterval(tick, 1000);
     }
 
+    var sticky = document.getElementById('udc-pp-sticky-{{ sid }}');
+    var stickyPrice = sticky ? sticky.querySelector('[data-udc-pp-sticky-price]') : null;
+
     var tierInput = root.querySelector('[data-udc-pp-variant-input]');
     var tiers = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tier-radio]'));
     tiers.forEach(function (radio) {
@@ -52,6 +55,7 @@
         tiers.forEach(function (r) { r.closest('.udc-pp__tier').classList.remove('is-selected'); });
         radio.closest('.udc-pp__tier').classList.add('is-selected');
         if (tierInput) tierInput.value = radio.value;
+        if (stickyPrice && radio.getAttribute('data-price')) stickyPrice.textContent = radio.getAttribute('data-price');
       });
     });
 
@@ -80,6 +84,24 @@
           .then(function () { window.location.href = '/cart'; })
           .catch(function () { form.submit(); });
       });
+    }
+
+    var mainBtn = root.querySelector('.udc-pp__add');
+    if (sticky && mainBtn && form && 'IntersectionObserver' in window) {
+      // Moved to <body> so position:fixed can't be broken by a transformed ancestor.
+      document.body.appendChild(sticky);
+      var stickyBtn = sticky.querySelector('[data-udc-pp-sticky-btn]');
+      new IntersectionObserver(function (entries) {
+        var e = entries[0];
+        var show = !e.isIntersecting && e.boundingClientRect.top < 0;
+        sticky.classList.toggle('is-visible', show);
+        if (stickyBtn) stickyBtn.tabIndex = show ? 0 : -1;
+      }).observe(mainBtn);
+      if (stickyBtn) {
+        stickyBtn.addEventListener('click', function () {
+          if (form.requestSubmit) form.requestSubmit(mainBtn); else mainBtn.click();
+        });
+      }
     }
 
     var tabBtns = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tabbtn]'));

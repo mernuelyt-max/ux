@@ -231,6 +231,10 @@
         "disclaimer": "Resultados reales de alumnos concretos, reconocidos en la conferencia anual de U del Closer. No son ingresos típicos ni garantizados: dependen del esfuerzo, la dedicación y el mercado de cada persona."
       }
     },
+    "cinta": {
+      "type": "udc-cinta",
+      "settings": {}
+    },
     "udc_13": {
       "type": "udc-13-bonus",
       "blocks": {
@@ -318,6 +322,7 @@
     "main",
     "udc_04",
     "facturacion",
+    "cinta",
     "udc_05",
     "udc_06",
     "udc_07",
