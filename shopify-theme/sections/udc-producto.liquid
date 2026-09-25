@@ -48,7 +48,7 @@
   <header class="udc udc-pp-brand" id="udc-pp-brand-{{ section.id }}">
     <a href="{{ routes.root_url }}" class="udc-pp-brand__link">
       {%- if settings.logo != blank -%}
-        <img src="{{ settings.logo | image_url: height: 120 }}" alt="{{ settings.logo.alt | default: shop.name | escape }}"
+        <img src="{{ settings.logo | image_url: height: 240 }}" alt="{{ settings.logo.alt | default: shop.name | escape }}"
              width="{{ settings.logo.width }}" height="{{ settings.logo.height }}" class="udc-pp-brand__img">
       {%- else -%}
         <span class="udc-pp-brand__name">{{ shop.name }}</span>
@@ -276,9 +276,9 @@
     display:flex;justify-content:center;align-items:center;padding:18px 20px}
   #udc-pp-brand-{{ section.id }} .udc-pp-brand__link{display:inline-flex;align-items:center;color:var(--udc-text);text-decoration:none}
   #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{
-    display:block;width:auto;height:{{ settings.logo_height_mobile | default: 28 }}px;object-fit:contain}
+    display:block;width:auto;height:{{ section.settings.brand_height | times: 0.8 | round }}px;object-fit:contain}
   @media (min-width:750px){
-    #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{height:{{ settings.logo_height | default: 36 }}px}
+    #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{height:{{ section.settings.brand_height }}px}
   }
   #udc-pp-brand-{{ section.id }} .udc-pp-brand__name{
     font-family:var(--udc-anton);font-size:20px;letter-spacing:.06em;text-transform:uppercase}
@@ -450,6 +450,7 @@
   "tag": "section",
   "settings": [
     { "type": "checkbox", "id": "show_brand", "label": "Mostrar logo arriba", "default": true, "info": "El header y el footer del tema están ocultos en esta página. El logo sale de Configuración del tema → Logo; si no hay, se muestra el nombre de la tienda." },
+    { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
 
     { "type": "header", "content": "Calificación bajo el título" },
