@@ -1,20 +1,34 @@
 {%- comment -%}
-  UDC — Tarjeta de facturación de un alumno, usada por sections/udc-facturacion.liquid.
-  Recibe: block (un bloque de tipo "caso").
-  Sin <style> propio: las reglas .udc-fc__card* viven en el <style> de la
+  UDC — Tarjeta 9:16 de facturación de un alumno (formato historia/reel),
+  usada por sections/udc-facturacion.liquid.
+  Recibe: block (bloque "caso") y tag (texto de la píldora de arriba).
+
+  Si el bloque no tiene foto (las 5 fotos udc-facturado-*.jpg nunca se
+  recuperaron), la tarjeta no queda vacía: fondo oscuro con resplandor rojo
+  abajo y la inicial del nombre gigante y casi transparente de fondo.
+
+  Sin <style> propio: las reglas .udc-fc__* viven en el <style> de la
   sección, escopeadas a #udc-fc-{{ section.id }}.
 {%- endcomment -%}
 
 <div class="udc-fc__card" {{ block.shopify_attributes }}>
   {%- if block.settings.image != blank -%}
-    <div class="udc-fc__photo">
-      <img src="{{ block.settings.image | image_url: width: 300 }}"
-           loading="lazy"
-           width="{{ block.settings.image.width }}"
-           height="{{ block.settings.image.height }}"
-           alt="{{ block.settings.image.alt | default: block.settings.name | escape }}">
-    </div>
+    <img class="udc-fc__img"
+         src="{{ block.settings.image | image_url: width: 600 }}"
+         loading="lazy"
+         width="{{ block.settings.image.width }}"
+         height="{{ block.settings.image.height }}"
+         alt="{{ block.settings.image.alt | default: block.settings.name | escape }}">
+  {%- elsif block.settings.name != blank -%}
+    <span class="udc-fc__mono" aria-hidden="true">{{ block.settings.name | slice: 0 }}</span>
   {%- endif -%}
+
+  <span class="udc-fc__shade" aria-hidden="true"></span>
+
+  {%- if tag != blank -%}
+    <span class="udc-fc__tag"><span aria-hidden="true">✦</span>{{ tag }}</span>
+  {%- endif -%}
+
   <div class="udc-fc__body">
     {%- if block.settings.amount != blank -%}
       <span class="udc-fc__amount">{{ block.settings.amount }}</span>
