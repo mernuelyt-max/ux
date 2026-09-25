@@ -1,0 +1,160 @@
+{%- comment -%}
+  UDC — Página de producto (buy box)
+
+  Sin diseño de referencia recuperado: el artifact original era una landing
+  de una sola página, nunca tuvo una página de producto propia. Se construye
+  nueva, siguiendo el mismo sistema visual --udc-* que el resto del tema.
+
+  Todo el contenido (imagen, título, descripción, precio) sale en vivo del
+  objeto `product` de Shopify — nada se escribe a mano acá. Pensada para
+  templates/product.json, junto con udc-prod-resenas / udc-prod-testimonios /
+  udc-prod-video.
+
+  Los productos reales (ver Shopify admin) son todos de variante única
+  ("Default Title"), sin opciones ni planes de venta — por eso el formulario
+  no tiene selector de variante, solo un input oculto con el id de la
+  variante seleccionada.
+
+  Dos botones de compra:
+   · "Agregar al carrito" — POST normal a /cart/add, va al carrito (udc-cart).
+   · Botón de pago dinámico ({{ form | payment_button }}) — el widget nativo
+     de Shopify (Shop Pay / tarjeta / etc.), va directo a checkout. Es un
+     iframe de Shopify: no se puede re-skinear a los colores del tema, es
+     esperable que se vea distinto al resto de los botones.
+
+  Igual que udc-03-hero, oculta el header/footer nativos de Horizon (ver
+  udc-hide-chrome.liquid): mantiene la misma estética "sin distracciones"
+  del resto del sitio en vez de volver a mostrar el header claro de Horizon
+  encima de una página oscura.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+{% render 'udc-hide-chrome' %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
+  <div class="udc-pp__grid">
+    <div class="udc-pp__media" data-udc-reveal>
+      {%- if product.featured_image != blank -%}
+        <img src="{{ product.featured_image | image_url: width: 900 }}"
+             loading="lazy"
+             width="{{ product.featured_image.width }}"
+             height="{{ product.featured_image.height }}"
+             alt="{{ product.featured_image.alt | default: product.title | escape }}">
+      {%- endif -%}
+    </div>
+
+    <div class="udc-pp__info" data-udc-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      <h1 class="udc-h2 udc-pp__title">{{ product.title }}</h1>
+
+      {%- if product.description != blank -%}
+        <div class="udc-pp__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      <div class="udc-pp__price">
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <s class="udc-pp__compare">{{ current_variant.compare_at_price | money }}</s>
+        {%- endif -%}
+        <span class="udc-pp__pricenow">{{ current_variant.price | money }}</span>
+      </div>
+
+      {%- form 'product', product, class: 'udc-pp__form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        <button type="submit"
+                name="add"
+                class="udc-btn udc-pp__add"
+                {% unless current_variant.available %}disabled{% endunless %}>
+          {%- if current_variant.available -%}
+            {{ section.settings.add_text | default: 'Agregar al carrito →' }}
+          {%- else -%}
+            {{ section.settings.sold_out_text | default: 'Agotado' }}
+          {%- endif -%}
+        </button>
+
+        {%- if current_variant.available -%}
+          <div class="udc-pp__paybtn">{{ form | payment_button }}</div>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- if section.settings.support_text != blank -%}
+        <p class="udc-serif udc-pp__support">{{ section.settings.support_text }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.payment_row != blank -%}
+        <div class="udc-pp__pay">
+          {%- assign pays = section.settings.payment_row | split: ',' -%}
+          {%- for p in pays -%}
+            {%- assign p = p | strip -%}
+            {%- if p != blank -%}<span>{{ p }}</span>{%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #udc-pp-{{ section.id }}{overflow:hidden}
+
+  #udc-pp-{{ section.id }} .udc-pp__grid{
+    position:relative;display:grid;grid-template-columns:1fr;gap:clamp(28px,5vw,56px);
+    max-width:1080px;margin:0 auto}
+  @media (min-width:860px){
+    #udc-pp-{{ section.id }} .udc-pp__grid{grid-template-columns:minmax(0,420px) 1fr;align-items:start}
+  }
+
+  #udc-pp-{{ section.id }} .udc-pp__media{
+    position:relative;aspect-ratio:4/5;border-radius:18px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg2);
+    box-shadow:0 30px 70px rgba(0,0,0,.7)}
+  #udc-pp-{{ section.id }} .udc-pp__media img{
+    display:block;width:100%;height:100%;object-fit:cover}
+
+  #udc-pp-{{ section.id }} .udc-pp__title{margin:14px 0 0}
+
+  #udc-pp-{{ section.id }} .udc-pp__desc{
+    margin:18px 0 0;font-size:15px;line-height:1.6;color:#D9D9CF}
+  #udc-pp-{{ section.id }} .udc-pp__desc p{margin:0 0 12px}
+  #udc-pp-{{ section.id }} .udc-pp__desc p:last-child{margin-bottom:0}
+
+  #udc-pp-{{ section.id }} .udc-pp__price{
+    display:flex;align-items:baseline;gap:12px;margin:22px 0 0}
+  #udc-pp-{{ section.id }} .udc-pp__compare{font-size:16px;color:var(--udc-dim)}
+  #udc-pp-{{ section.id }} .udc-pp__pricenow{
+    font-family:var(--udc-anton);font-weight:400;font-size:clamp(26px,3vw,36px);color:var(--udc-text)}
+
+  #udc-pp-{{ section.id }} .udc-pp__form{margin:24px 0 0;display:flex;flex-direction:column;gap:14px}
+  #udc-pp-{{ section.id }} .udc-pp__add{width:100%}
+  #udc-pp-{{ section.id }} .udc-pp__add:disabled{
+    opacity:.5;cursor:not-allowed;box-shadow:none}
+  #udc-pp-{{ section.id }} .udc-pp__add:disabled:hover{transform:none}
+
+  #udc-pp-{{ section.id }} .udc-pp__support{
+    margin:18px 0 0;font-size:15px;color:var(--udc-muted)}
+
+  #udc-pp-{{ section.id }} .udc-pp__pay{
+    display:flex;flex-wrap:wrap;gap:clamp(14px,3vw,28px);margin-top:20px}
+  #udc-pp-{{ section.id }} .udc-pp__pay span{
+    font-size:13px;letter-spacing:.06em;color:var(--udc-dim);font-weight:700}
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Producto",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo" },
+    { "type": "text", "id": "add_text", "label": "Texto del botón", "default": "Agregar al carrito →" },
+    { "type": "text", "id": "sold_out_text", "label": "Texto sin stock", "default": "Agotado" },
+    { "type": "textarea", "id": "support_text", "label": "Texto de apoyo bajo el botón" },
+    { "type": "text", "id": "payment_row", "label": "Métodos de pago (separados por coma)", "info": "Vacío = no aparece." }
+  ],
+  "presets": [{ "name": "UDC · Producto" }]
+}
+{% endschema %}

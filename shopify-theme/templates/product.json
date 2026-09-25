@@ -1,0 +1,126 @@
+{
+  "sections": {
+    "main": {
+      "type": "udc-producto",
+      "settings": {
+        "eyebrow": "U del Closer",
+        "add_text": "Agregar al carrito →",
+        "sold_out_text": "Agotado"
+      }
+    },
+    "resenas": {
+      "type": "udc-prod-resenas",
+      "blocks": {
+        "r1": {
+          "type": "resena",
+          "settings": {
+            "stars": 5,
+            "title": "La U del closer tiene U problema!!!",
+            "text": "La U del closer tiene u problema, deberái de llamarse la U DE LA VIDA! lo que te enseñan ahí te cambia la vida te hace mejor y si lo aplicas el cambio no solo es laboral, es en tu propia manera de ser, pues ser vendedor es una manera de vivir, basada en el servicio, la humildad y el constante progreso de tu cliente y de ti mismo, abrazos!!!",
+            "author": "Javier",
+            "meta": "MX · 3 reseñas",
+            "date": "29 jun 2026",
+            "badge": "Opinión espontánea"
+          }
+        },
+        "r2": {
+          "type": "resena",
+          "settings": {
+            "stars": 5,
+            "title": "100x100 Recomendado",
+            "text": "He dado con Tito y la U a través de IG! Y realmente lo recomiendo al 100 por 100, no solo por el contenido de la excelente plataforma sino más aún por las clases y prácticas!!! Aprendizaje asegurado y mejor aún real para ponerlo en práctica en el día a día sin importar a lo que te dediques !",
+            "author": "Nicolás Lauria",
+            "meta": "AR · 1 opinión",
+            "date": "29 jun 2026",
+            "badge": "Opinión espontánea"
+          }
+        },
+        "r3": {
+          "type": "resena",
+          "settings": {
+            "stars": 5,
+            "title": "U CLOSER esta hecha por autenticos vendedores",
+            "text": "U CLOSER esta hecha por autenticos vendedores que saben trasnmitir el conocimiento y hacerlo vida, es increible el cambio, para bien, si me preguntas si deberias de entrar, te diria que vas tarde....",
+            "author": "Javier",
+            "meta": "MX · 3 reseñas",
+            "date": "21 may 2026",
+            "badge": "Opinión espontánea"
+          }
+        },
+        "r4": {
+          "type": "resena",
+          "settings": {
+            "stars": 5,
+            "title": "Recomendado a un 100%",
+            "text": "Recomendado a un 100%. Excelente manera de transmitir la información. Te cambia la mente.",
+            "author": "JULIETH CARREÑO",
+            "meta": "CO · 1 opinión",
+            "date": "25 jun 2026",
+            "badge": "Opinión espontánea"
+          }
+        },
+        "r5": {
+          "type": "resena",
+          "settings": {
+            "stars": 4,
+            "title": "Tino es una persona muy visionaria",
+            "text": "Tino es una persona muy visionaria. Sus videos no solo son motivadores, sino que realmente transforman la mentalidad .por ejemplo en uno de sus videos sobre emprendimiento mostro como pasar de una idea pequeña a un negocio propio. Aunque todavía no tengo un negocio propio , me hace pensar en las posibilidades a futuro . Además un de los libros que recomienda,´ Padre Rico ,Padre Pobre´ es buenísimo y también me abierto la mente sobre las finanzas",
+            "author": "Nicole Sofia Oviedo Bernal",
+            "meta": "CO · 2 reseñas",
+            "date": "22 jun 2026",
+            "badge": "Opinión espontánea"
+          }
+        },
+        "r6": {
+          "type": "resena",
+          "settings": {
+            "stars": 5,
+            "title": "Super recomendable",
+            "text": "Super recomendable , me fue muy bien .",
+            "author": "Claudia Guarachi Alvarado",
+            "meta": "AR · 1 opinión",
+            "date": "25 jun 2026",
+            "badge": "Opinión espontánea"
+          }
+        }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
+      "settings": {
+        "eyebrow": "Opiniones en Trustpilot",
+        "title_1": "Lo que dicen",
+        "title_2": "los que ya pasaron por la U",
+        "grade": "Excelente",
+        "score": "4,8",
+        "summary": "Opiniones verificadas en Trustpilot",
+        "trustpilot_url": "https://es.trustpilot.com/review/factorstudios.io",
+        "link_text": "Ver todas en Trustpilot",
+        "show_distribution": true,
+        "pct_5": 83,
+        "pct_4": 17,
+        "pct_3": 0,
+        "pct_2": 0,
+        "pct_1": 0,
+        "animate": false,
+        "speed": 7
+      }
+    },
+    "testimonios": {
+      "type": "udc-prod-testimonios",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Testimonios",
+        "title_1": "Lo que dicen",
+        "title_2": "nuestros alumnos"
+      }
+    },
+    "video": {
+      "type": "udc-prod-video",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Mirá cómo funciona",
+        "title": "Conocé el sistema por dentro"
+      }
+    }
+  },
+  "order": ["main", "resenas", "testimonios", "video"]
+}
