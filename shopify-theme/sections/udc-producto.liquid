@@ -38,6 +38,25 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 {%- assign tier1 = product.variants.first -%}
 
+{%- comment -%}
+  Barra mínima con el logo: el header nativo está oculto (udc-hide-chrome,
+  full: true), pero el usuario quiere conservar el logo arriba. Usa el
+  logo de la configuración del tema (settings.logo) y, si no hay, el nombre
+  de la tienda como texto — igual que el bloque _header-logo de Horizon.
+{%- endcomment -%}
+{%- if section.settings.show_brand -%}
+  <header class="udc udc-pp-brand" id="udc-pp-brand-{{ section.id }}">
+    <a href="{{ routes.root_url }}" class="udc-pp-brand__link">
+      {%- if settings.logo != blank -%}
+        <img src="{{ settings.logo | image_url: height: 120 }}" alt="{{ settings.logo.alt | default: shop.name | escape }}"
+             width="{{ settings.logo.width }}" height="{{ settings.logo.height }}" class="udc-pp-brand__img">
+      {%- else -%}
+        <span class="udc-pp-brand__name">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+  </header>
+{%- endif -%}
+
 <section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
   <div class="udc-pp__grid">
     <div class="udc-pp__media" data-udc-reveal>
@@ -253,6 +272,17 @@
 </section>
 
 <style>
+  #udc-pp-brand-{{ section.id }}{
+    display:flex;justify-content:center;align-items:center;padding:18px 20px}
+  #udc-pp-brand-{{ section.id }} .udc-pp-brand__link{display:inline-flex;align-items:center;color:var(--udc-text);text-decoration:none}
+  #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{
+    display:block;width:auto;height:{{ settings.logo_height_mobile | default: 28 }}px;object-fit:contain}
+  @media (min-width:750px){
+    #udc-pp-brand-{{ section.id }} .udc-pp-brand__img{height:{{ settings.logo_height | default: 36 }}px}
+  }
+  #udc-pp-brand-{{ section.id }} .udc-pp-brand__name{
+    font-family:var(--udc-anton);font-size:20px;letter-spacing:.06em;text-transform:uppercase}
+
   #udc-pp-{{ section.id }}{overflow:hidden}
 
   #udc-pp-{{ section.id }} .udc-pp__grid{
@@ -419,6 +449,7 @@
   "name": "UDC · Producto",
   "tag": "section",
   "settings": [
+    { "type": "checkbox", "id": "show_brand", "label": "Mostrar logo arriba", "default": true, "info": "El header y el footer del tema están ocultos en esta página. El logo sale de Configuración del tema → Logo; si no hay, se muestra el nombre de la tienda." },
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
 
     { "type": "header", "content": "Calificación bajo el título" },
