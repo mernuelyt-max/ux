@@ -40,16 +40,17 @@
 
 {%- comment -%}
   Barra mínima con el logo: el header nativo está oculto (udc-hide-chrome,
-  full: true), pero el usuario quiere conservar el logo arriba. Usa el
-  logo de la configuración del tema (settings.logo) y, si no hay, el nombre
-  de la tienda como texto — igual que el bloque _header-logo de Horizon.
+  full: true), pero el usuario quiere conservar el logo arriba. Usa la
+  imagen de la sección (brand_logo), si no el logo de la configuración del
+  tema (settings.logo) y, si tampoco hay, el nombre de la tienda como texto.
 {%- endcomment -%}
+{%- assign brand_logo = section.settings.brand_logo | default: settings.logo -%}
 {%- if section.settings.show_brand -%}
   <header class="udc udc-pp-brand" id="udc-pp-brand-{{ section.id }}">
     <a href="{{ routes.root_url }}" class="udc-pp-brand__link">
-      {%- if settings.logo != blank -%}
-        <img src="{{ settings.logo | image_url: height: 240 }}" alt="{{ settings.logo.alt | default: shop.name | escape }}"
-             width="{{ settings.logo.width }}" height="{{ settings.logo.height }}" class="udc-pp-brand__img">
+      {%- if brand_logo != blank -%}
+        <img src="{{ brand_logo | image_url: height: 240 }}" alt="{{ brand_logo.alt | default: shop.name | escape }}"
+             width="{{ brand_logo.width }}" height="{{ brand_logo.height }}" class="udc-pp-brand__img">
       {%- else -%}
         <span class="udc-pp-brand__name">{{ shop.name }}</span>
       {%- endif -%}
@@ -450,6 +451,7 @@
   "tag": "section",
   "settings": [
     { "type": "checkbox", "id": "show_brand", "label": "Mostrar logo arriba", "default": true, "info": "El header y el footer del tema están ocultos en esta página. El logo sale de Configuración del tema → Logo; si no hay, se muestra el nombre de la tienda." },
+    { "type": "image_picker", "id": "brand_logo", "label": "Logo", "info": "Vacío = logo de Configuración del tema." },
     { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
 

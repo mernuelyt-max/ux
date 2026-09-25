@@ -42,7 +42,8 @@
         "eyebrow": "U del Closer",
         "bump_product": "shopify://products/asesoria-1-a-1-con-tino",
         "add_text": "Agregar al carrito →",
-        "sold_out_text": "Agotado"
+        "sold_out_text": "Agotado",
+        "brand_logo": "shopify://shop_images/udc-logo.png"
       }
     },
     "udc_04": {
