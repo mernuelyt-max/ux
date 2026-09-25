@@ -33,7 +33,8 @@
       <a href="{{ section.settings.empty_url | default: '/' }}" class="udc-btn">{{ section.settings.empty_cta | default: 'Ver membresías →' }}</a>
     </div>
   {%- else -%}
-    {%- form 'cart', cart, class: 'udc-ct__form', id: 'udc-ct-form-' | append: section.id -%}
+    {%- assign cart_form_id = 'udc-ct-form-' | append: section.id -%}
+    {%- form 'cart', cart, class: 'udc-ct__form', id: cart_form_id -%}
       <div class="udc-ct__lines">
         {%- for item in cart.items -%}
           <div class="udc-ct__line" data-udc-cart-line="{{ forloop.index }}">
