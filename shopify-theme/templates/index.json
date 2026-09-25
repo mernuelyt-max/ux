@@ -15,7 +15,6 @@
     },
     "udc_02": {
       "type": "udc-02-nav",
-      "disabled": true,
       "settings": {}
     },
     "udc_03": {
@@ -39,7 +38,6 @@
     },
     "udc_05": {
       "type": "udc-05-statement",
-      "disabled": true,
       "blocks": {
         "b1": { "type": "chip", "settings": { "text": "48 páginas" } },
         "b2": { "type": "chip", "settings": { "text": "Formato PDF" } },
@@ -69,7 +67,6 @@
     },
     "udc_07": {
       "type": "udc-07-contenido",
-      "disabled": true,
       "blocks": {
         "b1": { "type": "chapter", "settings": { "title": "La mentalidad del closer", "text": "Cómo piensa quien cierra ventas todos los días y por qué la actitud vende antes que la técnica." } },
         "b2": { "type": "chapter", "settings": { "title": "Prospección inteligente", "text": "Dónde encontrar personas que ya quieren comprar y cómo abrir conversaciones sin sonar a vendedor." } },
@@ -85,7 +82,6 @@
     },
     "udc_08": {
       "type": "udc-08-pilares",
-      "disabled": true,
       "blocks": {
         "b1": { "type": "pilar", "settings": { "title": "Prospección", "text": "Cómo encontrar personas que ya quieren comprar y abrir conversaciones sin sonar a vendedor. Incluye mensajes de primer contacto y cómo calificar antes de agendar." } },
         "b2": { "type": "pilar", "settings": { "title": "Llamada", "text": "La estructura completa de una llamada de venta: preguntas de diagnóstico, escucha activa y cómo manejar las objeciones más comunes sin discutir." } },
@@ -332,7 +328,6 @@
     },
     "udc_14": {
       "type": "udc-14-packs",
-      "disabled": true,
       "blocks": {
         "b1": {
           "type": "pack",
@@ -417,7 +412,6 @@
     },
     "udc_19": {
       "type": "udc-19-cta-final",
-      "disabled": true,
       "settings": {}
     },
     "udc_20": {
@@ -438,7 +432,6 @@
     },
     "udc_22": {
       "type": "udc-22-footer",
-      "disabled": true,
       "settings": {}
     }
   },
