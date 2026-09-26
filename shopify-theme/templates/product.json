@@ -47,7 +47,8 @@
         "pack_1": "shopify://products/guia-digital-convertite-en-closer-de-ventas",
         "pack_2": "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc",
         "pack_3": "shopify://products/guia-digital-acompanamento-1-1",
-        "pack_1_badge": "Entrega inmediata"
+        "pack_1_badge": "Entrega inmediata",
+        "pack_3_no_bump": true
       }
     },
     "udc_04": {

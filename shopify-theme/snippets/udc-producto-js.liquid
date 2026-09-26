@@ -7,7 +7,8 @@
      udc-01-temporizador — no se reinicia en cada visita).
    · Selector de cantidad / packs: clickear una tarjeta la marca como
      seleccionada y cambia el input oculto "id" del form al variant_id de
-     esa tarjeta. Con packs también actualiza el precio de arriba.
+     esa tarjeta. Con packs también actualiza el precio de arriba y oculta
+     el order bump si el pack elegido lo tiene marcado (pack_N_no_bump).
    · Al enviar el form, si hay JS, se intercepta y se agrega al carrito
      por Cart AJAX API (/cart/add.js) la variante elegida + el bump si
      está tildado, en un solo pedido, y se redirige a /cart. Si el fetch
@@ -50,6 +51,7 @@
     var stickyPrice = sticky ? sticky.querySelector('[data-udc-pp-sticky-price]') : null;
 
     var tierInput = root.querySelector('[data-udc-pp-variant-input]');
+    var bumpBox = root.querySelector('[data-udc-pp-bump]');
     var priceBox = root.querySelector('[data-udc-pp-price]');
     var tiers = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tier-radio]'));
     tiers.forEach(function (radio) {
@@ -58,6 +60,13 @@
         radio.closest('.udc-pp__tier').classList.add('is-selected');
         if (tierInput) tierInput.value = radio.value;
         if (stickyPrice && radio.getAttribute('data-price')) stickyPrice.textContent = radio.getAttribute('data-price');
+        // Un pack que ya incluye el producto del bump (pack_N_no_bump) lo oculta
+        // y lo destilda, para no agregarlo dos veces al carrito.
+        if (bumpBox) {
+          var noBump = radio.hasAttribute('data-no-bump');
+          bumpBox.hidden = noBump;
+          if (noBump) { var bt = bumpBox.querySelector('[data-udc-pp-bump-toggle]'); if (bt) bt.checked = false; }
+        }
         // Packs (distintos productos): el precio de arriba sigue al pack elegido.
         // En el selector de cantidad no hay data-off y el precio de arriba no cambia.
         if (priceBox && radio.hasAttribute('data-off')) {

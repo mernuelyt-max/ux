@@ -58,9 +58,12 @@
   {%- endif -%}
 {%- endfor -%}
 {%- if pack_match > 0 -%}{%- assign pack_sel = pack_match -%}{%- endif -%}
+{%- assign bump_hidden = false -%}
 {%- if pack_sel > 0 -%}
   {%- assign key = 'pack_' | append: pack_sel -%}
   {%- assign first_variant = section.settings[key].selected_or_first_available_variant -%}
+  {%- assign key = 'pack_' | append: pack_sel | append: '_no_bump' -%}
+  {%- if section.settings[key] -%}{%- assign bump_hidden = true -%}{%- endif -%}
 {%- else -%}
   {%- assign first_variant = tier1 -%}
 {%- endif -%}
@@ -146,6 +149,8 @@
               {%- assign pk_label = section.settings[key] -%}
               {%- assign key = 'pack_' | append: n | append: '_badge' -%}
               {%- assign pk_badge = section.settings[key] -%}
+              {%- assign key = 'pack_' | append: n | append: '_no_bump' -%}
+              {%- assign pk_no_bump = section.settings[key] -%}
               {%- assign pk_save = pv.compare_at_price | minus: pv.price -%}
               {%- assign pk_off = 0 -%}
               {%- if pv.compare_at_price > pv.price -%}
@@ -158,6 +163,7 @@
                        data-price="{{ pv.price | money | escape }}"
                        data-compare="{% if pv.compare_at_price > pv.price %}{{ pv.compare_at_price | money | escape }}{% endif %}"
                        data-off="{{ pk_off }}"
+                       {% if pk_no_bump %}data-no-bump{% endif %}
                        data-udc-pp-tier-radio {% if is_sel %}checked{% endif %}{% unless pv.available %} disabled{% endunless %}>
                 <span class="udc-pp__tier__radio" aria-hidden="true"></span>
 
@@ -243,7 +249,7 @@
 
         {%- if section.settings.bump_product != blank and section.settings.bump_product.selected_or_first_available_variant.available -%}
           {%- assign bump_variant = section.settings.bump_product.selected_or_first_available_variant -%}
-          <label class="udc-pp__bump">
+          <label class="udc-pp__bump" data-udc-pp-bump{% if bump_hidden %} hidden{% endif %}>
             <input type="checkbox" data-udc-pp-bump-toggle>
             {%- if section.settings.bump_product.featured_image != blank -%}
               <span class="udc-pp__bump__thumb">
@@ -447,7 +453,8 @@
   #udc-pp-{{ section.id }} .udc-pp__tier__badge--extra{background:var(--udc-accent);color:#fff}
   #udc-pp-{{ section.id }} .udc-pp__tier__save{font-size:12px;color:var(--udc-dim)}
 
-  #udc-pp-{{ section.id }} .udc-pp__price [hidden]{display:none}
+  #udc-pp-{{ section.id }} .udc-pp__price [hidden],
+  #udc-pp-{{ section.id }} .udc-pp__bump[hidden]{display:none}
 
   #udc-pp-{{ section.id }} .udc-pp__pack__thumb{
     flex:0 0 auto;width:56px;height:56px;border-radius:12px;overflow:hidden;
@@ -559,12 +566,15 @@
     { "type": "product", "id": "pack_1", "label": "Pack 1" },
     { "type": "text", "id": "pack_1_label", "label": "Pack 1 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_1_badge", "label": "Pack 1 · badge (vacío = -% OFF)" },
+    { "type": "checkbox", "id": "pack_1_no_bump", "label": "Pack 1 · ocultar el order bump", "default": false },
     { "type": "product", "id": "pack_2", "label": "Pack 2" },
     { "type": "text", "id": "pack_2_label", "label": "Pack 2 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_2_badge", "label": "Pack 2 · badge (vacío = -% OFF)" },
+    { "type": "checkbox", "id": "pack_2_no_bump", "label": "Pack 2 · ocultar el order bump", "default": false },
     { "type": "product", "id": "pack_3", "label": "Pack 3" },
     { "type": "text", "id": "pack_3_label", "label": "Pack 3 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_3_badge", "label": "Pack 3 · badge (vacío = -% OFF)" },
+    { "type": "checkbox", "id": "pack_3_no_bump", "label": "Pack 3 · ocultar el order bump", "default": false },
 
     { "type": "header", "content": "Order bump" },
     { "type": "product", "id": "bump_product", "label": "Producto adicional (opcional)" },
