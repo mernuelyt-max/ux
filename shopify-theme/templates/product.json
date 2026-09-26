@@ -48,7 +48,8 @@
         "pack_2": "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc",
         "pack_3": "shopify://products/guia-digital-acompanamento-1-1",
         "pack_1_badge": "Entrega inmediata",
-        "pack_3_no_bump": true
+        "pack_3_no_bump": true,
+        "gift_text": ""
       }
     },
     "udc_04": {
