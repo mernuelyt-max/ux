@@ -1,0 +1,396 @@
+{%- comment -%}
+  UDC — Carrusel de Reels (videos 9:16)
+
+  Mismo motor coverflow que sections/udc-facturacion.liquid (el carrusel de
+  testimonios 9:16 que pidió el usuario): la tarjeta activa al centro con
+  glow rojo que late y un brillo que la cruza, las vecinas asoman a los
+  costados más chicas y apagadas, loop infinito sin clonar nodos, flechas,
+  puntos, swipe y tocar una tarjeta lateral.
+
+  Lo propio de los videos:
+   · Cada bloque "reel" es un video subido a Shopify (setting "video", se
+     sube desde el editor) + portada opcional + título y detalle opcionales.
+   · Solo reproduce el reel activo, y solo mientras la sección está en
+     pantalla: muteado e inline (como Instagram, única forma de autoplay en
+     celular). Barra de progreso roja abajo. Al terminar pasa al siguiente.
+   · Tocar el reel activo lo pausa / reanuda; el botón de sonido activa el
+     audio para todos los reels.
+   · Un bloque sin video avanza por tiempo (setting interval).
+
+  Sin contenido inventado: sin bloques, en el editor se muestran marcos
+  vacíos con una indicación para subir los videos; en la tienda la sección
+  no se muestra hasta que haya al menos un reel con video.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign reel_count = 0 -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.video != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if reel_count > 0 or request.design_mode -%}
+<section class="udc udc-top udc-rv" id="udc-rv-{{ section.id }}">
+  <span class="udc-glow udc-rv__glow" aria-hidden="true"></span>
+
+  <div class="udc-rv__head" data-udc-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="udc-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+    <h2 class="udc-h2 udc-rv__title">
+      {{ section.settings.title_1 }}
+      {%- if section.settings.title_2 != blank -%}<br><span class="udc-serif udc-serif-glow">{{ section.settings.title_2 }}</span>{%- endif -%}
+    </h2>
+  </div>
+
+  <div class="udc-rv__carousel" data-udc-reveal data-interval="{{ section.settings.interval | default: 6 }}">
+    <div class="udc-rv__stage" data-udc-rv-stage>
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div class="udc-rv__slide{% if forloop.first %} is-active{% endif %}" data-udc-rv-slide="{{ forloop.index0 }}">
+            <div class="udc-rv__card" {{ block.shopify_attributes }}>
+              {%- if block.settings.video != blank -%}
+                {{ block.settings.video | video_tag: muted: true, playsinline: true, preload: 'metadata', class: 'udc-rv__video', image_size: '720x' }}
+              {%- endif -%}
+              {%- if block.settings.cover != blank -%}
+                <img class="udc-rv__cover" src="{{ block.settings.cover | image_url: width: 720 }}" loading="lazy"
+                     width="{{ block.settings.cover.width }}" height="{{ block.settings.cover.height }}" alt="">
+              {%- endif -%}
+              {%- if block.settings.video == blank -%}
+                <span class="udc-rv__empty" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="44" height="44" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  {%- if request.design_mode -%}<small>Subí un video 9:16 en este bloque</small>{%- endif -%}
+                </span>
+              {%- endif -%}
+
+              <span class="udc-rv__shade" aria-hidden="true"></span>
+
+              {%- if section.settings.tag != blank -%}
+                <span class="udc-rv__tag"><span class="udc-rv__dot" aria-hidden="true"></span>{{ section.settings.tag }}</span>
+              {%- endif -%}
+
+              {%- if block.settings.video != blank -%}
+                <button type="button" class="udc-rv__sound" data-udc-rv-sound aria-label="Activar sonido">
+                  <svg class="udc-rv__ico-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+                  <svg class="udc-rv__ico-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+                </button>
+                <span class="udc-rv__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank or block.settings.caption != blank -%}
+                <div class="udc-rv__body">
+                  {%- if block.settings.title != blank -%}<span class="udc-rv__name">{{ block.settings.title }}</span>{%- endif -%}
+                  {%- if block.settings.caption != blank -%}<span class="udc-rv__caption">{{ block.settings.caption }}</span>{%- endif -%}
+                </div>
+              {%- endif -%}
+
+              <span class="udc-rv__progress" aria-hidden="true"><span></span></span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..5) -%}
+          <div class="udc-rv__slide{% if forloop.first %} is-active{% endif %}" data-udc-rv-slide="{{ forloop.index0 }}">
+            <div class="udc-rv__card">
+              <span class="udc-rv__empty" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="44" height="44" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <small>Agregá bloques "Reel" y subí tus videos 9:16</small>
+              </span>
+              <span class="udc-rv__shade" aria-hidden="true"></span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <div class="udc-rv__controls">
+      <button type="button" class="udc-rv__arrow" data-udc-rv-prev aria-label="Reel anterior">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="udc-rv__dots" data-udc-rv-dots></div>
+      <button type="button" class="udc-rv__arrow" data-udc-rv-next aria-label="Reel siguiente">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  #udc-rv-{{ section.id }}{position:relative;overflow:hidden;--rv-w:clamp(220px,60vw,290px)}
+  #udc-rv-{{ section.id }} .udc-rv__glow{
+    top:52%;left:50%;translate:-50% -50%;width:600px;height:600px;filter:blur(120px);opacity:.3}
+  #udc-rv-{{ section.id }} .udc-rv__head{text-align:center;position:relative}
+  #udc-rv-{{ section.id }} .udc-rv__title{margin-top:14px}
+
+  /* Tarjeta 9:16 */
+  #udc-rv-{{ section.id }} .udc-rv__card{
+    position:relative;width:var(--rv-w);aspect-ratio:9/16;border-radius:24px;overflow:hidden;isolation:isolate;
+    border:1px solid var(--udc-border);
+    background:
+      radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 38%, transparent), transparent 62%),
+      linear-gradient(180deg,#161111,#070707);
+    box-shadow:0 30px 70px rgba(0,0,0,.7)}
+  #udc-rv-{{ section.id }} .udc-rv__video,
+  #udc-rv-{{ section.id }} .udc-rv__cover{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:block}
+  #udc-rv-{{ section.id }} .udc-rv__cover{z-index:1;transition:opacity .4s ease}
+  #udc-rv-{{ section.id }} .udc-rv__card.is-playing .udc-rv__cover{opacity:0}
+  #udc-rv-{{ section.id }} .udc-rv__empty{
+    position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+    color:rgba(255,255,255,.18);text-align:center;padding:0 22px}
+  #udc-rv-{{ section.id }} .udc-rv__empty small{font-size:11px;letter-spacing:.06em;color:var(--udc-dim)}
+  #udc-rv-{{ section.id }} .udc-rv__shade{
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,transparent 20%,transparent 55%,rgba(0,0,0,.88) 100%)}
+
+  #udc-rv-{{ section.id }} .udc-rv__tag{
+    position:absolute;top:14px;left:14px;z-index:4;display:inline-flex;align-items:center;gap:7px;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#fff;
+    background:rgba(5,5,5,.55);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 12px;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #udc-rv-{{ section.id }} .udc-rv__dot{
+    width:7px;height:7px;border-radius:50%;background:var(--udc-accent);
+    box-shadow:0 0 0 0 color-mix(in srgb, var(--udc-accent) 70%, transparent);animation:udcRvPing 1.6s ease-out infinite}
+  @keyframes udcRvPing{0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--udc-accent) 70%, transparent)}100%{box-shadow:0 0 0 9px transparent}}
+
+  #udc-rv-{{ section.id }} .udc-rv__sound{
+    position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;padding:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    background:rgba(5,5,5,.55);border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .3s ease}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__sound{opacity:1}
+  #udc-rv-{{ section.id }} .udc-rv__ico-on{display:none}
+  #udc-rv-{{ section.id }}.is-sound .udc-rv__ico-on{display:block}
+  #udc-rv-{{ section.id }}.is-sound .udc-rv__ico-off{display:none}
+
+  #udc-rv-{{ section.id }} .udc-rv__play{
+    position:absolute;top:50%;left:50%;z-index:4;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;pointer-events:none;
+    background:color-mix(in srgb, var(--udc-accent) 85%, transparent);
+    box-shadow:0 0 40px color-mix(in srgb, var(--udc-accent) 60%, transparent);
+    transition:opacity .3s ease,transform .3s ease}
+  #udc-rv-{{ section.id }} .udc-rv__card.is-playing .udc-rv__play{opacity:0;transform:scale(.7)}
+
+  #udc-rv-{{ section.id }} .udc-rv__body{
+    position:absolute;left:0;right:0;bottom:0;z-index:4;padding:18px 18px 22px;
+    display:flex;flex-direction:column;gap:4px;pointer-events:none}
+  #udc-rv-{{ section.id }} .udc-rv__name{
+    font-family:var(--udc-anton);font-size:18px;line-height:1.15;text-transform:uppercase;color:#fff}
+  #udc-rv-{{ section.id }} .udc-rv__caption{font-size:12px;color:var(--udc-muted)}
+
+  #udc-rv-{{ section.id }} .udc-rv__progress{
+    position:absolute;left:14px;right:14px;bottom:10px;z-index:5;height:3px;border-radius:999px;
+    background:rgba(255,255,255,.18);overflow:hidden;opacity:0;transition:opacity .3s ease}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__progress{opacity:1}
+  #udc-rv-{{ section.id }} .udc-rv__progress span{
+    display:block;height:100%;width:calc(var(--p, 0) * 100%);background:var(--udc-accent);
+    box-shadow:0 0 10px var(--udc-accent)}
+
+  /* Brillo que cruza la tarjeta activa */
+  #udc-rv-{{ section.id }} .udc-rv__card::after{
+    content:'';position:absolute;inset:0;z-index:6;pointer-events:none;
+    background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.14) 50%,transparent 62%);
+    transform:translateX(-130%)}
+
+  /* Coverflow */
+  #udc-rv-{{ section.id }} .udc-rv__carousel{position:relative;margin-top:36px}
+  #udc-rv-{{ section.id }} .udc-rv__stage{
+    position:relative;height:calc(var(--rv-w) * 16 / 9 + 48px);touch-action:pan-y;user-select:none}
+  #udc-rv-{{ section.id }} .udc-rv__slide{
+    position:absolute;top:24px;left:50%;width:var(--rv-w);margin-left:calc(var(--rv-w) / -2);
+    transform:translateX(calc(var(--o, 0) * var(--rv-w) * .64)) scale(var(--s, 1));
+    transition:transform .75s cubic-bezier(.2,.7,.2,1),opacity .75s ease,filter .75s ease;
+    opacity:0;pointer-events:none;z-index:1}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active{opacity:1;pointer-events:auto;z-index:3;cursor:pointer}
+  #udc-rv-{{ section.id }} .udc-rv__slide[data-pos="1"]{
+    opacity:.55;filter:brightness(.55) saturate(.8);pointer-events:auto;cursor:pointer;z-index:2}
+  #udc-rv-{{ section.id }} .udc-rv__slide[data-pos="2"]{opacity:.22;filter:brightness(.4);z-index:1}
+  #udc-rv-{{ section.id }} .udc-rv__slide[data-pos="hidden"]{opacity:0}
+
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__card{
+    border-color:var(--udc-accent);animation:udcRvGlow 3.2s ease-in-out infinite}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__card::after{animation:udcRvShine 5.5s ease-in-out infinite 1s}
+
+  #udc-rv-{{ section.id }} .udc-rv__controls{
+    position:relative;z-index:4;display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px}
+  #udc-rv-{{ section.id }} .udc-rv__arrow{
+    width:44px;height:44px;border-radius:50%;padding:0;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;
+    color:var(--udc-text);background:var(--udc-bg2);border:1px solid var(--udc-border);
+    transition:border-color .2s ease,box-shadow .2s ease,color .2s ease}
+  #udc-rv-{{ section.id }} .udc-rv__arrow:hover{
+    border-color:var(--udc-accent);color:var(--udc-accent);
+    box-shadow:0 0 24px color-mix(in srgb, var(--udc-accent) 40%, transparent)}
+  #udc-rv-{{ section.id }} .udc-rv__dots{display:flex;gap:8px}
+  #udc-rv-{{ section.id }} .udc-rv__dots button{
+    width:7px;height:7px;border-radius:999px;background:var(--udc-line2);border:0;padding:0;cursor:pointer;
+    transition:width .3s ease,background .3s ease}
+  #udc-rv-{{ section.id }} .udc-rv__dots button.is-active{
+    width:22px;background:var(--udc-accent);box-shadow:0 0 12px color-mix(in srgb, var(--udc-accent) 60%, transparent)}
+
+  @keyframes udcRvGlow{
+    0%,100%{box-shadow:0 0 0 1px var(--udc-accent),0 0 36px color-mix(in srgb, var(--udc-accent) 35%, transparent),0 30px 70px rgba(0,0,0,.7)}
+    50%{box-shadow:0 0 0 1px var(--udc-accent),0 0 90px color-mix(in srgb, var(--udc-accent) 65%, transparent),0 30px 70px rgba(0,0,0,.7)}}
+  @keyframes udcRvShine{0%{transform:translateX(-130%)}35%,100%{transform:translateX(130%)}}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-rv-{{ section.id }} .udc-rv__slide{transition:none}
+    #udc-rv-{{ section.id }} .udc-rv__card,
+    #udc-rv-{{ section.id }} .udc-rv__card::after,
+    #udc-rv-{{ section.id }} .udc-rv__dot{animation:none !important}
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-rv-{{ section.id }}');
+    if (!root) return;
+    var carousel = root.querySelector('.udc-rv__carousel');
+    var slides = Array.prototype.slice.call(carousel.querySelectorAll('[data-udc-rv-slide]'));
+    var n = slides.length;
+    if (!n) return;
+
+    var dotsWrap = carousel.querySelector('[data-udc-rv-dots]');
+    var dots = slides.map(function (_, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Ver reel ' + (i + 1));
+      dotsWrap.appendChild(b);
+      return b;
+    });
+    if (n < 2) carousel.querySelector('.udc-rv__controls').hidden = true;
+
+    var videoOf = function (slide) { return slide.querySelector('video'); };
+    var cardOf = function (slide) { return slide.querySelector('.udc-rv__card'); };
+    var soundOn = false;
+    var inView = false;
+    var paused = false;
+    var active = 0;
+    var timer = null;
+    var interval = (parseFloat(carousel.getAttribute('data-interval')) || 6) * 1000;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    slides.forEach(function (slide) {
+      var v = videoOf(slide);
+      if (!v) return;
+      v.muted = true;
+      v.playsInline = true;
+      v.removeAttribute('controls');
+      v.addEventListener('timeupdate', function () {
+        if (v.duration) cardOf(slide).style.setProperty('--p', (v.currentTime / v.duration).toFixed(4));
+      });
+      v.addEventListener('playing', function () { cardOf(slide).classList.add('is-playing'); });
+      v.addEventListener('pause', function () { cardOf(slide).classList.remove('is-playing'); });
+      v.addEventListener('ended', function () { if (slides[active] === slide && n > 1) go(active + 1); else v.play(); });
+    });
+
+    var stopTimer = function () { if (timer) clearTimeout(timer); timer = null; };
+    var playActive = function () {
+      stopTimer();
+      var slide = slides[active];
+      var v = videoOf(slide);
+      if (!inView || paused) { if (v) v.pause(); return; }
+      if (v) {
+        v.muted = !soundOn;
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else if (n > 1 && !reduce) {
+        timer = setTimeout(function () { go(active + 1); }, interval);
+      }
+    };
+
+    var render = function () {
+      slides.forEach(function (slide, i) {
+        var o = i - active;
+        if (o > n / 2) o -= n;
+        if (o < -n / 2) o += n;
+        var a = Math.abs(o);
+        slide.style.setProperty('--o', o);
+        slide.style.setProperty('--s', a === 0 ? 1 : (a === 1 ? 0.84 : 0.7));
+        slide.setAttribute('data-pos', a > 2 ? 'hidden' : String(a));
+        slide.classList.toggle('is-active', o === 0);
+        var v = videoOf(slide);
+        if (v && o !== 0) { v.pause(); try { v.currentTime = 0; } catch (e) {} cardOf(slide).style.setProperty('--p', 0); }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === active); });
+    };
+    var go = function (i) { active = (i + n) % n; paused = false; render(); playActive(); };
+    render();
+
+    carousel.querySelector('[data-udc-rv-prev]').addEventListener('click', function () { go(active - 1); });
+    carousel.querySelector('[data-udc-rv-next]').addEventListener('click', function () { go(active + 1); });
+    dots.forEach(function (d, i) { d.addEventListener('click', function () { go(i); }); });
+
+    slides.forEach(function (slide, i) {
+      slide.addEventListener('click', function (e) {
+        if (e.target.closest('[data-udc-rv-sound]')) return;
+        if (i !== active) { go(i); return; }
+        var v = videoOf(slide);
+        if (!v) return;
+        paused = !v.paused;
+        if (paused) v.pause(); else playActive();
+      });
+    });
+
+    root.addEventListener('click', function (e) {
+      if (!e.target.closest('[data-udc-rv-sound]')) return;
+      soundOn = !soundOn;
+      root.classList.toggle('is-sound', soundOn);
+      root.querySelectorAll('[data-udc-rv-sound]').forEach(function (b) {
+        b.setAttribute('aria-label', soundOn ? 'Silenciar' : 'Activar sonido');
+      });
+      var v = videoOf(slides[active]);
+      if (v) { v.muted = !soundOn; if (v.paused && !paused) playActive(); }
+    });
+
+    var stage = carousel.querySelector('[data-udc-rv-stage]');
+    var x0 = null;
+    stage.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      x0 = null;
+      if (Math.abs(dx) > 40) go(dx < 0 ? active + 1 : active - 1);
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        inView = entries[0].isIntersecting;
+        playActive();
+      }, { threshold: 0.35 }).observe(stage);
+    } else {
+      inView = true;
+      playActive();
+    }
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "UDC · Reels",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Reels" },
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "La U del Closer" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "en video" },
+    { "type": "text", "id": "tag", "label": "Píldora de cada reel (vacío = ocultar)", "default": "Reel" },
+    { "type": "range", "id": "interval", "label": "Segundos por reel sin video", "min": 3, "max": 15, "step": 1, "default": 6, "info": "Los reels con video pasan al siguiente cuando terminan." }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "Reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
+        { "type": "image_picker", "id": "cover", "label": "Portada (opcional)", "info": "Se ve hasta que arranca el video." },
+        { "type": "text", "id": "title", "label": "Título (opcional)" },
+        { "type": "text", "id": "caption", "label": "Detalle (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Reels" }]
+}
+{% endschema %}

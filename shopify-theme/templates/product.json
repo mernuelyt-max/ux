@@ -941,6 +941,10 @@
         "limit": 3,
         "add_text": "+ Agregar"
       }
+    },
+    "reels": {
+      "type": "udc-reels",
+      "settings": {}
     }
   },
   "order": [
@@ -948,6 +952,7 @@
     "udc_04",
     "facturacion",
     "cinta",
+    "reels",
     "udc_05",
     "udc_06",
     "udc_07",
