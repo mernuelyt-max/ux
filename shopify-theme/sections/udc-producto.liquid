@@ -46,27 +46,34 @@
   pack elegido (1-3), 0 = sin packs (selector de cantidad).
   first_variant = variante que arranca elegida (precio de arriba, input id,
   barra sticky).
+  Se lee cada setting por su nombre (section.settings.pack_1, …) y se
+  chequea .id en vez de "!= blank": una lectura dinámica
+  section.settings['pack_' | append: n] dejaba los packs vacíos.
 {%- endcomment -%}
+{%- assign pack_1 = section.settings.pack_1 -%}
+{%- assign pack_2 = section.settings.pack_2 -%}
+{%- assign pack_3 = section.settings.pack_3 -%}
 {%- assign pack_sel = 0 -%}
-{%- assign pack_match = 0 -%}
-{%- for n in (1..3) -%}
-  {%- assign key = 'pack_' | append: n -%}
-  {%- assign pk = section.settings[key] -%}
-  {%- if pk != blank -%}
-    {%- if pack_sel == 0 -%}{%- assign pack_sel = n -%}{%- endif -%}
-    {%- if pk.id == product.id -%}{%- assign pack_match = n -%}{%- endif -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- if pack_match > 0 -%}{%- assign pack_sel = pack_match -%}{%- endif -%}
+{%- if pack_3.id -%}{%- assign pack_sel = 3 -%}{%- endif -%}
+{%- if pack_2.id -%}{%- assign pack_sel = 2 -%}{%- endif -%}
+{%- if pack_1.id -%}{%- assign pack_sel = 1 -%}{%- endif -%}
+{%- if pack_1.id and pack_1.id == product.id -%}{%- assign pack_sel = 1 -%}{%- endif -%}
+{%- if pack_2.id and pack_2.id == product.id -%}{%- assign pack_sel = 2 -%}{%- endif -%}
+{%- if pack_3.id and pack_3.id == product.id -%}{%- assign pack_sel = 3 -%}{%- endif -%}
 {%- assign bump_hidden = false -%}
-{%- if pack_sel > 0 -%}
-  {%- assign key = 'pack_' | append: pack_sel -%}
-  {%- assign first_variant = section.settings[key].selected_or_first_available_variant -%}
-  {%- assign key = 'pack_' | append: pack_sel | append: '_no_bump' -%}
-  {%- if section.settings[key] -%}{%- assign bump_hidden = true -%}{%- endif -%}
-{%- else -%}
-  {%- assign first_variant = tier1 -%}
-{%- endif -%}
+{%- case pack_sel -%}
+  {%- when 1 -%}
+    {%- assign first_variant = pack_1.selected_or_first_available_variant -%}
+    {%- if section.settings.pack_1_no_bump -%}{%- assign bump_hidden = true -%}{%- endif -%}
+  {%- when 2 -%}
+    {%- assign first_variant = pack_2.selected_or_first_available_variant -%}
+    {%- if section.settings.pack_2_no_bump -%}{%- assign bump_hidden = true -%}{%- endif -%}
+  {%- when 3 -%}
+    {%- assign first_variant = pack_3.selected_or_first_available_variant -%}
+    {%- if section.settings.pack_3_no_bump -%}{%- assign bump_hidden = true -%}{%- endif -%}
+  {%- else -%}
+    {%- assign first_variant = tier1 -%}
+{%- endcase -%}
 
 {%- if section.settings.show_brand -%}
   {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height %}
@@ -128,9 +135,14 @@
 
       {%- if section.settings.countdown_label != blank -%}
         <div class="udc-pp__countdown" data-udc-pp-countdown data-hours="{{ section.settings.countdown_hours | default: 24 }}">
-          <span aria-hidden="true">🔥</span>
-          {{ section.settings.countdown_label }}
-          <span class="udc-pp__countdown-clock" data-udc-pp-clock>00:00:00</span>
+          <span class="udc-pp__countdown-label"><span class="udc-pp__countdown-dot" aria-hidden="true"></span>{{ section.settings.countdown_label }}</span>
+          <span class="udc-pp__countdown-clock" role="timer">
+            <span class="udc-pp__cd"><b data-udc-pp-h>00</b><small>hs</small></span>
+            <i aria-hidden="true">:</i>
+            <span class="udc-pp__cd"><b data-udc-pp-m>00</b><small>min</small></span>
+            <i aria-hidden="true">:</i>
+            <span class="udc-pp__cd"><b data-udc-pp-s>00</b><small>seg</small></span>
+          </span>
         </div>
       {%- endif -%}
 
@@ -139,18 +151,21 @@
         {%- if pack_sel > 0 -%}
           <div class="udc-pp__tiers udc-pp__tiers--packs" data-udc-pp-tiers>
             {%- for n in (1..3) -%}
-              {%- assign key = 'pack_' | append: n -%}
-              {%- assign pk = section.settings[key] -%}
-              {%- if pk == blank -%}{%- continue -%}{%- endif -%}
+              {%- case n -%}
+                {%- when 1 -%}
+                  {%- assign pk = pack_1 -%}{%- assign pk_label = section.settings.pack_1_label -%}{%- assign pk_badge = section.settings.pack_1_badge -%}
+                  {%- assign pk_ribbon = section.settings.pack_1_ribbon -%}{%- assign pk_no_bump = section.settings.pack_1_no_bump -%}
+                {%- when 2 -%}
+                  {%- assign pk = pack_2 -%}{%- assign pk_label = section.settings.pack_2_label -%}{%- assign pk_badge = section.settings.pack_2_badge -%}
+                  {%- assign pk_ribbon = section.settings.pack_2_ribbon -%}{%- assign pk_no_bump = section.settings.pack_2_no_bump -%}
+                {%- else -%}
+                  {%- assign pk = pack_3 -%}{%- assign pk_label = section.settings.pack_3_label -%}{%- assign pk_badge = section.settings.pack_3_badge -%}
+                  {%- assign pk_ribbon = section.settings.pack_3_ribbon -%}{%- assign pk_no_bump = section.settings.pack_3_no_bump -%}
+              {%- endcase -%}
+              {%- unless pk.id -%}{%- continue -%}{%- endunless -%}
               {%- assign pv = pk.selected_or_first_available_variant -%}
               {%- assign is_sel = false -%}
               {%- if n == pack_sel -%}{%- assign is_sel = true -%}{%- endif -%}
-              {%- assign key = 'pack_' | append: n | append: '_label' -%}
-              {%- assign pk_label = section.settings[key] -%}
-              {%- assign key = 'pack_' | append: n | append: '_badge' -%}
-              {%- assign pk_badge = section.settings[key] -%}
-              {%- assign key = 'pack_' | append: n | append: '_no_bump' -%}
-              {%- assign pk_no_bump = section.settings[key] -%}
               {%- assign pk_save = pv.compare_at_price | minus: pv.price -%}
               {%- assign pk_off = 0 -%}
               {%- if pv.compare_at_price > pv.price -%}
@@ -158,7 +173,8 @@
                 {%- assign pk_off = 100 | minus: pk_off -%}
               {%- endif -%}
 
-              <label class="udc-pp__tier udc-pp__pack{% if is_sel %} is-selected{% endif %}{% unless pv.available %} is-soldout{% endunless %}">
+              <label class="udc-pp__tier udc-pp__pack{% if is_sel %} is-selected{% endif %}{% unless pv.available %} is-soldout{% endunless %}{% if pk_ribbon != blank %} has-ribbon{% endif %}">
+                {%- if pk_ribbon != blank -%}<span class="udc-pp__ribbon">{{ pk_ribbon }}</span>{%- endif -%}
                 <input type="radio" name="udc-pp-tier-{{ section.id }}" value="{{ pv.id }}"
                        data-price="{{ pv.price | money | escape }}"
                        data-compare="{% if pv.compare_at_price > pv.price %}{{ pv.compare_at_price | money | escape }}{% endif %}"
@@ -169,7 +185,7 @@
 
                 {%- if pk.featured_image != blank -%}
                   <span class="udc-pp__pack__thumb">
-                    <img src="{{ pk.featured_image | image_url: width: 160 }}" loading="lazy" width="56" height="56" alt="">
+                    <img src="{{ pk.featured_image | image_url: width: 180 }}" loading="lazy" width="64" height="64" alt="">
                   </span>
                 {%- endif -%}
 
@@ -177,24 +193,25 @@
                   <span class="udc-pp__pack__eyebrow">{{ section.settings.pack_prefix | default: 'Pack' }} {{ n }}</span>
                   <span class="udc-pp__tier__name">{{ pk_label | default: pk.title }}</span>
                   <span class="udc-pp__tier__row">
-                    {%- if pk_badge != blank -%}
-                      <span class="udc-pp__tier__badge{% unless n == 1 %} udc-pp__tier__badge--extra{% endunless %}">{{ pk_badge }}</span>
-                    {%- elsif pk_off > 0 -%}
+                    {%- if pk_off > 0 -%}
                       <span class="udc-pp__tier__badge udc-pp__tier__badge--extra">-{{ pk_off }}% OFF</span>
+                    {%- endif -%}
+                    {%- if pk_badge != blank -%}
+                      <span class="udc-pp__tier__badge">{{ pk_badge }}</span>
                     {%- endif -%}
                     {%- unless pv.available -%}
                       <span class="udc-pp__tier__badge">{{ section.settings.sold_out_text | default: 'Agotado' }}</span>
                     {%- endunless -%}
                   </span>
-                  {%- if pk_save > 0 -%}
-                    <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ pk_save | money }}</span>
-                  {%- endif -%}
                 </span>
 
                 <span class="udc-pp__tier__prices">
                   <span class="udc-pp__tier__pricenow">{{ pv.price | money }}</span>
                   {%- if pv.compare_at_price > pv.price -%}
                     <s class="udc-pp__tier__pricecompare">{{ pv.compare_at_price | money }}</s>
+                  {%- endif -%}
+                  {%- if pk_save > 0 -%}
+                    <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ pk_save | money }}</span>
                   {%- endif -%}
                 </span>
               </label>
@@ -229,15 +246,15 @@
                     {%- endif -%}
                   {%- endif -%}
                 </span>
-                {%- if savings > 0 -%}
-                  <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ savings | money }}</span>
-                {%- endif -%}
               </span>
 
               <span class="udc-pp__tier__prices">
                 <span class="udc-pp__tier__pricenow">{{ unit_price | money }}</span>
                 {%- if unit_compare > unit_price -%}
                   <s class="udc-pp__tier__pricecompare">{{ unit_compare | money }}</s>
+                {%- endif -%}
+                {%- if savings > 0 -%}
+                  <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ savings | money }}</span>
                 {%- endif -%}
               </span>
             </label>
@@ -247,7 +264,7 @@
 
         <input type="hidden" name="id" value="{{ first_variant.id }}" data-udc-pp-variant-input>
 
-        {%- if section.settings.bump_product != blank and section.settings.bump_product.selected_or_first_available_variant.available -%}
+        {%- if section.settings.bump_product.id and section.settings.bump_product.selected_or_first_available_variant.available -%}
           {%- assign bump_variant = section.settings.bump_product.selected_or_first_available_variant -%}
           <label class="udc-pp__bump" data-udc-pp-bump{% if bump_hidden %} hidden{% endif %}>
             <input type="checkbox" data-udc-pp-bump-toggle>
@@ -275,6 +292,7 @@
                 name="add"
                 class="udc-btn udc-pp__add"
                 {% unless current_variant.available %}disabled{% endunless %}>
+          <span class="udc-pp__shine" aria-hidden="true"></span>
           {%- if current_variant.available -%}
             {{ section.settings.add_text | default: 'Agregar al carrito →' }}
           {%- else -%}
@@ -283,7 +301,12 @@
         </button>
 
         {%- if section.settings.trust_bold != blank or section.settings.trust_rest != blank -%}
-          <p class="udc-pp__trust"><strong>{{ section.settings.trust_bold }}</strong> {{ section.settings.trust_rest }}</p>
+          <p class="udc-pp__trust">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            <strong>{{ section.settings.trust_bold }}</strong> {{ section.settings.trust_rest }}
+          </p>
         {%- endif -%}
 
         {%- if section.settings.payment_row != blank -%}
@@ -299,13 +322,13 @@
         {%- if section.settings.badge1_text != blank or section.settings.badge2_text != blank or section.settings.badge3_text != blank -%}
           <div class="udc-pp__badges">
             {%- if section.settings.badge1_text != blank -%}
-              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
+              <span class="udc-pp__miniBadge"><span class="udc-pp__miniBadge-icon" aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
             {%- endif -%}
             {%- if section.settings.badge2_text != blank -%}
-              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
+              <span class="udc-pp__miniBadge"><span class="udc-pp__miniBadge-icon" aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
             {%- endif -%}
             {%- if section.settings.badge3_text != blank -%}
-              <span class="udc-pp__miniBadge"><span aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
+              <span class="udc-pp__miniBadge"><span class="udc-pp__miniBadge-icon" aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
             {%- endif -%}
           </div>
         {%- endif -%}
@@ -424,55 +447,93 @@
   #udc-pp-{{ section.id }} .udc-pp__divider::after{content:'';flex:1 1 auto;height:1px;background:var(--udc-line)}
 
   #udc-pp-{{ section.id }} .udc-pp__countdown{
-    margin:22px 0 0;padding:16px 20px;border-radius:14px;text-align:center;font-size:14px;
-    font-weight:700;color:#fff;background:linear-gradient(135deg,var(--udc-accent),#7A0D0D)}
-  #udc-pp-{{ section.id }} .udc-pp__countdown-clock{
-    display:inline-block;margin-left:6px;font-family:var(--udc-anton);letter-spacing:.04em}
+    margin:22px 0 0;padding:14px 18px;border-radius:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    color:#fff;background:linear-gradient(135deg,var(--udc-accent),#6E0B0B);
+    box-shadow:0 0 50px color-mix(in srgb, var(--udc-accent) 35%, transparent)}
+  #udc-pp-{{ section.id }} .udc-pp__countdown-label{
+    display:inline-flex;align-items:center;gap:10px;font-family:var(--udc-anton);
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;line-height:1.25}
+  #udc-pp-{{ section.id }} .udc-pp__countdown-dot{
+    flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#fff;
+    box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:udcPpPing 1.6s ease-out infinite}
+  @keyframes udcPpPing{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}100%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+  #udc-pp-{{ section.id }} .udc-pp__countdown-clock{display:inline-flex;align-items:flex-start;gap:4px}
+  #udc-pp-{{ section.id }} .udc-pp__countdown-clock i{
+    font-style:normal;font-family:var(--udc-anton);font-size:18px;line-height:34px;opacity:.7}
+  #udc-pp-{{ section.id }} .udc-pp__cd{display:flex;flex-direction:column;align-items:center;gap:3px}
+  #udc-pp-{{ section.id }} .udc-pp__cd b{
+    min-width:40px;padding:5px 6px;border-radius:8px;text-align:center;font-weight:400;
+    font-family:var(--udc-anton);font-size:20px;line-height:24px;letter-spacing:.02em;
+    background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18)}
+  #udc-pp-{{ section.id }} .udc-pp__cd small{font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
 
-  #udc-pp-{{ section.id }} .udc-pp__tiers{display:flex;flex-direction:column;gap:14px;margin:24px 0 0}
+  #udc-pp-{{ section.id }} .udc-pp__tiers{display:flex;flex-direction:column;gap:12px;margin:22px 0 0}
   #udc-pp-{{ section.id }} .udc-pp__tier{
     position:relative;display:flex;align-items:center;gap:14px;cursor:pointer;
-    border:1px solid var(--udc-border);border-radius:14px;padding:16px 18px;
-    transition:border-color .2s ease,box-shadow .2s ease}
+    border:1px solid var(--udc-border);border-radius:18px;padding:16px 16px;
+    background:var(--udc-bg2);opacity:.82;
+    transition:border-color .25s ease,box-shadow .25s ease,opacity .25s ease,transform .25s ease,background .25s ease}
+  #udc-pp-{{ section.id }} .udc-pp__tier:hover{opacity:1;border-color:#3A3232}
   #udc-pp-{{ section.id }} .udc-pp__tier input{position:absolute;opacity:0;pointer-events:none}
   #udc-pp-{{ section.id }} .udc-pp__tier.is-selected{
-    border-color:var(--udc-accent);box-shadow:0 0 30px color-mix(in srgb, var(--udc-accent) 25%, transparent)}
+    opacity:1;border-color:var(--udc-accent);transform:scale(1.015);
+    background:linear-gradient(135deg,color-mix(in srgb, var(--udc-accent) 16%, var(--udc-bg2)),var(--udc-bg2) 70%);
+    animation:udcPpGlow 2.8s ease-in-out infinite}
+  @keyframes udcPpGlow{
+    0%,100%{box-shadow:0 0 24px color-mix(in srgb, var(--udc-accent) 20%, transparent)}
+    50%{box-shadow:0 0 48px color-mix(in srgb, var(--udc-accent) 40%, transparent)}}
+  #udc-pp-{{ section.id }} .udc-pp__tier.has-ribbon{margin-top:10px}
+  #udc-pp-{{ section.id }} .udc-pp__ribbon{
+    position:absolute;top:0;right:18px;transform:translateY(-50%);
+    background:var(--udc-accent);color:#fff;font-family:var(--udc-anton);font-size:11px;
+    letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;white-space:nowrap;
+    box-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 55%, transparent)}
 
   #udc-pp-{{ section.id }} .udc-pp__tier__radio{
-    flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:2px solid #3A3A34;position:relative}
-  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__radio{border-color:var(--udc-accent)}
+    flex:0 0 auto;width:22px;height:22px;border-radius:50%;border:2px solid #3A3A34;position:relative;
+    transition:border-color .2s ease,background .2s ease}
+  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__radio{border-color:var(--udc-accent);background:var(--udc-accent)}
   #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__radio::after{
-    content:'';position:absolute;inset:3px;border-radius:50%;background:var(--udc-accent)}
+    content:'';position:absolute;left:6px;top:2px;width:6px;height:11px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 
   #udc-pp-{{ section.id }} .udc-pp__tier__main{flex:1 1 auto;display:flex;flex-direction:column;gap:6px;min-width:0}
-  #udc-pp-{{ section.id }} .udc-pp__tier__row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  #udc-pp-{{ section.id }} .udc-pp__tier__row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   #udc-pp-{{ section.id }} .udc-pp__tier__name{font-size:15px;font-weight:700;color:var(--udc-text)}
   #udc-pp-{{ section.id }} .udc-pp__tier__badge{
-    font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--udc-accent);
-    border:1px solid var(--udc-accent);border-radius:999px;padding:3px 10px}
+    font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--udc-accent);
+    border:1px solid var(--udc-accent);border-radius:999px;padding:3px 9px;white-space:nowrap}
   #udc-pp-{{ section.id }} .udc-pp__tier__badge--extra{background:var(--udc-accent);color:#fff}
-  #udc-pp-{{ section.id }} .udc-pp__tier__save{font-size:12px;color:var(--udc-dim)}
 
   #udc-pp-{{ section.id }} .udc-pp__price [hidden],
   #udc-pp-{{ section.id }} .udc-pp__bump[hidden]{display:none}
 
   #udc-pp-{{ section.id }} .udc-pp__pack__thumb{
-    flex:0 0 auto;width:56px;height:56px;border-radius:12px;overflow:hidden;
+    flex:0 0 auto;width:64px;height:64px;border-radius:14px;overflow:hidden;
     border:1px solid var(--udc-border);background:var(--udc-bg)}
   #udc-pp-{{ section.id }} .udc-pp__pack__thumb img{display:block;width:100%;height:100%;object-fit:cover}
   #udc-pp-{{ section.id }} .udc-pp__pack__eyebrow{
     font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--udc-accent);font-weight:700}
-  #udc-pp-{{ section.id }} .udc-pp__pack .udc-pp__tier__name{line-height:1.3}
-  #udc-pp-{{ section.id }} .udc-pp__pack.is-soldout{opacity:.5;cursor:not-allowed}
-  @media (max-width:420px){
-    #udc-pp-{{ section.id }} .udc-pp__pack{gap:10px;padding:14px}
-    #udc-pp-{{ section.id }} .udc-pp__pack__thumb{width:44px;height:44px}
-  }
+  #udc-pp-{{ section.id }} .udc-pp__pack .udc-pp__tier__name{
+    font-family:var(--udc-anton);font-weight:400;font-size:15px;line-height:1.2;text-transform:uppercase;letter-spacing:.01em}
+  #udc-pp-{{ section.id }} .udc-pp__pack.is-soldout{opacity:.45;cursor:not-allowed}
 
-  #udc-pp-{{ section.id }} .udc-pp__tier__prices{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;gap:2px}
+  #udc-pp-{{ section.id }} .udc-pp__tier__prices{
+    flex:0 0 auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
   #udc-pp-{{ section.id }} .udc-pp__tier__pricenow{
-    font-family:var(--udc-anton);font-size:19px;color:var(--udc-text)}
+    font-family:var(--udc-anton);font-size:19px;line-height:1.1;color:var(--udc-text)}
   #udc-pp-{{ section.id }} .udc-pp__tier__pricecompare{font-size:12px;color:var(--udc-dim)}
+  #udc-pp-{{ section.id }} .udc-pp__tier__save{
+    margin-top:2px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;
+    color:#fff;background:rgba(255,255,255,.08);border-radius:6px;padding:3px 7px}
+  #udc-pp-{{ section.id }} .udc-pp__tier.is-selected .udc-pp__tier__save{background:color-mix(in srgb, var(--udc-accent) 35%, transparent)}
+
+  @media (max-width:420px){
+    #udc-pp-{{ section.id }} .udc-pp__tier{gap:10px;padding:14px 12px}
+    #udc-pp-{{ section.id }} .udc-pp__pack__thumb{width:52px;height:52px;border-radius:12px}
+    #udc-pp-{{ section.id }} .udc-pp__tier__pricenow{font-size:17px}
+  }
 
   #udc-pp-{{ section.id }} .udc-pp__bump{
     margin:20px 0 0;display:flex;align-items:center;gap:14px;cursor:pointer;
@@ -490,25 +551,47 @@
     margin:16px 0 0;text-align:center;font-size:14px;color:var(--udc-muted)}
 
   #udc-pp-{{ section.id }} .udc-pp__form{margin-top:6px;display:flex;flex-direction:column}
-  #udc-pp-{{ section.id }} .udc-pp__add{margin-top:20px;width:100%}
-  #udc-pp-{{ section.id }} .udc-pp__add:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+  #udc-pp-{{ section.id }} .udc-pp__add{
+    margin-top:20px;width:100%;overflow:hidden;border:0;cursor:pointer;
+    animation:udcPpBtn 2.4s ease-in-out infinite}
+  @keyframes udcPpBtn{
+    0%,100%{box-shadow:0 0 40px color-mix(in srgb, var(--udc-accent) 45%, transparent)}
+    50%{box-shadow:0 0 80px color-mix(in srgb, var(--udc-accent) 75%, transparent)}}
+  #udc-pp-{{ section.id }} .udc-pp__shine{
+    position:absolute;top:0;bottom:0;left:-60%;width:40%;pointer-events:none;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+    transform:skewX(-20deg);animation:udcPpShine 3s ease-in-out infinite}
+  @keyframes udcPpShine{0%,55%{left:-60%}100%{left:130%}}
+  #udc-pp-{{ section.id }} .udc-pp__add:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;animation:none}
+  #udc-pp-{{ section.id }} .udc-pp__add:disabled .udc-pp__shine{display:none}
   #udc-pp-{{ section.id }} .udc-pp__add:disabled:hover{transform:none}
 
   #udc-pp-{{ section.id }} .udc-pp__trust{
-    margin:16px 0 0;text-align:center;font-size:13px;color:var(--udc-dim)}
+    margin:14px 0 0;display:flex;align-items:center;justify-content:center;gap:7px;
+    font-size:13px;color:var(--udc-dim)}
+  #udc-pp-{{ section.id }} .udc-pp__trust svg{color:var(--udc-accent)}
   #udc-pp-{{ section.id }} .udc-pp__trust strong{color:var(--udc-text)}
 
   #udc-pp-{{ section.id }} .udc-pp__pay{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px}
+    display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
   #udc-pp-{{ section.id }} .udc-pp__pay span{
-    font-size:12px;letter-spacing:.04em;color:var(--udc-muted);
-    border:1px solid var(--udc-border);border-radius:8px;padding:8px 14px}
+    font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--udc-muted);
+    background:var(--udc-bg2);border:1px solid var(--udc-border);border-radius:6px;padding:5px 10px}
 
   #udc-pp-{{ section.id }} .udc-pp__badges{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:16px}
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px}
   #udc-pp-{{ section.id }} .udc-pp__miniBadge{
-    display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--udc-text);
-    border:1px solid var(--udc-border);border-radius:999px;padding:10px 18px}
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
+    font-size:11px;font-weight:700;line-height:1.25;color:var(--udc-text);
+    border:1px solid var(--udc-border);border-radius:14px;padding:12px 6px;background:var(--udc-bg2)}
+  #udc-pp-{{ section.id }} .udc-pp__miniBadge-icon{font-size:18px;line-height:1}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-pp-{{ section.id }} .udc-pp__tier.is-selected,
+    #udc-pp-{{ section.id }} .udc-pp__add,
+    #udc-pp-{{ section.id }} .udc-pp__shine,
+    #udc-pp-{{ section.id }} .udc-pp__countdown-dot{animation:none}
+  }
 
   #udc-pp-{{ section.id }} .udc-pp__tabs{margin:36px 0 0}
   #udc-pp-{{ section.id }} .udc-pp__tabbar{
@@ -566,14 +649,17 @@
     { "type": "product", "id": "pack_1", "label": "Pack 1" },
     { "type": "text", "id": "pack_1_label", "label": "Pack 1 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_1_badge", "label": "Pack 1 · badge (vacío = -% OFF)" },
+    { "type": "text", "id": "pack_1_ribbon", "label": "Pack 1 · cinta arriba (opcional)" },
     { "type": "checkbox", "id": "pack_1_no_bump", "label": "Pack 1 · ocultar el order bump", "default": false },
     { "type": "product", "id": "pack_2", "label": "Pack 2" },
     { "type": "text", "id": "pack_2_label", "label": "Pack 2 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_2_badge", "label": "Pack 2 · badge (vacío = -% OFF)" },
+    { "type": "text", "id": "pack_2_ribbon", "label": "Pack 2 · cinta arriba (opcional)" },
     { "type": "checkbox", "id": "pack_2_no_bump", "label": "Pack 2 · ocultar el order bump", "default": false },
     { "type": "product", "id": "pack_3", "label": "Pack 3" },
     { "type": "text", "id": "pack_3_label", "label": "Pack 3 · nombre (vacío = título del producto)" },
     { "type": "text", "id": "pack_3_badge", "label": "Pack 3 · badge (vacío = -% OFF)" },
+    { "type": "text", "id": "pack_3_ribbon", "label": "Pack 3 · cinta arriba (opcional)" },
     { "type": "checkbox", "id": "pack_3_no_bump", "label": "Pack 3 · ocultar el order bump", "default": false },
 
     { "type": "header", "content": "Order bump" },

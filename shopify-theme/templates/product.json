@@ -49,7 +49,9 @@
         "pack_3": "shopify://products/guia-digital-acompanamento-1-1",
         "pack_1_badge": "Entrega inmediata",
         "pack_3_no_bump": true,
-        "gift_text": ""
+        "gift_text": "",
+        "pack_3_ribbon": "Incluye asesoría 1 a 1",
+        "divider_text": "Elegí tu pack"
       }
     },
     "udc_04": {
