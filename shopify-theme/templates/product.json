@@ -40,13 +40,13 @@
       ],
       "settings": {
         "eyebrow": "U del Closer",
-        "bump_product": "shopify://products/asesoria-1-a-1-con-tino",
+        "bump_product": "asesoria-1-a-1-con-tino",
         "add_text": "Agregar al carrito →",
         "sold_out_text": "Agotado",
         "brand_logo": "shopify://shop_images/udc-logo.png",
-        "pack_1": "shopify://products/guia-digital-convertite-en-closer-de-ventas",
-        "pack_2": "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc",
-        "pack_3": "shopify://products/guia-digital-acompanamento-1-1",
+        "pack_1": "guia-digital-convertite-en-closer-de-ventas",
+        "pack_2": "guia-digital-plataforma-teorica-con-modulos-udc",
+        "pack_3": "guia-digital-acompanamento-1-1",
         "pack_1_badge": "Entrega inmediata",
         "pack_3_no_bump": true,
         "gift_text": "",
@@ -933,10 +933,10 @@
         "title_1": "También te puede",
         "title_2": "interesar",
         "products": [
-          "shopify://products/guia-digital-convertite-en-closer-de-ventas",
-          "shopify://products/guia-digital-acompanamento-1-1",
-          "shopify://products/asesoria-1-a-1-con-tino",
-          "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc"
+          "guia-digital-convertite-en-closer-de-ventas",
+          "guia-digital-acompanamento-1-1",
+          "asesoria-1-a-1-con-tino",
+          "guia-digital-plataforma-teorica-con-modulos-udc"
         ],
         "limit": 3,
         "add_text": "+ Agregar"

@@ -46,9 +46,9 @@
   pack elegido (1-3), 0 = sin packs (selector de cantidad).
   first_variant = variante que arranca elegida (precio de arriba, input id,
   barra sticky).
-  Se lee cada setting por su nombre (section.settings.pack_1, …) y se
-  chequea .id en vez de "!= blank": una lectura dinámica
-  section.settings['pack_' | append: n] dejaba los packs vacíos.
+  En templates/*.json un setting de producto se guarda como el handle solo
+  ("pack_1": "guia-digital-…"), no como "shopify://products/…" (ese formato
+  es de los settings tipo url): con el prefijo el producto llega vacío.
 {%- endcomment -%}
 {%- assign pack_1 = section.settings.pack_1 -%}
 {%- assign pack_2 = section.settings.pack_2 -%}

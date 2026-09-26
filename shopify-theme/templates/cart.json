@@ -13,10 +13,10 @@
         "title_1": "También te puede",
         "title_2": "interesar",
         "products": [
-          "shopify://products/guia-digital-convertite-en-closer-de-ventas",
-          "shopify://products/guia-digital-acompanamento-1-1",
-          "shopify://products/asesoria-1-a-1-con-tino",
-          "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc"
+          "guia-digital-convertite-en-closer-de-ventas",
+          "guia-digital-acompanamento-1-1",
+          "asesoria-1-a-1-con-tino",
+          "guia-digital-plataforma-teorica-con-modulos-udc"
         ],
         "limit": 3,
         "add_text": "+ Agregar"
