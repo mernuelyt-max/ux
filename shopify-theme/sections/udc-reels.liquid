@@ -20,9 +20,10 @@
    · Tocar el reel activo lo pausa / reanuda; el botón de sonido activa el
      audio para todos los reels.
 
-  Sin contenido inventado: sin bloques, en el editor se muestran marcos
-  vacíos con una indicación para subir los videos; en la tienda la sección
-  no se muestra hasta que haya al menos un reel con video.
+  Sin contenido inventado: mientras no haya videos se muestran marcos 9:16
+  vacíos (solo un ▶, sin textos ni datos) para ver el diseño y la animación;
+  la indicación para subir videos aparece solo en el editor. Con show_empty
+  apagado, la sección no se muestra en la tienda hasta que haya un video.
 {%- endcomment -%}
 
 {% render 'udc-base' %}
@@ -32,7 +33,7 @@
   {%- if block.settings.video != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
 {%- endfor -%}
 
-{%- if reel_count > 0 or request.design_mode -%}
+{%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
 <section class="udc udc-top udc-rv" id="udc-rv-{{ section.id }}">
   <span class="udc-glow udc-rv__glow" aria-hidden="true"></span>
 
@@ -99,7 +100,7 @@
             <div class="udc-rv__card">
               <span class="udc-rv__empty" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="44" height="44" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                <small>Agregá bloques "Reel" y subí tus videos 9:16</small>
+                {%- if request.design_mode -%}<small>Agregá bloques "Reel" y subí tus videos 9:16</small>{%- endif -%}
               </span>
               <span class="udc-rv__shade" aria-hidden="true"></span>
             </div>
@@ -398,6 +399,7 @@
     { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "La U del Closer" },
     { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "en video" },
     { "type": "text", "id": "tag", "label": "Píldora de cada reel (vacío = ocultar)", "default": "Reel" },
+    { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true, "info": "Apagalo para ocultar la sección en la tienda hasta subir el primer video." },
     {
       "type": "select", "id": "advance", "label": "Cómo avanza", "default": "time",
       "options": [
