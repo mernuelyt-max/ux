@@ -12,10 +12,13 @@
      sube desde el editor) + portada opcional + título y detalle opcionales.
    · Solo reproduce el reel activo, y solo mientras la sección está en
      pantalla: muteado e inline (como Instagram, única forma de autoplay en
-     celular). Barra de progreso roja abajo. Al terminar pasa al siguiente.
+     celular). Barra de progreso roja abajo.
+   · Misma animación que el carrusel de imágenes de facturación: avanza
+     solo cada `interval` segundos (4 por defecto), zoom lento sobre el
+     reel activo y pausa con el mouse encima. Con advance = "end" en vez
+     de por tiempo pasa al siguiente cuando termina cada video.
    · Tocar el reel activo lo pausa / reanuda; el botón de sonido activa el
      audio para todos los reels.
-   · Un bloque sin video avanza por tiempo (setting interval).
 
   Sin contenido inventado: sin bloques, en el editor se muestran marcos
   vacíos con una indicación para subir los videos; en la tienda la sección
@@ -43,7 +46,7 @@
     </h2>
   </div>
 
-  <div class="udc-rv__carousel" data-udc-reveal data-interval="{{ section.settings.interval | default: 6 }}">
+  <div class="udc-rv__carousel" data-udc-reveal data-interval="{{ section.settings.interval | default: 4 }}" data-advance="{{ section.settings.advance | default: 'time' }}">
     <div class="udc-rv__stage" data-udc-rv-stage>
       {%- if section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
@@ -211,7 +214,9 @@
 
   #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__card{
     border-color:var(--udc-accent);animation:udcRvGlow 3.2s ease-in-out infinite}
-  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__card::after{animation:udcRvShine 5.5s ease-in-out infinite 1s}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__card::after{animation:udcRvShine 4.8s ease-in-out infinite 1s}
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__video,
+  #udc-rv-{{ section.id }} .udc-rv__slide.is-active .udc-rv__cover{animation:udcRvZoom 9s ease-out forwards}
 
   #udc-rv-{{ section.id }} .udc-rv__controls{
     position:relative;z-index:4;display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px}
@@ -234,11 +239,14 @@
     0%,100%{box-shadow:0 0 0 1px var(--udc-accent),0 0 36px color-mix(in srgb, var(--udc-accent) 35%, transparent),0 30px 70px rgba(0,0,0,.7)}
     50%{box-shadow:0 0 0 1px var(--udc-accent),0 0 90px color-mix(in srgb, var(--udc-accent) 65%, transparent),0 30px 70px rgba(0,0,0,.7)}}
   @keyframes udcRvShine{0%{transform:translateX(-130%)}35%,100%{transform:translateX(130%)}}
+  @keyframes udcRvZoom{from{transform:scale(1)}to{transform:scale(1.08)}}
 
   @media (prefers-reduced-motion: reduce){
     #udc-rv-{{ section.id }} .udc-rv__slide{transition:none}
     #udc-rv-{{ section.id }} .udc-rv__card,
     #udc-rv-{{ section.id }} .udc-rv__card::after,
+    #udc-rv-{{ section.id }} .udc-rv__video,
+    #udc-rv-{{ section.id }} .udc-rv__cover,
     #udc-rv-{{ section.id }} .udc-rv__dot{animation:none !important}
   }
 </style>
@@ -269,7 +277,12 @@
     var paused = false;
     var active = 0;
     var timer = null;
-    var interval = (parseFloat(carousel.getAttribute('data-interval')) || 6) * 1000;
+    var interval = (parseFloat(carousel.getAttribute('data-interval')) || 4) * 1000;
+    // "time": avanza cada `interval` segundos como el carrusel de imágenes de
+    // facturación (el video del centro se repite mientras está activo).
+    // "end": espera a que termine cada video.
+    var byTime = carousel.getAttribute('data-advance') !== 'end';
+    var hover = false;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     slides.forEach(function (slide) {
@@ -283,7 +296,10 @@
       });
       v.addEventListener('playing', function () { cardOf(slide).classList.add('is-playing'); });
       v.addEventListener('pause', function () { cardOf(slide).classList.remove('is-playing'); });
-      v.addEventListener('ended', function () { if (slides[active] === slide && n > 1) go(active + 1); else v.play(); });
+      v.addEventListener('ended', function () {
+        if (!byTime && slides[active] === slide && n > 1) { go(active + 1); return; }
+        if (slides[active] === slide && inView && !paused) { v.currentTime = 0; v.play(); }
+      });
     });
 
     var stopTimer = function () { if (timer) clearTimeout(timer); timer = null; };
@@ -296,7 +312,8 @@
         v.muted = !soundOn;
         var p = v.play();
         if (p && p.catch) p.catch(function () {});
-      } else if (n > 1 && !reduce) {
+      }
+      if (n > 1 && !reduce && !hover && (byTime || !v)) {
         timer = setTimeout(function () { go(active + 1); }, interval);
       }
     };
@@ -330,7 +347,7 @@
         var v = videoOf(slide);
         if (!v) return;
         paused = !v.paused;
-        if (paused) v.pause(); else playActive();
+        if (paused) { v.pause(); stopTimer(); } else playActive();
       });
     });
 
@@ -344,6 +361,10 @@
       var v = videoOf(slides[active]);
       if (v) { v.muted = !soundOn; if (v.paused && !paused) playActive(); }
     });
+
+    // Igual que el carrusel de imágenes: con el mouse encima deja de avanzar.
+    carousel.addEventListener('mouseenter', function () { hover = true; stopTimer(); });
+    carousel.addEventListener('mouseleave', function () { hover = false; playActive(); });
 
     var stage = carousel.querySelector('[data-udc-rv-stage]');
     var x0 = null;
@@ -377,7 +398,14 @@
     { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "La U del Closer" },
     { "type": "text", "id": "title_2", "label": "Título · línea 2 (serif itálica)", "default": "en video" },
     { "type": "text", "id": "tag", "label": "Píldora de cada reel (vacío = ocultar)", "default": "Reel" },
-    { "type": "range", "id": "interval", "label": "Segundos por reel sin video", "min": 3, "max": 15, "step": 1, "default": 6, "info": "Los reels con video pasan al siguiente cuando terminan." }
+    {
+      "type": "select", "id": "advance", "label": "Cómo avanza", "default": "time",
+      "options": [
+        { "value": "time", "label": "Solo, cada X segundos (como el carrusel de imágenes)" },
+        { "value": "end", "label": "Cuando termina cada video" }
+      ]
+    },
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 15, "step": 1, "default": 4, "info": "En 'Cuando termina cada video' solo se usa para reels sin video." }
   ],
   "blocks": [
     {
