@@ -38,6 +38,33 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 {%- assign tier1 = product.variants.first -%}
 
+{%- comment -%}
+  Packs: si hay productos en pack_1..pack_3, las burbujas son esos productos
+  (su primera variante disponible) en vez de las variantes de cantidad de
+  este producto. Queda preseleccionado el pack que coincide con el producto
+  que se está viendo; si ninguno, el primero cargado. pack_sel = número de
+  pack elegido (1-3), 0 = sin packs (selector de cantidad).
+  first_variant = variante que arranca elegida (precio de arriba, input id,
+  barra sticky).
+{%- endcomment -%}
+{%- assign pack_sel = 0 -%}
+{%- assign pack_match = 0 -%}
+{%- for n in (1..3) -%}
+  {%- assign key = 'pack_' | append: n -%}
+  {%- assign pk = section.settings[key] -%}
+  {%- if pk != blank -%}
+    {%- if pack_sel == 0 -%}{%- assign pack_sel = n -%}{%- endif -%}
+    {%- if pk.id == product.id -%}{%- assign pack_match = n -%}{%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if pack_match > 0 -%}{%- assign pack_sel = pack_match -%}{%- endif -%}
+{%- if pack_sel > 0 -%}
+  {%- assign key = 'pack_' | append: pack_sel -%}
+  {%- assign first_variant = section.settings[key].selected_or_first_available_variant -%}
+{%- else -%}
+  {%- assign first_variant = tier1 -%}
+{%- endif -%}
+
 {%- if section.settings.show_brand -%}
   {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height %}
 {%- endif -%}
@@ -68,16 +95,15 @@
 
       <h1 class="udc-h2 udc-pp__title">{{ product.title }}</h1>
 
-      <div class="udc-pp__price">
-        {%- if tier1.compare_at_price > tier1.price -%}
-          <s class="udc-pp__compare">{{ tier1.compare_at_price | money }}</s>
-        {%- endif -%}
-        <span class="udc-pp__pricenow">{{ tier1.price | money }}</span>
-        {%- if tier1.compare_at_price > tier1.price -%}
-          {%- assign off_pct = tier1.price | times: 100 | divided_by: tier1.compare_at_price -%}
+      <div class="udc-pp__price" data-udc-pp-price>
+        {%- assign off_pct = 0 -%}
+        {%- if first_variant.compare_at_price > first_variant.price -%}
+          {%- assign off_pct = first_variant.price | times: 100 | divided_by: first_variant.compare_at_price -%}
           {%- assign off_pct = 100 | minus: off_pct -%}
-          <span class="udc-pp__offbadge">-{{ off_pct }}% OFF</span>
         {%- endif -%}
+        <s class="udc-pp__compare"{% if off_pct == 0 %} hidden{% endif %}>{% if off_pct > 0 %}{{ first_variant.compare_at_price | money }}{% endif %}</s>
+        <span class="udc-pp__pricenow">{{ first_variant.price | money }}</span>
+        <span class="udc-pp__offbadge"{% if off_pct == 0 %} hidden{% endif %}>-{{ off_pct }}% OFF</span>
       </div>
 
       {%- if section.blocks.size > 0 -%}
@@ -107,6 +133,68 @@
 
       {%- assign pp_form_id = 'udc-pp-form-' | append: section.id -%}
       {%- form 'product', product, class: 'udc-pp__form', id: pp_form_id -%}
+        {%- if pack_sel > 0 -%}
+          <div class="udc-pp__tiers udc-pp__tiers--packs" data-udc-pp-tiers>
+            {%- for n in (1..3) -%}
+              {%- assign key = 'pack_' | append: n -%}
+              {%- assign pk = section.settings[key] -%}
+              {%- if pk == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign pv = pk.selected_or_first_available_variant -%}
+              {%- assign is_sel = false -%}
+              {%- if n == pack_sel -%}{%- assign is_sel = true -%}{%- endif -%}
+              {%- assign key = 'pack_' | append: n | append: '_label' -%}
+              {%- assign pk_label = section.settings[key] -%}
+              {%- assign key = 'pack_' | append: n | append: '_badge' -%}
+              {%- assign pk_badge = section.settings[key] -%}
+              {%- assign pk_save = pv.compare_at_price | minus: pv.price -%}
+              {%- assign pk_off = 0 -%}
+              {%- if pv.compare_at_price > pv.price -%}
+                {%- assign pk_off = pv.price | times: 100 | divided_by: pv.compare_at_price -%}
+                {%- assign pk_off = 100 | minus: pk_off -%}
+              {%- endif -%}
+
+              <label class="udc-pp__tier udc-pp__pack{% if is_sel %} is-selected{% endif %}{% unless pv.available %} is-soldout{% endunless %}">
+                <input type="radio" name="udc-pp-tier-{{ section.id }}" value="{{ pv.id }}"
+                       data-price="{{ pv.price | money | escape }}"
+                       data-compare="{% if pv.compare_at_price > pv.price %}{{ pv.compare_at_price | money | escape }}{% endif %}"
+                       data-off="{{ pk_off }}"
+                       data-udc-pp-tier-radio {% if is_sel %}checked{% endif %}{% unless pv.available %} disabled{% endunless %}>
+                <span class="udc-pp__tier__radio" aria-hidden="true"></span>
+
+                {%- if pk.featured_image != blank -%}
+                  <span class="udc-pp__pack__thumb">
+                    <img src="{{ pk.featured_image | image_url: width: 160 }}" loading="lazy" width="56" height="56" alt="">
+                  </span>
+                {%- endif -%}
+
+                <span class="udc-pp__tier__main">
+                  <span class="udc-pp__pack__eyebrow">{{ section.settings.pack_prefix | default: 'Pack' }} {{ n }}</span>
+                  <span class="udc-pp__tier__name">{{ pk_label | default: pk.title }}</span>
+                  <span class="udc-pp__tier__row">
+                    {%- if pk_badge != blank -%}
+                      <span class="udc-pp__tier__badge{% unless n == 1 %} udc-pp__tier__badge--extra{% endunless %}">{{ pk_badge }}</span>
+                    {%- elsif pk_off > 0 -%}
+                      <span class="udc-pp__tier__badge udc-pp__tier__badge--extra">-{{ pk_off }}% OFF</span>
+                    {%- endif -%}
+                    {%- unless pv.available -%}
+                      <span class="udc-pp__tier__badge">{{ section.settings.sold_out_text | default: 'Agotado' }}</span>
+                    {%- endunless -%}
+                  </span>
+                  {%- if pk_save > 0 -%}
+                    <span class="udc-pp__tier__save">{{ section.settings.savings_label | default: 'Ahorrá' }} {{ pk_save | money }}</span>
+                  {%- endif -%}
+                </span>
+
+                <span class="udc-pp__tier__prices">
+                  <span class="udc-pp__tier__pricenow">{{ pv.price | money }}</span>
+                  {%- if pv.compare_at_price > pv.price -%}
+                    <s class="udc-pp__tier__pricecompare">{{ pv.compare_at_price | money }}</s>
+                  {%- endif -%}
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
         <div class="udc-pp__tiers" data-udc-pp-tiers>
           {%- for variant in product.variants -%}
             {%- assign qty = forloop.index -%}
@@ -149,8 +237,9 @@
             </label>
           {%- endfor -%}
         </div>
+        {%- endif -%}
 
-        <input type="hidden" name="id" value="{{ tier1.id }}" data-udc-pp-variant-input>
+        <input type="hidden" name="id" value="{{ first_variant.id }}" data-udc-pp-variant-input>
 
         {%- if section.settings.bump_product != blank and section.settings.bump_product.selected_or_first_available_variant.available -%}
           {%- assign bump_variant = section.settings.bump_product.selected_or_first_available_variant -%}
@@ -246,7 +335,7 @@
         {%- endif -%}
         <div class="udc-pp__sticky-info">
           <span class="udc-pp__sticky-title">{{ product.title }}</span>
-          <span class="udc-pp__sticky-price" data-udc-pp-sticky-price>{{ tier1.price | money }}</span>
+          <span class="udc-pp__sticky-price" data-udc-pp-sticky-price>{{ first_variant.price | money }}</span>
         </div>
         <button type="button" class="udc-btn udc-pp__sticky-btn" data-udc-pp-sticky-btn tabindex="-1">
           {{ section.settings.sticky_text | default: 'Agregar al carrito' }}
@@ -358,6 +447,21 @@
   #udc-pp-{{ section.id }} .udc-pp__tier__badge--extra{background:var(--udc-accent);color:#fff}
   #udc-pp-{{ section.id }} .udc-pp__tier__save{font-size:12px;color:var(--udc-dim)}
 
+  #udc-pp-{{ section.id }} .udc-pp__price [hidden]{display:none}
+
+  #udc-pp-{{ section.id }} .udc-pp__pack__thumb{
+    flex:0 0 auto;width:56px;height:56px;border-radius:12px;overflow:hidden;
+    border:1px solid var(--udc-border);background:var(--udc-bg)}
+  #udc-pp-{{ section.id }} .udc-pp__pack__thumb img{display:block;width:100%;height:100%;object-fit:cover}
+  #udc-pp-{{ section.id }} .udc-pp__pack__eyebrow{
+    font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--udc-accent);font-weight:700}
+  #udc-pp-{{ section.id }} .udc-pp__pack .udc-pp__tier__name{line-height:1.3}
+  #udc-pp-{{ section.id }} .udc-pp__pack.is-soldout{opacity:.5;cursor:not-allowed}
+  @media (max-width:420px){
+    #udc-pp-{{ section.id }} .udc-pp__pack{gap:10px;padding:14px}
+    #udc-pp-{{ section.id }} .udc-pp__pack__thumb{width:44px;height:44px}
+  }
+
   #udc-pp-{{ section.id }} .udc-pp__tier__prices{flex:0 0 auto;text-align:right;display:flex;flex-direction:column;gap:2px}
   #udc-pp-{{ section.id }} .udc-pp__tier__pricenow{
     font-family:var(--udc-anton);font-size:19px;color:var(--udc-text)}
@@ -448,6 +552,19 @@
     { "type": "text", "id": "tier_label", "label": "Etiqueta", "default": "Llevando" },
     { "type": "text", "id": "tier1_badge", "label": "Badge de la 1ª opción", "default": "Entrega inmediata" },
     { "type": "text", "id": "savings_label", "label": "Etiqueta de ahorro", "default": "Ahorrá" },
+
+    { "type": "header", "content": "Packs (reemplazan al selector de cantidad)" },
+    { "type": "paragraph", "content": "Si elegís al menos un producto acá, las burbujas pasan a ser estos packs (primera variante disponible de cada uno) en vez de Llevando 1/2/3. Vacíos = selector de cantidad." },
+    { "type": "text", "id": "pack_prefix", "label": "Etiqueta arriba del nombre", "default": "Pack" },
+    { "type": "product", "id": "pack_1", "label": "Pack 1" },
+    { "type": "text", "id": "pack_1_label", "label": "Pack 1 · nombre (vacío = título del producto)" },
+    { "type": "text", "id": "pack_1_badge", "label": "Pack 1 · badge (vacío = -% OFF)" },
+    { "type": "product", "id": "pack_2", "label": "Pack 2" },
+    { "type": "text", "id": "pack_2_label", "label": "Pack 2 · nombre (vacío = título del producto)" },
+    { "type": "text", "id": "pack_2_badge", "label": "Pack 2 · badge (vacío = -% OFF)" },
+    { "type": "product", "id": "pack_3", "label": "Pack 3" },
+    { "type": "text", "id": "pack_3_label", "label": "Pack 3 · nombre (vacío = título del producto)" },
+    { "type": "text", "id": "pack_3_badge", "label": "Pack 3 · badge (vacío = -% OFF)" },
 
     { "type": "header", "content": "Order bump" },
     { "type": "product", "id": "bump_product", "label": "Producto adicional (opcional)" },

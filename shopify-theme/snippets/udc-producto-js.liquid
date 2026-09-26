@@ -5,8 +5,9 @@
   Cuatro cosas, todas opcionales/progresivas:
    · Countdown de oferta (localStorage propio, mismo patrón que
      udc-01-temporizador — no se reinicia en cada visita).
-   · Selector de cantidad: clickear una tarjeta la marca como seleccionada
-     y cambia el input oculto "id" del form al variant_id de esa tarjeta.
+   · Selector de cantidad / packs: clickear una tarjeta la marca como
+     seleccionada y cambia el input oculto "id" del form al variant_id de
+     esa tarjeta. Con packs también actualiza el precio de arriba.
    · Al enviar el form, si hay JS, se intercepta y se agrega al carrito
      por Cart AJAX API (/cart/add.js) la variante elegida + el bump si
      está tildado, en un solo pedido, y se redirige a /cart. Si el fetch
@@ -49,6 +50,7 @@
     var stickyPrice = sticky ? sticky.querySelector('[data-udc-pp-sticky-price]') : null;
 
     var tierInput = root.querySelector('[data-udc-pp-variant-input]');
+    var priceBox = root.querySelector('[data-udc-pp-price]');
     var tiers = Array.prototype.slice.call(root.querySelectorAll('[data-udc-pp-tier-radio]'));
     tiers.forEach(function (radio) {
       radio.addEventListener('change', function () {
@@ -56,6 +58,17 @@
         radio.closest('.udc-pp__tier').classList.add('is-selected');
         if (tierInput) tierInput.value = radio.value;
         if (stickyPrice && radio.getAttribute('data-price')) stickyPrice.textContent = radio.getAttribute('data-price');
+        // Packs (distintos productos): el precio de arriba sigue al pack elegido.
+        // En el selector de cantidad no hay data-off y el precio de arriba no cambia.
+        if (priceBox && radio.hasAttribute('data-off')) {
+          var off = parseInt(radio.getAttribute('data-off'), 10) || 0;
+          var now = priceBox.querySelector('.udc-pp__pricenow');
+          var compare = priceBox.querySelector('.udc-pp__compare');
+          var badge = priceBox.querySelector('.udc-pp__offbadge');
+          if (now) now.textContent = radio.getAttribute('data-price');
+          if (compare) { compare.textContent = radio.getAttribute('data-compare'); compare.hidden = off === 0; }
+          if (badge) { badge.textContent = '-' + off + '% OFF'; badge.hidden = off === 0; }
+        }
       });
     });
 

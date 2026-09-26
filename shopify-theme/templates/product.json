@@ -43,7 +43,11 @@
         "bump_product": "shopify://products/asesoria-1-a-1-con-tino",
         "add_text": "Agregar al carrito →",
         "sold_out_text": "Agotado",
-        "brand_logo": "shopify://shop_images/udc-logo.png"
+        "brand_logo": "shopify://shop_images/udc-logo.png",
+        "pack_1": "shopify://products/guia-digital-convertite-en-closer-de-ventas",
+        "pack_2": "shopify://products/guia-digital-plataforma-teorica-con-modulos-udc",
+        "pack_3": "shopify://products/guia-digital-acompanamento-1-1",
+        "pack_1_badge": "Entrega inmediata"
       }
     },
     "udc_04": {
