@@ -37,6 +37,19 @@
 {%- endfor -%}
 {%- assign before_total = cart.total_price | plus: saved -%}
 
+{%- comment -%}
+  Mercado Pago directo: si el carrito tiene UNA sola unidad de UN producto y
+  ese producto tiene cargado el metafield custom.mercadopago_url ("Link de
+  Mercado Pago" en el admin del producto), "Finalizar compra" lleva a ese
+  link en vez del checkout de Shopify. Un link de Mercado Pago cobra un
+  monto fijo, así que con más de un producto o más de una unidad no hay un
+  link que cubra el total y se sigue usando el checkout de Shopify.
+{%- endcomment -%}
+{%- assign mp_url = '' -%}
+{%- if section.settings.mp_enabled and cart.item_count == 1 -%}
+  {%- assign mp_url = cart.items.first.product.metafields.custom.mercadopago_url.value | default: '' -%}
+{%- endif -%}
+
 <section class="udc udc-top udc-ct" id="udc-ct-{{ section.id }}">
   <span class="udc-glow udc-ct__glow" aria-hidden="true"></span>
   <span class="udc-ct__aurora udc-ct__aurora--1" aria-hidden="true"></span>
@@ -165,14 +178,25 @@
               <p class="udc-ct__note">{{ section.settings.taxes_text }}</p>
             {%- endif -%}
 
-            <button type="submit" name="checkout" class="udc-btn udc-ct__checkout" data-udc-cart-checkout>
+            {%- if mp_url != blank -%}
+              <a href="{{ mp_url }}" class="udc-btn udc-ct__checkout" data-udc-cart-checkout data-udc-cart-mp>
+            {%- else -%}
+              <button type="submit" name="checkout" class="udc-btn udc-ct__checkout" data-udc-cart-checkout>
+            {%- endif -%}
               <span class="udc-ct__shine" aria-hidden="true"></span>
               <svg class="udc-ct__btnlock" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
               </svg>
               <span>{{ section.settings.checkout_text }}</span>
               <span class="udc-ct__btnarrow" aria-hidden="true">→</span>
-            </button>
+            {%- if mp_url != blank -%}
+              </a>
+            {%- else -%}
+              </button>
+            {%- endif -%}
+            {%- if mp_url != blank and section.settings.mp_note != blank -%}
+              <p class="udc-ct__mpnote">{{ section.settings.mp_note }}</p>
+            {%- endif -%}
 
             {%- if section.settings.secure_text != blank -%}
               <p class="udc-ct__secure">
@@ -217,11 +241,19 @@
           <span>{{ section.settings.total_label }}</span>
           <b>{{ cart.total_price | money }}</b>
         </div>
-        <button type="submit" form="{{ cart_form_id }}" name="checkout" class="udc-btn udc-ct__sticky-btn" tabindex="-1">
+        {%- if mp_url != blank -%}
+          <a href="{{ mp_url }}" class="udc-btn udc-ct__sticky-btn" tabindex="-1" data-udc-cart-mp>
+        {%- else -%}
+          <button type="submit" form="{{ cart_form_id }}" name="checkout" class="udc-btn udc-ct__sticky-btn" tabindex="-1">
+        {%- endif -%}
           <span class="udc-ct__shine" aria-hidden="true"></span>
           <span>{{ section.settings.checkout_text }}</span>
           <span class="udc-ct__btnarrow" aria-hidden="true">→</span>
-        </button>
+        {%- if mp_url != blank -%}
+          </a>
+        {%- else -%}
+          </button>
+        {%- endif -%}
       </div>
     {%- endif -%}
   {%- endif -%}
@@ -264,6 +296,8 @@
     { "type": "text", "id": "total_label", "label": "Etiqueta del total", "default": "Total" },
     { "type": "text", "id": "taxes_text", "label": "Nota de impuestos", "default": "Impuestos incluidos.", "info": "Se muestra solo si la tienda tiene impuestos incluidos en los precios." },
     { "type": "text", "id": "checkout_text", "label": "Botón de compra", "default": "Finalizar compra" },
+    { "type": "checkbox", "id": "mp_enabled", "label": "Pagar con link de Mercado Pago", "default": true, "info": "Si el carrito tiene 1 unidad de un producto con 'Link de Mercado Pago' cargado (admin del producto → Metacampos), el botón lleva a ese link. Si no, checkout de Shopify." },
+    { "type": "text", "id": "mp_note", "label": "Nota bajo el botón (Mercado Pago)", "default": "Vas a pagar de forma segura con Mercado Pago" },
     { "type": "checkbox", "id": "sticky_enabled", "label": "Barra fija abajo en celular", "default": true, "info": "Aparece con el total y el botón cuando el resumen queda fuera de pantalla." },
     { "type": "text", "id": "secure_text", "label": "Texto bajo el botón", "default": "Pago Seguro En Línea" },
     { "type": "text", "id": "payment_row", "label": "Medios de pago (separados por coma)", "default": "Mercado Pago, Visa, Mastercard, Amex" },
