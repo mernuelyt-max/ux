@@ -20,6 +20,24 @@
     var root = document.getElementById('udc-ct-' + sid);
     if (!root) return;
 
+    // Barra fija (celular): visible mientras el botón del resumen no está en
+    // pantalla. Se vuelve a enganchar después de cada re-render de la sección.
+    var stickyObs = null;
+    var initSticky = function () {
+      if (stickyObs) { stickyObs.disconnect(); stickyObs = null; }
+      var bar = root.querySelector('[data-udc-cart-sticky]');
+      var mainBtn = root.querySelector('[data-udc-cart-checkout]');
+      if (!bar || !mainBtn || !('IntersectionObserver' in window)) return;
+      var barBtn = bar.querySelector('button');
+      stickyObs = new IntersectionObserver(function (entries) {
+        var show = !entries[0].isIntersecting;
+        bar.classList.toggle('is-visible', show);
+        if (barBtn) barBtn.tabIndex = show ? 0 : -1;
+      });
+      stickyObs.observe(mainBtn);
+    };
+    initSticky();
+
     var fallback = function (href) {
       if (href) { window.location.href = href; return; }
       var form = document.getElementById('udc-ct-form-' + sid);
@@ -45,6 +63,7 @@
           root.querySelectorAll('[data-udc-reveal]').forEach(function (el) { el.classList.add('is-in'); });
           var total = root.querySelector('.udc-ct__total');
           if (total) total.classList.add('is-bump');
+          initSticky();
         })
         .catch(function () { fallback(href); });
     };

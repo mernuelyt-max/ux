@@ -39,6 +39,8 @@
 
 <section class="udc udc-top udc-ct" id="udc-ct-{{ section.id }}">
   <span class="udc-glow udc-ct__glow" aria-hidden="true"></span>
+  <span class="udc-ct__aurora udc-ct__aurora--1" aria-hidden="true"></span>
+  <span class="udc-ct__aurora udc-ct__aurora--2" aria-hidden="true"></span>
 
   <div class="udc-ct__head" data-udc-reveal>
     {%- if section.settings.eyebrow != blank -%}
@@ -53,6 +55,14 @@
     {%- endif -%}
   </div>
 
+  {%- if cart.item_count > 0 and section.settings.step_1 != blank -%}
+    <ol class="udc-ct__steps" data-udc-reveal>
+      <li class="is-active"><span>1</span>{{ section.settings.step_1 }}</li>
+      {%- if section.settings.step_2 != blank -%}<li><span>2</span>{{ section.settings.step_2 }}</li>{%- endif -%}
+      {%- if section.settings.step_3 != blank -%}<li><span>3</span>{{ section.settings.step_3 }}</li>{%- endif -%}
+    </ol>
+  {%- endif -%}
+
   {%- if cart.item_count == 0 -%}
     <div class="udc-ct__empty" data-udc-reveal>
       <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -66,6 +76,12 @@
     {%- form 'cart', cart, class: 'udc-ct__form', id: cart_form_id -%}
       <div class="udc-ct__grid">
         <div class="udc-ct__lines">
+          {%- if saved > 0 and section.settings.savings_banner != blank -%}
+            <div class="udc-ct__savebar">
+              <span aria-hidden="true">🔥</span>
+              <span>{{ section.settings.savings_banner }} <b>{{ saved | money }}</b></span>
+            </div>
+          {%- endif -%}
           {%- for item in cart.items -%}
             {%- assign compare = item.variant.compare_at_price -%}
             <div class="udc-ct__line" style="--i:{{ forloop.index0 }}" data-udc-cart-line="{{ forloop.index }}">
@@ -126,6 +142,7 @@
 
         <aside class="udc-ct__summary">
           <div class="udc-ct__card">
+            <span class="udc-ct__cardborder" aria-hidden="true"></span>
             <span class="udc-ct__cardtitle">{{ section.settings.summary_title }}</span>
 
             {%- if saved > 0 -%}
@@ -148,9 +165,13 @@
               <p class="udc-ct__note">{{ section.settings.taxes_text }}</p>
             {%- endif -%}
 
-            <button type="submit" name="checkout" class="udc-btn udc-ct__checkout">
+            <button type="submit" name="checkout" class="udc-btn udc-ct__checkout" data-udc-cart-checkout>
               <span class="udc-ct__shine" aria-hidden="true"></span>
-              {{ section.settings.checkout_text }}
+              <svg class="udc-ct__btnlock" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+              </svg>
+              <span>{{ section.settings.checkout_text }}</span>
+              <span class="udc-ct__btnarrow" aria-hidden="true">→</span>
             </button>
 
             {%- if section.settings.secure_text != blank -%}
@@ -176,19 +197,33 @@
           {%- if section.settings.badge1_text != blank or section.settings.badge2_text != blank or section.settings.badge3_text != blank -%}
             <div class="udc-ct__badges">
               {%- if section.settings.badge1_text != blank -%}
-                <span><span aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
+                <span><span class="udc-ct__badgeicon" aria-hidden="true">{{ section.settings.badge1_icon }}</span>{{ section.settings.badge1_text }}</span>
               {%- endif -%}
               {%- if section.settings.badge2_text != blank -%}
-                <span><span aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
+                <span><span class="udc-ct__badgeicon" aria-hidden="true">{{ section.settings.badge2_icon }}</span>{{ section.settings.badge2_text }}</span>
               {%- endif -%}
               {%- if section.settings.badge3_text != blank -%}
-                <span><span aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
+                <span><span class="udc-ct__badgeicon" aria-hidden="true">{{ section.settings.badge3_icon }}</span>{{ section.settings.badge3_text }}</span>
               {%- endif -%}
             </div>
           {%- endif -%}
         </aside>
       </div>
     {%- endform -%}
+
+    {%- if section.settings.sticky_enabled -%}
+      <div class="udc-ct__sticky" data-udc-cart-sticky>
+        <div class="udc-ct__sticky-info">
+          <span>{{ section.settings.total_label }}</span>
+          <b>{{ cart.total_price | money }}</b>
+        </div>
+        <button type="submit" form="{{ cart_form_id }}" name="checkout" class="udc-btn udc-ct__sticky-btn" tabindex="-1">
+          <span class="udc-ct__shine" aria-hidden="true"></span>
+          <span>{{ section.settings.checkout_text }}</span>
+          <span class="udc-ct__btnarrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    {%- endif -%}
   {%- endif -%}
 </section>
 
@@ -211,6 +246,10 @@
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Último paso" },
     { "type": "text", "id": "title_1", "label": "Título", "default": "Tu" },
     { "type": "text", "id": "title_2", "label": "Título (serif itálica)", "default": "carrito" },
+    { "type": "text", "id": "step_1", "label": "Paso 1 (vacío = sin pasos)", "default": "Carrito" },
+    { "type": "text", "id": "step_2", "label": "Paso 2", "default": "Pago seguro" },
+    { "type": "text", "id": "step_3", "label": "Paso 3", "default": "Acceso inmediato" },
+    { "type": "text", "id": "savings_banner", "label": "Banner de ahorro (vacío = ocultar)", "default": "Estás ahorrando", "info": "Solo aparece si hay ahorro real (precio tachado mayor al precio)." },
 
     { "type": "header", "content": "Productos" },
     { "type": "text", "id": "remove_text", "label": "Texto de quitar", "default": "Quitar" },
@@ -224,7 +263,8 @@
     { "type": "text", "id": "saved_label", "label": "Etiqueta de ahorro", "default": "Ahorrás" },
     { "type": "text", "id": "total_label", "label": "Etiqueta del total", "default": "Total" },
     { "type": "text", "id": "taxes_text", "label": "Nota de impuestos", "default": "Impuestos incluidos.", "info": "Se muestra solo si la tienda tiene impuestos incluidos en los precios." },
-    { "type": "text", "id": "checkout_text", "label": "Botón de compra", "default": "Finalizar compra →" },
+    { "type": "text", "id": "checkout_text", "label": "Botón de compra", "default": "Finalizar compra" },
+    { "type": "checkbox", "id": "sticky_enabled", "label": "Barra fija abajo en celular", "default": true, "info": "Aparece con el total y el botón cuando el resumen queda fuera de pantalla." },
     { "type": "text", "id": "secure_text", "label": "Texto bajo el botón", "default": "Pago Seguro En Línea" },
     { "type": "text", "id": "payment_row", "label": "Medios de pago (separados por coma)", "default": "Mercado Pago, Visa, Mastercard, Amex" },
 
