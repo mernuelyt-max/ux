@@ -401,11 +401,11 @@
     {
       "type": "select", "id": "advance", "label": "Cómo avanza", "default": "time",
       "options": [
-        { "value": "time", "label": "Solo, cada X segundos (como el carrusel de imágenes)" },
-        { "value": "end", "label": "Cuando termina cada video" }
+        { "value": "time", "label": "Cada X segundos" },
+        { "value": "end", "label": "Al terminar el video" }
       ]
     },
-    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 15, "step": 1, "default": 4, "info": "En 'Cuando termina cada video' solo se usa para reels sin video." }
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 15, "step": 1, "default": 4, "info": "Con Al terminar el video, solo para reels sin video." }
   ],
   "blocks": [
     {
