@@ -472,76 +472,82 @@
             "accent": false
           }
         },
-        "b4": {
+        "s01": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/528636479_18301745335217635_6753767247189593359_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-01.jpg"
           }
         },
-        "b5": {
+        "s02": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/529980550_18301744987217635_2265782137072011016_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-02.jpg"
           }
         },
-        "b6": {
+        "s03": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/435988760_18249230107217635_6212012918725214631_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-03.jpg"
           }
         },
-        "b7": {
+        "s04": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/472853656_18279769975217635_250981189526388962_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-04.jpg"
           }
         },
-        "b8": {
+        "s05": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/458476377_18265897861217635_1750282033224139171_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-05.jpg"
           }
         },
-        "b9": {
+        "s06": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/584385230_18315938461217635_5968530133479637627_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-06.jpg"
           }
         },
-        "b10": {
+        "s07": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/548013174_17915047425056630_4737303061471721168_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-07.jpg"
           }
         },
-        "b11": {
+        "s08": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/541202369_18303956299217635_23745974498731281_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-08.jpg"
           }
         },
-        "b12": {
+        "s09": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/587290410_18317650555217635_3118883550968712209_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-09.jpg"
           }
         },
-        "b13": {
+        "s10": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/588763559_18315938497217635_2154315528679328589_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-10.jpg"
           }
         },
-        "b14": {
+        "s11": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/543739645_18304556641217635_678708304264507966_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-11.jpg"
           }
         },
-        "b15": {
+        "s12": {
           "type": "shot",
           "settings": {
-            "image": "shopify://shop_images/541089802_18303956323217635_1103330165706974148_n.jpg"
+            "image": "shopify://shop_images/udc-testimonio-12.jpg"
+          }
+        },
+        "s13": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/udc-testimonio-13.jpg"
           }
         }
       },
@@ -549,18 +555,19 @@
         "b1",
         "b2",
         "b3",
-        "b4",
-        "b5",
-        "b6",
-        "b7",
-        "b8",
-        "b9",
-        "b10",
-        "b11",
-        "b12",
-        "b13",
-        "b14",
-        "b15"
+        "s01",
+        "s02",
+        "s03",
+        "s04",
+        "s05",
+        "s06",
+        "s07",
+        "s08",
+        "s09",
+        "s10",
+        "s11",
+        "s12",
+        "s13"
       ],
       "settings": {}
     },
