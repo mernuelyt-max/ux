@@ -1,0 +1,222 @@
+{%- comment -%}
+  UDC — Reels en fila (9:16, deslizamiento horizontal)
+
+  Copia del bloque "Caffi en acción" de caffi.com.ar (video de referencia
+  del usuario): título con un rayo rojo a la izquierda y una fila de reels
+  9:16 que se desliza con el dedo (scroll-snap), con la tarjeta siguiente
+  asomando a la derecha. Cada reel se reproduce solo, muteado e inline,
+  mientras está visible en pantalla; botón de sonido abajo a la derecha.
+  Glow rojo en el reel que está sonando / más visible.
+
+  Es la versión "en fila" de sections/udc-reels.liquid (que es coverflow y
+  sigue en la landing). Mismos bloques: video subido a Shopify + portada,
+  título y detalle opcionales. Sin videos se muestran marcos vacíos (solo un
+  ▶); show_empty los oculta en la tienda hasta el primer video.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign reel_count = 0 -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.video != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
+<section class="udc udc-rf" id="udc-rf-{{ section.id }}">
+  <h2 class="udc-rf__title" data-udc-reveal>
+    <span class="udc-rf__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
+    {{ section.settings.title }}
+  </h2>
+
+  <div class="udc-rf__track" data-udc-rf-track>
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        <div class="udc-rf__card" data-udc-rf-card {{ block.shopify_attributes }}>
+          {%- if block.settings.video != blank -%}
+            {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'metadata', class: 'udc-rf__video', image_size: '540x' }}
+          {%- endif -%}
+          {%- if block.settings.cover != blank -%}
+            <img class="udc-rf__cover" src="{{ block.settings.cover | image_url: width: 540 }}" loading="lazy"
+                 width="{{ block.settings.cover.width }}" height="{{ block.settings.cover.height }}" alt="">
+          {%- endif -%}
+          {%- if block.settings.video == blank -%}
+            <span class="udc-rf__empty" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              {%- if request.design_mode -%}<small>Subí un video 9:16</small>{%- endif -%}
+            </span>
+          {%- endif -%}
+          <span class="udc-rf__shade" aria-hidden="true"></span>
+          {%- if block.settings.title != blank or block.settings.caption != blank -%}
+            <span class="udc-rf__body">
+              {%- if block.settings.title != blank -%}<b>{{ block.settings.title }}</b>{%- endif -%}
+              {%- if block.settings.caption != blank -%}<small>{{ block.settings.caption }}</small>{%- endif -%}
+            </span>
+          {%- endif -%}
+          <button type="button" class="udc-rf__sound" data-udc-rf-sound aria-label="Activar sonido">
+            <svg class="udc-rf__ico-off" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>
+            <svg class="udc-rf__ico-on" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+          </button>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..5) -%}
+        <div class="udc-rf__card" data-udc-rf-card>
+          <span class="udc-rf__empty" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            {%- if request.design_mode -%}<small>Agregá bloques "Reel"</small>{%- endif -%}
+          </span>
+          <span class="udc-rf__shade" aria-hidden="true"></span>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #udc-rf-{{ section.id }}{padding-top:clamp(28px,5vw,48px);padding-bottom:clamp(28px,5vw,48px);overflow-x:clip}
+  #udc-rf-{{ section.id }} .udc-rf__title{
+    margin:0 auto;max-width:1080px;display:flex;align-items:center;gap:10px;
+    font-family:var(--udc-sans);font-weight:700;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;color:var(--udc-text)}
+  #udc-rf-{{ section.id }} .udc-rf__bolt{
+    display:inline-flex;color:var(--udc-accent);
+    filter:drop-shadow(0 0 10px color-mix(in srgb, var(--udc-accent) 70%, transparent))}
+  #udc-rf-{{ section.id }} .udc-rf__bolt svg{fill:var(--udc-accent)}
+
+  #udc-rf-{{ section.id }} .udc-rf__track{
+    display:flex;gap:12px;margin:20px auto 0;max-width:1080px;
+    overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:0;
+    padding:14px 2px 22px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #udc-rf-{{ section.id }} .udc-rf__track::-webkit-scrollbar{display:none}
+  /* Como en Caffi: la fila llega hasta el borde derecho de la pantalla y el
+     reel siguiente asoma cortado, invitando a deslizar. */
+  @media (max-width:1180px){
+    #udc-rf-{{ section.id }} .udc-rf__track{
+      margin-right:calc(-1 * clamp(20px,5vw,72px));padding-right:clamp(20px,5vw,72px)}
+  }
+
+  #udc-rf-{{ section.id }} .udc-rf__card{
+    position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
+    scroll-snap-align:start;isolation:isolate;cursor:pointer;
+    background:radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 32%, transparent), transparent 62%),linear-gradient(180deg,#161111,#070707);
+    border:1px solid var(--udc-border);
+    transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease}
+  #udc-rf-{{ section.id }} .udc-rf__card.is-live{
+    border-color:color-mix(in srgb, var(--udc-accent) 70%, transparent);
+    box-shadow:0 0 0 1px color-mix(in srgb, var(--udc-accent) 60%, transparent),0 10px 40px color-mix(in srgb, var(--udc-accent) 38%, transparent)}
+  #udc-rf-{{ section.id }} .udc-rf__video,
+  #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  #udc-rf-{{ section.id }} .udc-rf__cover{z-index:1;transition:opacity .4s ease}
+  #udc-rf-{{ section.id }} .udc-rf__card.is-playing .udc-rf__cover{opacity:0}
+  #udc-rf-{{ section.id }} .udc-rf__empty{
+    position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    color:rgba(255,255,255,.18);text-align:center;padding:0 14px}
+  #udc-rf-{{ section.id }} .udc-rf__empty small{font-size:11px;color:var(--udc-dim)}
+  #udc-rf-{{ section.id }} .udc-rf__shade{
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.75) 100%)}
+  #udc-rf-{{ section.id }} .udc-rf__body{
+    position:absolute;left:12px;right:52px;bottom:14px;z-index:3;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+  #udc-rf-{{ section.id }} .udc-rf__body b{font-size:14px;line-height:1.2;color:#fff}
+  #udc-rf-{{ section.id }} .udc-rf__body small{font-size:11px;color:var(--udc-muted)}
+
+  #udc-rf-{{ section.id }} .udc-rf__sound{
+    position:absolute;right:10px;bottom:10px;z-index:4;width:36px;height:36px;border-radius:50%;padding:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    background:rgba(10,10,10,.6);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .2s ease}
+  #udc-rf-{{ section.id }} .udc-rf__ico-on{display:none}
+  #udc-rf-{{ section.id }} .udc-rf__card.is-sound .udc-rf__ico-on{display:block}
+  #udc-rf-{{ section.id }} .udc-rf__card.is-sound .udc-rf__ico-off{display:none}
+  #udc-rf-{{ section.id }} .udc-rf__card.is-sound .udc-rf__sound{background:var(--udc-accent);border-color:var(--udc-accent)}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-rf-{{ section.id }} .udc-rf__card{transition:none}
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-rf-{{ section.id }}');
+    if (!root) return;
+    var cards = Array.prototype.slice.call(root.querySelectorAll('[data-udc-rf-card]'));
+    var vids = cards.map(function (c) { return c.querySelector('video'); });
+    var ratios = cards.map(function () { return 0; });
+
+    vids.forEach(function (v, i) {
+      if (!v) return;
+      v.muted = true; v.playsInline = true; v.loop = true; v.removeAttribute('controls');
+      v.addEventListener('playing', function () { cards[i].classList.add('is-playing'); });
+      v.addEventListener('pause', function () { cards[i].classList.remove('is-playing'); });
+    });
+
+    // El reel más visible lleva el glow; todos los que están en pantalla (>=60%) se reproducen.
+    var update = function () {
+      var best = -1, bestR = 0;
+      ratios.forEach(function (r, i) { if (r > bestR) { bestR = r; best = i; } });
+      cards.forEach(function (c, i) {
+        c.classList.toggle('is-live', i === best && bestR >= 0.6);
+        var v = vids[i];
+        if (!v) return;
+        if (ratios[i] >= 0.6 && !c.classList.contains('is-paused')) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else v.pause();
+      });
+    };
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { ratios[cards.indexOf(e.target)] = e.intersectionRatio; });
+        update();
+      }, { threshold: [0, 0.3, 0.6, 0.9] });
+      cards.forEach(function (c) { io.observe(c); });
+    } else {
+      ratios = ratios.map(function () { return 1; });
+      update();
+    }
+
+    root.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-udc-rf-card]');
+      if (!card) return;
+      var i = cards.indexOf(card);
+      var v = vids[i];
+      if (!v) return;
+      if (e.target.closest('[data-udc-rf-sound]')) {
+        // Un solo reel con sonido a la vez.
+        var on = !card.classList.contains('is-sound');
+        cards.forEach(function (c, j) {
+          c.classList.toggle('is-sound', on && j === i);
+          if (vids[j]) vids[j].muted = !(on && j === i);
+        });
+        card.querySelector('[data-udc-rf-sound]').setAttribute('aria-label', on ? 'Silenciar' : 'Activar sonido');
+        if (on && v.paused) { card.classList.remove('is-paused'); v.play(); }
+        return;
+      }
+      card.classList.toggle('is-paused', !v.paused);
+      if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
+    });
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "UDC · Reels en fila",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "La U en acción" },
+    { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "Reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
+        { "type": "image_picker", "id": "cover", "label": "Portada (opcional)" },
+        { "type": "text", "id": "title", "label": "Título (opcional)" },
+        { "type": "text", "id": "caption", "label": "Detalle (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Reels en fila" }]
+}
+{% endschema %}

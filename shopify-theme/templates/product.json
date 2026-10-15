@@ -51,7 +51,8 @@
         "pack_3_no_bump": true,
         "gift_text": "",
         "pack_3_ribbon": "Incluye asesoría 1 a 1",
-        "divider_text": "Elegí tu pack"
+        "divider_text": "Elegí tu pack",
+        "show_tabs": false
       }
     },
     "udc_04": {
@@ -949,17 +950,67 @@
         "add_text": "+ Agregar"
       }
     },
-    "reels": {
-      "type": "udc-reels",
+    "reels_fila": {
+      "type": "udc-reels-fila",
+      "settings": {
+        "title": "La U en acción"
+      }
+    },
+    "acordeon": {
+      "type": "udc-pp-acordeon",
+      "blocks": {
+        "d1": {
+          "type": "descripcion",
+          "settings": {
+            "title": "Qué incluye",
+            "icon": "check",
+            "open": false
+          }
+        },
+        "e1": {
+          "type": "item",
+          "settings": {
+            "title": "Entrega",
+            "icon": "bolt",
+            "text": "<p>Acceso inmediato: apenas confirmamos el pago recibís el link de descarga por email y WhatsApp.</p>",
+            "open": false
+          }
+        },
+        "p1": {
+          "type": "item",
+          "settings": {
+            "title": "Pago",
+            "icon": "card",
+            "text": "<p>Pagás con <strong>Mercado Pago, Visa, Mastercard o Amex</strong>. Tu compra está 100% protegida y tus datos viajan cifrados.</p>",
+            "open": false
+          }
+        },
+        "g1": {
+          "type": "item",
+          "settings": {
+            "title": "Garantía total",
+            "icon": "shield",
+            "text": "<p>7 días de garantía: si no es para vos, te devolvemos el 100% de tu dinero.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "e1",
+        "p1",
+        "g1"
+      ],
       "settings": {}
     }
   },
   "order": [
     "main",
+    "reels_fila",
+    "acordeon",
     "udc_04",
     "facturacion",
     "cinta",
-    "reels",
     "udc_05",
     "udc_06",
     "udc_07",

@@ -1,0 +1,134 @@
+{%- comment -%}
+  UDC — Acordeón de la página de producto
+
+  Copia del acordeón de caffi.com.ar (video de referencia del usuario):
+  filas separadas por líneas, ícono de línea a la izquierda, título en
+  negrita y un chevron dentro de un círculo oscuro a la derecha. Abierto:
+  el círculo se vuelve rojo, el chevron gira y el ícono se pinta de rojo;
+  el contenido usa viñetas rojas y negritas en blanco.
+
+  Reemplaza a las tabs Descripción / Entrega / Garantía de udc-producto
+  (que siguen ahí, apagadas con show_tabs). Bloques:
+   · "descripcion": muestra la descripción real del producto (la misma que
+     estaba en la tab Descripción).
+   · "item": título + ícono + texto libre (Entrega, Garantía, etc.).
+  Funciona sin JS (<details>/<summary>).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+<section class="udc udc-ac" id="udc-ac-{{ section.id }}">
+  <div class="udc-ac__list" data-udc-reveal>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'descripcion' and product.description == blank -%}{%- continue -%}{%- endif -%}
+      <details class="udc-ac__item" {% if block.settings.open %}open{% endif %} {{ block.shopify_attributes }}>
+        <summary class="udc-ac__head">
+          <span class="udc-ac__icon">{% render 'udc-icon', name: block.settings.icon, size: 24 %}</span>
+          <span class="udc-ac__title">{{ block.settings.title }}</span>
+          <span class="udc-ac__chev" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </summary>
+        <div class="udc-ac__body">
+          {%- if block.type == 'descripcion' -%}
+            {{ product.description }}
+          {%- else -%}
+            {{ block.settings.text }}
+          {%- endif -%}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+</section>
+
+<style>
+  #udc-ac-{{ section.id }}{padding-top:8px;padding-bottom:clamp(36px,6vw,64px)}
+  #udc-ac-{{ section.id }} .udc-ac__list{max-width:760px;margin:0 auto;border-top:1px solid var(--udc-line)}
+  #udc-ac-{{ section.id }} .udc-ac__item{border-bottom:1px solid var(--udc-line)}
+  #udc-ac-{{ section.id }} .udc-ac__head{
+    display:flex;align-items:center;gap:16px;padding:22px 2px;cursor:pointer;list-style:none;
+    -webkit-tap-highlight-color:transparent}
+  #udc-ac-{{ section.id }} .udc-ac__head::-webkit-details-marker{display:none}
+  #udc-ac-{{ section.id }} .udc-ac__icon{flex:0 0 auto;display:inline-flex;color:var(--udc-text);transition:color .25s ease}
+  #udc-ac-{{ section.id }} .udc-ac__title{flex:1 1 auto;font-family:var(--udc-sans);font-weight:700;font-size:clamp(17px,1.8vw,20px);color:var(--udc-text)}
+  #udc-ac-{{ section.id }} .udc-ac__chev{
+    flex:0 0 auto;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:var(--udc-text);background:#1A1A1A;transition:background .25s ease,transform .3s ease,box-shadow .25s ease}
+  #udc-ac-{{ section.id }} .udc-ac__head:hover .udc-ac__chev{background:#262626}
+  #udc-ac-{{ section.id }} .udc-ac__item[open] .udc-ac__icon{color:var(--udc-accent)}
+  #udc-ac-{{ section.id }} .udc-ac__item[open] .udc-ac__chev{
+    background:var(--udc-accent);color:#fff;transform:rotate(180deg);
+    box-shadow:0 0 22px color-mix(in srgb, var(--udc-accent) 60%, transparent)}
+
+  #udc-ac-{{ section.id }} .udc-ac__body{
+    padding:0 2px 24px 40px;font-size:14.5px;line-height:1.75;color:#BDB8B0;animation:udcAcIn .35s ease}
+  @keyframes udcAcIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  #udc-ac-{{ section.id }} .udc-ac__body p{margin:0 0 12px}
+  #udc-ac-{{ section.id }} .udc-ac__body p:last-child{margin-bottom:0}
+  #udc-ac-{{ section.id }} .udc-ac__body strong,
+  #udc-ac-{{ section.id }} .udc-ac__body b{color:var(--udc-text)}
+  #udc-ac-{{ section.id }} .udc-ac__body ul{list-style:none;margin:0 0 12px;padding:0}
+  #udc-ac-{{ section.id }} .udc-ac__body li{position:relative;padding-left:22px;margin:0 0 10px}
+  #udc-ac-{{ section.id }} .udc-ac__body li::before{
+    content:'';position:absolute;left:2px;top:.72em;width:7px;height:7px;border-radius:50%;background:var(--udc-accent);
+    box-shadow:0 0 8px color-mix(in srgb, var(--udc-accent) 70%, transparent)}
+  #udc-ac-{{ section.id }} .udc-ac__body a{color:var(--udc-accent)}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-ac-{{ section.id }} .udc-ac__body{animation:none}
+    #udc-ac-{{ section.id }} .udc-ac__chev{transition:none}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Acordeón",
+  "tag": "div",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "descripcion",
+      "name": "Descripción del producto",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Qué incluye" },
+        {
+          "type": "select", "id": "icon", "label": "Ícono", "default": "check",
+          "options": [
+            { "value": "check", "label": "Check" }, { "value": "book", "label": "Libro" },
+            { "value": "question", "label": "Pregunta" }, { "value": "bolt", "label": "Rayo" },
+            { "value": "leaf", "label": "Hoja" }, { "value": "truck", "label": "Envío" },
+            { "value": "shield", "label": "Escudo" }, { "value": "card", "label": "Tarjeta" },
+            { "value": "chat", "label": "Chat" }, { "value": "phone", "label": "Celular" },
+            { "value": "gift", "label": "Regalo" }, { "value": "clock", "label": "Reloj" },
+            { "value": "lock", "label": "Candado" }
+          ]
+        },
+        { "type": "checkbox", "id": "open", "label": "Abierto al cargar", "default": false }
+      ]
+    },
+    {
+      "type": "item",
+      "name": "Ítem",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Título" },
+        {
+          "type": "select", "id": "icon", "label": "Ícono", "default": "check",
+          "options": [
+            { "value": "check", "label": "Check" }, { "value": "book", "label": "Libro" },
+            { "value": "question", "label": "Pregunta" }, { "value": "bolt", "label": "Rayo" },
+            { "value": "leaf", "label": "Hoja" }, { "value": "truck", "label": "Envío" },
+            { "value": "shield", "label": "Escudo" }, { "value": "card", "label": "Tarjeta" },
+            { "value": "chat", "label": "Chat" }, { "value": "phone", "label": "Celular" },
+            { "value": "gift", "label": "Regalo" }, { "value": "clock", "label": "Reloj" },
+            { "value": "lock", "label": "Candado" }
+          ]
+        },
+        { "type": "richtext", "id": "text", "label": "Contenido" },
+        { "type": "checkbox", "id": "open", "label": "Abierto al cargar", "default": false }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Acordeón" }]
+}
+{% endschema %}
