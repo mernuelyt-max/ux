@@ -6,7 +6,9 @@
   9:16 que se desliza con el dedo (scroll-snap), con la tarjeta siguiente
   asomando a la derecha. Cada reel se reproduce solo, muteado e inline,
   mientras está visible en pantalla; botón de sonido abajo a la derecha.
-  Glow rojo en el reel que está sonando / más visible.
+  Glow rojo en el reel que está sonando / más visible, glow rojo en los
+  dos costados de la fila y deslizamiento automático (un reel cada
+  `interval` segundos, en loop; se frena al tocar o con el mouse encima).
 
   Es la versión "en fila" de sections/udc-reels.liquid (que es coverflow y
   sigue en la landing). Mismos bloques: video subido a Shopify + portada,
@@ -28,7 +30,10 @@
     {{ section.settings.title }}
   </h2>
 
-  <div class="udc-rf__track" data-udc-rf-track>
+  <div class="udc-rf__wrap">
+  <span class="udc-rf__edge udc-rf__edge--l" aria-hidden="true"></span>
+  <span class="udc-rf__edge udc-rf__edge--r" aria-hidden="true"></span>
+  <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
     {%- if section.blocks.size > 0 -%}
       {%- for block in section.blocks -%}
         <div class="udc-rf__card" data-udc-rf-card {{ block.shopify_attributes }}>
@@ -70,6 +75,7 @@
       {%- endfor -%}
     {%- endif -%}
   </div>
+  </div>
 </section>
 
 <style>
@@ -82,17 +88,35 @@
     filter:drop-shadow(0 0 10px color-mix(in srgb, var(--udc-accent) 70%, transparent))}
   #udc-rf-{{ section.id }} .udc-rf__bolt svg{fill:var(--udc-accent)}
 
+  #udc-rf-{{ section.id }} .udc-rf__wrap{position:relative;max-width:1080px;margin:20px auto 0}
   #udc-rf-{{ section.id }} .udc-rf__track{
-    display:flex;gap:12px;margin:20px auto 0;max-width:1080px;
+    display:flex;gap:12px;margin:0;
     overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:0;
     padding:14px 2px 22px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   #udc-rf-{{ section.id }} .udc-rf__track::-webkit-scrollbar{display:none}
   /* Como en Caffi: la fila llega hasta el borde derecho de la pantalla y el
      reel siguiente asoma cortado, invitando a deslizar. */
   @media (max-width:1180px){
-    #udc-rf-{{ section.id }} .udc-rf__track{
-      margin-right:calc(-1 * clamp(20px,5vw,72px));padding-right:clamp(20px,5vw,72px)}
+    #udc-rf-{{ section.id }} .udc-rf__wrap{margin-right:calc(-1 * clamp(20px,5vw,72px))}
+    #udc-rf-{{ section.id }} .udc-rf__track{padding-right:clamp(20px,5vw,72px)}
   }
+
+  /* Glow en los costados: una línea roja brillante en cada borde de la fila
+     con un resplandor que se desvanece hacia adentro y late suave. */
+  #udc-rf-{{ section.id }} .udc-rf__edge{
+    position:absolute;top:8px;bottom:16px;width:clamp(28px,7vw,60px);z-index:5;pointer-events:none;
+    animation:udcRfEdge 2.8s ease-in-out infinite}
+  #udc-rf-{{ section.id }} .udc-rf__edge--l{
+    left:0;background:linear-gradient(90deg,color-mix(in srgb, var(--udc-accent) 42%, transparent),transparent)}
+  #udc-rf-{{ section.id }} .udc-rf__edge--r{
+    right:0;background:linear-gradient(270deg,color-mix(in srgb, var(--udc-accent) 42%, transparent),transparent);
+    animation-delay:1.4s}
+  #udc-rf-{{ section.id }} .udc-rf__edge::after{
+    content:'';position:absolute;top:10%;bottom:10%;width:2px;border-radius:2px;background:var(--udc-accent);
+    box-shadow:0 0 14px 3px color-mix(in srgb, var(--udc-accent) 75%, transparent)}
+  #udc-rf-{{ section.id }} .udc-rf__edge--l::after{left:0}
+  #udc-rf-{{ section.id }} .udc-rf__edge--r::after{right:0}
+  @keyframes udcRfEdge{0%,100%{opacity:.55}50%{opacity:1}}
 
   #udc-rf-{{ section.id }} .udc-rf__card{
     position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
@@ -131,6 +155,7 @@
 
   @media (prefers-reduced-motion: reduce){
     #udc-rf-{{ section.id }} .udc-rf__card{transition:none}
+    #udc-rf-{{ section.id }} .udc-rf__edge{animation:none;opacity:.8}
   }
 </style>
 
@@ -173,6 +198,36 @@
       update();
     }
 
+    // Deslizamiento automático: avanza un reel cada `data-auto` segundos y al
+    // llegar al final vuelve al principio. Se frena mientras la persona toca,
+    // arrastra o tiene el mouse encima, y retoma tras unos segundos quieta.
+    // Solo corre con la fila en pantalla.
+    var track = root.querySelector('[data-udc-rf-track]');
+    var autoSec = parseFloat(track.getAttribute('data-auto')) || 0;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (autoSec > 0 && !reduce && cards.length > 1) {
+      var timer = null, holdUntil = 0, onScreen = false;
+      var step = function () {
+        if (!onScreen || Date.now() < holdUntil) return;
+        var cardW = cards[0].getBoundingClientRect().width + 12;
+        var max = track.scrollWidth - track.clientWidth;
+        var next = track.scrollLeft + cardW;
+        track.scrollTo({ left: next > max - 4 ? 0 : next, behavior: 'smooth' });
+      };
+      var hold = function (ms) { holdUntil = Date.now() + (ms || 5000); };
+      ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
+        track.addEventListener(ev, function () { hold(6000); }, { passive: true });
+      });
+      // Pausa por hover solo con mouse real (en iPhone un toque dispara
+      // mouseenter sin su mouseleave y la frenaría para siempre).
+      track.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold(1e9); });
+      track.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hold(1500); });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; }, { threshold: 0.4 }).observe(track);
+      } else { onScreen = true; }
+      timer = setInterval(step, autoSec * 1000);
+    }
+
     root.addEventListener('click', function (e) {
       var card = e.target.closest('[data-udc-rf-card]');
       if (!card) return;
@@ -203,7 +258,9 @@
   "tag": "div",
   "settings": [
     { "type": "text", "id": "title", "label": "Título", "default": "La U en acción" },
-    { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true }
+    { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true },
+    { "type": "checkbox", "id": "autoplay", "label": "Deslizamiento automático", "default": true },
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 10, "step": 1, "default": 3 }
   ],
   "blocks": [
     {
