@@ -20,7 +20,7 @@
 
 {%- assign reel_count = 0 -%}
 {%- for block in section.blocks -%}
-  {%- if block.settings.video != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
+  {%- if block.settings.video != blank or block.settings.video_src != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
 {%- endfor -%}
 
 {%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
@@ -39,12 +39,15 @@
         <div class="udc-rf__card" data-udc-rf-card {{ block.shopify_attributes }}>
           {%- if block.settings.video != blank -%}
             {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'metadata', class: 'udc-rf__video', image_size: '540x' }}
+          {%- elsif block.settings.video_src != blank -%}
+            <video class="udc-rf__video" src="{{ block.settings.video_src }}" muted loop playsinline preload="metadata"
+                   {% if block.settings.poster_src != blank %}poster="{{ block.settings.poster_src }}"{% endif %}></video>
           {%- endif -%}
           {%- if block.settings.cover != blank -%}
             <img class="udc-rf__cover" src="{{ block.settings.cover | image_url: width: 540 }}" loading="lazy"
                  width="{{ block.settings.cover.width }}" height="{{ block.settings.cover.height }}" alt="">
           {%- endif -%}
-          {%- if block.settings.video == blank -%}
+          {%- if block.settings.video == blank and block.settings.video_src == blank -%}
             <span class="udc-rf__empty" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               {%- if request.design_mode -%}<small>Subí un video 9:16</small>{%- endif -%}
@@ -268,6 +271,8 @@
       "name": "Reel",
       "settings": [
         { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
+        { "type": "text", "id": "video_src", "label": "O link directo al MP4", "info": "Se usa si no elegís un video arriba. Ej: el link de Contenido → Archivos." },
+        { "type": "text", "id": "poster_src", "label": "Link de portada (opcional)" },
         { "type": "image_picker", "id": "cover", "label": "Portada (opcional)" },
         { "type": "text", "id": "title", "label": "Título (opcional)" },
         { "type": "text", "id": "caption", "label": "Detalle (opcional)" }
