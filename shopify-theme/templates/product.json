@@ -696,7 +696,7 @@
         "eyebrow": "Facturación de alumnos",
         "title_1": "Lo que están facturando",
         "title_2": "nuestros alumnos",
-        "layout": "carousel",
+        "layout": "wall",
         "interval": 4,
         "wall_speed": 7,
         "disclaimer": "Resultados reales de alumnos concretos, reconocidos en la conferencia anual de U del Closer. No son ingresos típicos ni garantizados: dependen del esfuerzo, la dedicación y el mercado de cada persona."

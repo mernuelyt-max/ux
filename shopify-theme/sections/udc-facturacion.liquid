@@ -14,7 +14,9 @@
      el mouse encima, y se navega con flechas, puntos, swipe o tocando una
      tarjeta lateral. Loop infinito sin clonar nodos (cada slide calcula su
      offset circular respecto de la activa).
-   · "wall" — marquesina horizontal con todas las tarjetas 9:16 a la vez.
+   · "wall" — marquesina horizontal con todas las tarjetas 9:16 a la vez,
+     con glow rojo que late, brillo que las cruza y bordes que se esfuman;
+     se pausa con el mouse encima. Es el diseño activo en landing y producto.
 
   No se inventó ni un nombre ni un monto: son los 7 alumnos de las fotos que
   pasó el usuario (reconocimientos en la conferencia anual, con el monto en el
@@ -170,10 +172,19 @@
     width:22px;background:var(--udc-accent);box-shadow:0 0 12px color-mix(in srgb, var(--udc-accent) 60%, transparent)}
 
   /* Marquesina (layout "wall") */
-  #udc-fc-{{ section.id }} .udc-fc__wall{--fc-w:180px;overflow:hidden;margin-top:44px;position:relative;padding:20px 0}
+  #udc-fc-{{ section.id }} .udc-fc__wall{
+    --fc-w:clamp(190px,46vw,230px);overflow:hidden;margin:14px 0 -30px;position:relative;padding:74px 0;
+    -webkit-mask-image:linear-gradient(to right,transparent,black 8%,black 92%,transparent);
+    mask-image:linear-gradient(to right,transparent,black 8%,black 92%,transparent)}
   #udc-fc-{{ section.id }} .udc-fc__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
-  #udc-fc-{{ section.id }} .udc-fc__row{gap:16px;padding-right:16px}
-  #udc-fc-{{ section.id }} .udc-fc__row .udc-fc__card{flex:0 0 auto}
+  #udc-fc-{{ section.id }} .udc-fc__wall:hover .udc-fc__mq{animation-play-state:paused}
+  #udc-fc-{{ section.id }} .udc-fc__row{gap:18px;padding-right:18px}
+  #udc-fc-{{ section.id }} .udc-fc__row .udc-fc__card{
+    flex:0 0 auto;border-color:color-mix(in srgb, var(--udc-accent) 55%, transparent);
+    animation:udcFcGlow 3.2s ease-in-out infinite;transition:transform .35s ease}
+  #udc-fc-{{ section.id }} .udc-fc__row .udc-fc__card:nth-child(even){animation-delay:-1.6s}
+  #udc-fc-{{ section.id }} .udc-fc__row .udc-fc__card::after{animation:udcFcShine 5.5s ease-in-out infinite}
+  #udc-fc-{{ section.id }} .udc-fc__row .udc-fc__card:hover{transform:translateY(-6px) scale(1.03)}
 
   #udc-fc-{{ section.id }} .udc-fc__disclaimer{
     position:relative;margin:32px auto 0;max-width:640px;text-align:center;font-size:11.5px;line-height:1.55;color:#6E6A64}
