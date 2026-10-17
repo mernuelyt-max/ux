@@ -1,0 +1,27 @@
+{%- comment -%}
+  UDC — Header oscuro (☰ · logo · carrito)
+
+  El mismo header de la página de producto y del carrito (snippets/
+  udc-brand-bar.liquid, estilo caffi.com.ar) como sección suelta, para
+  usarlo en la landing u otras plantillas. Oculta el header y el footer
+  blancos de Horizon (udc-hide-chrome, full: true) — pedido del usuario:
+  "mismo estilo, NO en blanco".
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+{% render 'udc-hide-chrome', full: true %}
+{% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height, menu: section.settings.brand_menu, show_cart: section.settings.brand_cart %}
+
+{% schema %}
+{
+  "name": "UDC · Header",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "brand_logo", "label": "Logo", "info": "Vacío = logo de Configuración del tema." },
+    { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
+    { "type": "link_list", "id": "brand_menu", "label": "Menú del botón ☰ (izquierda)", "default": "main-menu" },
+    { "type": "checkbox", "id": "brand_cart", "label": "Mostrar carrito arriba a la derecha", "default": true }
+  ],
+  "presets": [{ "name": "UDC · Header" }]
+}
+{% endschema %}
