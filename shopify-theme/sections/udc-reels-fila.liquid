@@ -10,6 +10,15 @@
   dos costados de la fila y deslizamiento automático (un reel cada
   `interval` segundos, en loop; se frena al tocar o con el mouse encima).
 
+  Diseño "marquesina" (el de por defecto; pedido del usuario, igual que en
+  facturación): la fila corre sola y sin parar hacia la izquierda, a lo
+  ancho de toda la pantalla, con las tarjetas duplicadas para que el loop
+  sea continuo (udcMarquee de udc-base) y el mismo glow negro en los
+  costados. Se reproducen solo los reels que están a la vista. Al activar el
+  sonido de un reel la marquesina se frena para poder verlo, y sigue al
+  silenciarlo; con el mouse encima también se frena. El diseño "fila"
+  (deslizar con el dedo + avance automático) sigue disponible en "Diseño".
+
   Es la versión "en fila" de sections/udc-reels.liquid (que es coverflow y
   sigue en la landing). Mismos bloques: video subido a Shopify + portada,
   título y detalle opcionales. Sin videos se muestran marcos vacíos (solo un
@@ -23,24 +32,21 @@
   {%- if block.settings.video != blank or block.settings.video_src != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
 {%- endfor -%}
 
-{%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
-<section class="udc udc-rf" id="udc-rf-{{ section.id }}">
-  <h2 class="udc-rf__title" data-udc-reveal>
-    <span class="udc-rf__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
-    {{ section.settings.title }}
-  </h2>
+{%- assign is_mq = true -%}
+{%- if section.settings.layout == 'fila' -%}{%- assign is_mq = false -%}{%- endif -%}
+{%- comment -%} En la marquesina los videos cargan recién al quedar a la vista (hay copias duplicadas). {%- endcomment -%}
+{%- assign rf_preload = 'metadata' -%}
+{%- if is_mq -%}{%- assign rf_preload = 'none' -%}{%- endif -%}
 
-  <div class="udc-rf__wrap">
-  <span class="udc-rf__edge udc-rf__edge--l" aria-hidden="true"></span>
-  <span class="udc-rf__edge udc-rf__edge--r" aria-hidden="true"></span>
-  <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
+{%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
+{%- capture rf_cards -%}
     {%- if section.blocks.size > 0 -%}
       {%- for block in section.blocks -%}
         <div class="udc-rf__card" data-udc-rf-card {{ block.shopify_attributes }}>
           {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'metadata', class: 'udc-rf__video', image_size: '540x' }}
+            {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: rf_preload, class: 'udc-rf__video', image_size: '540x' }}
           {%- elsif block.settings.video_src != blank -%}
-            <video class="udc-rf__video" src="{{ block.settings.video_src }}" muted loop playsinline preload="metadata"
+            <video class="udc-rf__video" src="{{ block.settings.video_src }}" muted loop playsinline preload="{{ rf_preload }}"
                    {% if block.settings.poster_src != blank %}poster="{{ block.settings.poster_src }}"{% endif %}></video>
           {%- endif -%}
           {%- if block.settings.cover != blank -%}
@@ -77,7 +83,34 @@
         </div>
       {%- endfor -%}
     {%- endif -%}
+{%- endcapture -%}
+<section class="udc udc-rf" id="udc-rf-{{ section.id }}">
+  <h2 class="udc-rf__title" data-udc-reveal>
+    <span class="udc-rf__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
+    {{ section.settings.title }}
+  </h2>
+
+  <div class="udc-rf__wrap{% if is_mq %} udc-rf__wrap--mq{% endif %}">
+  <span class="udc-rf__edge udc-rf__edge--l" aria-hidden="true"></span>
+  <span class="udc-rf__edge udc-rf__edge--r" aria-hidden="true"></span>
+  {%- if is_mq -%}
+    {%- comment -%} Cada fila repite los reels hasta tener ~8 tarjetas, para cubrir pantallas anchas. {%- endcomment -%}
+    {%- assign rf_n = section.blocks.size -%}
+    {%- if rf_n == 0 -%}{%- assign rf_n = 5 -%}{%- endif -%}
+    {%- assign rf_reps = 8 | plus: rf_n | minus: 1 | divided_by: rf_n -%}
+    {%- assign rf_total = rf_n | times: rf_reps -%}
+    <div class="udc-marquee udc-rf__mq" data-udc-rf-mq style="animation-duration:{{ rf_total | times: section.settings.interval }}s">
+      {%- for pass in (1..2) -%}
+        <div class="udc-marquee__row udc-rf__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+          {%- for r in (1..rf_reps) -%}{{ rf_cards }}{%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+  <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
+{{ rf_cards }}
   </div>
+  {%- endif -%}
   </div>
 </section>
 
@@ -103,6 +136,17 @@
     #udc-rf-{{ section.id }} .udc-rf__wrap{margin-right:calc(-1 * clamp(20px,5vw,72px))}
     #udc-rf-{{ section.id }} .udc-rf__track{padding-right:clamp(20px,5vw,72px)}
   }
+
+  /* Marquesina: de borde a borde de la pantalla (anula el padding de .udc). */
+  #udc-rf-{{ section.id }} .udc-rf__wrap--mq{
+    max-width:none;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0 !important;overflow:hidden}
+  #udc-rf-{{ section.id }} .udc-rf__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-rf-{{ section.id }} .udc-rf__wrap--mq.is-held .udc-rf__mq{animation-play-state:paused}
+  @media (hover:hover){
+    #udc-rf-{{ section.id }} .udc-rf__wrap--mq:hover .udc-rf__mq{animation-play-state:paused}
+  }
+  #udc-rf-{{ section.id }} .udc-rf__row{gap:12px;padding:14px 12px 30px 0}
+  #udc-rf-{{ section.id }} .udc-rf__row .udc-rf__card{flex-basis:clamp(150px,40vw,240px)}
 
   /* Glow negro en los costados (pedido del usuario, antes era rojo): un
      degradé negro en cada borde de la fila que funde los reels con el fondo
@@ -155,6 +199,8 @@
   @media (prefers-reduced-motion: reduce){
     #udc-rf-{{ section.id }} .udc-rf__card{transition:none}
     #udc-rf-{{ section.id }} .udc-rf__edge{animation:none;opacity:.8}
+    /* Sin animación la marquesina queda quieta: que al menos se pueda deslizar. */
+    #udc-rf-{{ section.id }} .udc-rf__wrap--mq{overflow-x:auto;scrollbar-width:none}
   }
 </style>
 
@@ -173,6 +219,9 @@
       v.addEventListener('pause', function () { cards[i].classList.remove('is-playing'); });
     });
 
+    var mq = root.querySelector('[data-udc-rf-mq]');
+    var wrap = root.querySelector('.udc-rf__wrap');
+
     // El reel más visible lleva el glow; todos los que están en pantalla (>=60%) se reproducen.
     var update = function () {
       var best = -1, bestR = 0;
@@ -182,11 +231,36 @@
         var v = vids[i];
         if (!v) return;
         if (ratios[i] >= 0.6 && !c.classList.contains('is-paused')) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-        else v.pause();
+        else if (!v.paused) v.pause();
       });
     };
 
-    if ('IntersectionObserver' in window) {
+    if (mq) {
+      // Marquesina: las tarjetas se mueven solas, así que la visibilidad se
+      // mide cada 300 ms con getBoundingClientRect (recortada al ancho de la
+      // fila y a la pantalla). El glow va al reel más cerca del centro.
+      Array.prototype.forEach.call(mq.querySelectorAll('[aria-hidden="true"] button'), function (b) { b.tabIndex = -1; });
+      var measure = function () {
+        if (document.hidden) return;
+        var w = wrap.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        var cx = (w.left + w.right) / 2, best = -1, bestD = Infinity;
+        cards.forEach(function (c, i) {
+          var r = c.getBoundingClientRect();
+          if (!r.width) { ratios[i] = 0; return; }
+          var vw = Math.max(0, Math.min(r.right, w.right) - Math.max(r.left, w.left));
+          var vv = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+          ratios[i] = (vw / r.width) * (vv / r.height);
+          var d = Math.abs((r.left + r.right) / 2 - cx);
+          if (ratios[i] >= 0.6 && d < bestD) { bestD = d; best = i; }
+        });
+        update();
+        cards.forEach(function (c, i) { c.classList.toggle('is-live', i === best); });
+      };
+      measure();
+      setInterval(measure, 300);
+      window.addEventListener('scroll', measure, { passive: true });
+    } else if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { ratios[cards.indexOf(e.target)] = e.intersectionRatio; });
         update();
@@ -207,6 +281,7 @@
     //  · al soltar después de deslizar a mano, se alinea al reel más cercano;
     //  · con "reducir movimiento" salta sin animar.
     var track = root.querySelector('[data-udc-rf-track]');
+    if (track) {
     var autoSec = parseFloat(track.getAttribute('data-auto')) || 0;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var posOf = function (i) { return cards[i].offsetLeft - cards[0].offsetLeft; };
@@ -269,6 +344,7 @@
         animateTo((next >= cards.length || track.scrollLeft >= max - 4) ? 0 : posOf(next));
       }, autoSec * 1000);
     }
+    }
 
     root.addEventListener('click', function (e) {
       var card = e.target.closest('[data-udc-rf-card]');
@@ -284,6 +360,8 @@
           if (vids[j]) vids[j].muted = !(on && j === i);
         });
         card.querySelector('[data-udc-rf-sound]').setAttribute('aria-label', on ? 'Silenciar' : 'Activar sonido');
+        // Con sonido, la marquesina se frena para poder ver ese reel.
+        if (mq) wrap.classList.toggle('is-held', on);
         if (on && v.paused) { card.classList.remove('is-paused'); v.play(); }
         return;
       }
@@ -300,9 +378,16 @@
   "tag": "div",
   "settings": [
     { "type": "text", "id": "title", "label": "Título", "default": "La U en acción" },
+    {
+      "type": "select", "id": "layout", "label": "Diseño", "default": "marquee",
+      "options": [
+        { "value": "marquee", "label": "Marquesina" },
+        { "value": "fila", "label": "Fila para deslizar" }
+      ]
+    },
     { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true },
-    { "type": "checkbox", "id": "autoplay", "label": "Deslizamiento automático", "default": true },
-    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 10, "step": 1, "default": 3 }
+    { "type": "checkbox", "id": "autoplay", "label": "Avance automático (diseño fila)", "default": true },
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "info": "En la marquesina, lo que tarda cada reel en pasar.", "min": 2, "max": 10, "step": 1, "default": 3 }
   ],
   "blocks": [
     {
