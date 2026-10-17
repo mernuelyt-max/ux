@@ -6,7 +6,7 @@
   9:16 que se desliza con el dedo (scroll-snap), con la tarjeta siguiente
   asomando a la derecha. Cada reel se reproduce solo, muteado e inline,
   mientras está visible en pantalla; botón de sonido abajo a la derecha.
-  Glow rojo en el reel que está sonando / más visible, glow rojo en los
+  Glow negro (sombra profunda) en el reel más visible, glow negro en los
   dos costados de la fila y deslizamiento automático (un reel cada
   `interval` segundos, en loop; se frena al tocar o con el mouse encima).
 
@@ -104,22 +104,18 @@
     #udc-rf-{{ section.id }} .udc-rf__track{padding-right:clamp(20px,5vw,72px)}
   }
 
-  /* Glow en los costados: una línea roja brillante en cada borde de la fila
-     con un resplandor que se desvanece hacia adentro y late suave. */
+  /* Glow negro en los costados (pedido del usuario, antes era rojo): un
+     degradé negro en cada borde de la fila que funde los reels con el fondo
+     y late suave. */
   #udc-rf-{{ section.id }} .udc-rf__edge{
-    position:absolute;top:8px;bottom:16px;width:clamp(28px,7vw,60px);z-index:5;pointer-events:none;
+    position:absolute;top:0;bottom:8px;width:clamp(36px,10vw,90px);z-index:5;pointer-events:none;
     animation:udcRfEdge 2.8s ease-in-out infinite}
   #udc-rf-{{ section.id }} .udc-rf__edge--l{
-    left:0;background:linear-gradient(90deg,color-mix(in srgb, var(--udc-accent) 42%, transparent),transparent)}
+    left:0;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,.75) 35%,transparent)}
   #udc-rf-{{ section.id }} .udc-rf__edge--r{
-    right:0;background:linear-gradient(270deg,color-mix(in srgb, var(--udc-accent) 42%, transparent),transparent);
+    right:0;background:linear-gradient(270deg,#000 0%,rgba(0,0,0,.75) 35%,transparent);
     animation-delay:1.4s}
-  #udc-rf-{{ section.id }} .udc-rf__edge::after{
-    content:'';position:absolute;top:10%;bottom:10%;width:2px;border-radius:2px;background:var(--udc-accent);
-    box-shadow:0 0 14px 3px color-mix(in srgb, var(--udc-accent) 75%, transparent)}
-  #udc-rf-{{ section.id }} .udc-rf__edge--l::after{left:0}
-  #udc-rf-{{ section.id }} .udc-rf__edge--r::after{right:0}
-  @keyframes udcRfEdge{0%,100%{opacity:.55}50%{opacity:1}}
+  @keyframes udcRfEdge{0%,100%{opacity:.8}50%{opacity:1}}
 
   #udc-rf-{{ section.id }} .udc-rf__card{
     position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
@@ -128,8 +124,8 @@
     border:1px solid var(--udc-border);
     transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease}
   #udc-rf-{{ section.id }} .udc-rf__card.is-live{
-    border-color:color-mix(in srgb, var(--udc-accent) 70%, transparent);
-    box-shadow:0 0 0 1px color-mix(in srgb, var(--udc-accent) 60%, transparent),0 10px 40px color-mix(in srgb, var(--udc-accent) 38%, transparent)}
+    border-color:rgba(255,255,255,.16);
+    box-shadow:0 0 0 1px rgba(0,0,0,.9),0 16px 48px 6px rgba(0,0,0,.95)}
   #udc-rf-{{ section.id }} .udc-rf__video,
   #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   #udc-rf-{{ section.id }} .udc-rf__cover{z-index:1;transition:opacity .4s ease}
