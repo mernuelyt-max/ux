@@ -953,7 +953,9 @@
     "reels_fila": {
       "type": "udc-reels-fila",
       "settings": {
-        "title": "La U en acción"
+        "title": "La U en acción",
+        "autoplay": true,
+        "interval": 6
       },
       "blocks": {
         "r1": {
