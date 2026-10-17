@@ -21,9 +21,16 @@
         "limit": 3,
         "add_text": "+ Agregar"
       }
+    },
+    "barra": {
+      "type": "udc-barra",
+      "settings": {
+        "text": "OFERTA ESPECIAL"
+      }
     }
   },
   "order": [
+    "barra",
     "main",
     "relacionados"
   ]
