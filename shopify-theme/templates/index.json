@@ -591,13 +591,22 @@
         "f1": {
           "type": "caso",
           "settings": {
+            "image": "shopify://shop_images/udc-facturado-hernan-grando-200k.jpg",
+            "amount": "200K",
+            "period": "Closer de ventas · 2025",
+            "name": "Hernan Grando"
+          }
+        },
+        "f2": {
+          "type": "caso",
+          "settings": {
             "image": "shopify://shop_images/udc-facturado-jupiter-marchesani-200k.jpg",
             "amount": "200K",
             "period": "Closer de ventas · 2025",
             "name": "Jupiter Marchesani"
           }
         },
-        "f2": {
+        "f3": {
           "type": "caso",
           "settings": {
             "image": "shopify://shop_images/udc-facturado-franco-potrino-130k.jpg",
@@ -606,7 +615,7 @@
             "name": "Franco Potrino"
           }
         },
-        "f3": {
+        "f4": {
           "type": "caso",
           "settings": {
             "image": "shopify://shop_images/udc-facturado-vanesa-bergamin-200k.jpg",
@@ -615,22 +624,31 @@
             "name": "Vanesa Bergamin"
           }
         },
-        "f4": {
+        "f5": {
           "type": "caso",
           "settings": {
-            "image": "shopify://shop_images/udc-facturado-adrian-martinez-70k.jpg",
-            "amount": "70K",
+            "image": "shopify://shop_images/udc-facturado-alexis-velazquez-45k.jpg",
+            "amount": "45K",
             "period": "Closer de ventas · 2025",
-            "name": "Adrian Martinez"
+            "name": "Alexis Velazquez"
           }
         },
-        "f5": {
+        "f6": {
           "type": "caso",
           "settings": {
             "image": "shopify://shop_images/udc-facturado-fernando-carnero-200k.jpg",
             "amount": "200K",
             "period": "Closer de ventas · 2025",
             "name": "Fernando Carnero"
+          }
+        },
+        "f7": {
+          "type": "caso",
+          "settings": {
+            "image": "shopify://shop_images/udc-facturado-adrian-martinez-70k.jpg",
+            "amount": "70K",
+            "period": "Closer de ventas · 2025",
+            "name": "Adrian Martinez"
           }
         }
       },
@@ -639,7 +657,9 @@
         "f2",
         "f3",
         "f4",
-        "f5"
+        "f5",
+        "f6",
+        "f7"
       ],
       "settings": {
         "eyebrow": "Facturación de alumnos",

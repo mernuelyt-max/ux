@@ -158,10 +158,10 @@ testimonios en imagen vertical con marquesina y glow.
 214×380 se ve bien a tamaño chico, pero en pantallas retina va a pixelar. Si
 aparecen los archivos originales, conviene reemplazarlas.
 
-**Lo que sigue sin aparecer:** las 5 fotos de facturación de alumnos
-(`udc-facturado-*.jpg`, con Jupiter Marchesani, Franco Potrino, Vanesa Bergamin,
-Adrian Martinez y Fernando Carnero). Los nombres y montos están en `index.json`,
-pero las fotos no estaban en el artifact.
+**Fotos de facturación de alumnos:** las 7 (`udc-facturado-*.jpg`: Hernan
+Grando, Jupiter Marchesani, Franco Potrino, Vanesa Bergamin, Alexis Velazquez,
+Fernando Carnero y Adrian Martinez) las pasó el usuario y se subieron directo a
+Archivos de Shopify, no al repo, porque muestran a personas reales.
 
 ## Cómo se combinan las dos mitades
 
