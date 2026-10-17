@@ -55,6 +55,16 @@
               {%- assign rm_poster = block.settings.cover | image_url: width: 540 -%}
             {%- elsif block.settings.poster_src != blank -%}
               {%- assign rm_poster = block.settings.poster_src -%}
+              {%- comment -%} Portada chica desde el CDN de Shopify (sin esto viene a tamaño completo). {%- endcomment -%}
+              {%- if rm_poster contains 'cdn.shopify.com' -%}
+                {%- unless rm_poster contains 'width=' -%}
+                  {%- if rm_poster contains '?' -%}
+                    {%- assign rm_poster = rm_poster | append: '&width=540' -%}
+                  {%- else -%}
+                    {%- assign rm_poster = rm_poster | append: '?width=540' -%}
+                  {%- endif -%}
+                {%- endunless -%}
+              {%- endif -%}
             {%- elsif block.settings.video != blank -%}
               {%- assign rm_poster = block.settings.video.preview_image | image_url: width: 540 -%}
             {%- endif -%}
@@ -70,7 +80,7 @@
                     aria-label="Ver reel {{ rm_i | plus: 1 }}{% if block.settings.title != blank %}: {{ block.settings.title | escape }}{% endif %}"
                     {{ block.shopify_attributes }}>
               {%- if rm_poster != blank -%}
-                <img class="udc-rm__img" src="{{ rm_poster }}" alt="" loading="lazy" width="540" height="960">
+                <img class="udc-rm__img" src="{{ rm_poster }}" alt="" decoding="async" width="540" height="960">
               {%- endif -%}
               <span class="udc-rm__shade" aria-hidden="true"></span>
               <span class="udc-rm__play" aria-hidden="true">
@@ -123,6 +133,13 @@
 
 <style>
   #udc-rm-{{ section.id }}{padding-top:clamp(28px,5vw,48px);padding-bottom:clamp(28px,5vw,48px);overflow-x:clip}
+  /* Sin el zoom .85 de .udc en celular: en Safari el zoom suma trabajo a la
+     fila que se mueve. Los tamaños de abajo ya son los que se veían con zoom. */
+  @media (max-width:749px){
+    #udc-rm-{{ section.id }}.udc{zoom:1}
+    #udc-rm-{{ section.id }} .udc-rm__title{font-size:19px}
+    #udc-rm-{{ section.id }} .udc-rm__row .udc-rm__card{flex-basis:34vw}
+  }
   #udc-rm-{{ section.id }} .udc-rm__title{
     margin:0 auto;max-width:1080px;display:flex;align-items:center;gap:10px;
     font-family:var(--udc-sans);font-weight:700;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;color:var(--udc-text)}
@@ -134,7 +151,11 @@
   /* De borde a borde de la pantalla (anula el padding lateral de .udc). */
   #udc-rm-{{ section.id }} .udc-rm__wrap{
     position:relative;overflow:hidden;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0}
-  #udc-rm-{{ section.id }} .udc-rm__mq.is-running{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  /* La fila va en su propia capa (will-change + translate3d) para que el
+     celular la mueva sin redibujarla y sin saltos de a un píxel. */
+  #udc-rm-{{ section.id }} .udc-rm__mq{will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+  #udc-rm-{{ section.id }} .udc-rm__mq.is-running{animation-name:udcRmMq;animation-timing-function:linear;animation-iteration-count:infinite}
+  @keyframes udcRmMq{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
   #udc-rm-{{ section.id }} .udc-rm__wrap.is-held .udc-rm__mq{animation-play-state:paused}
   @media (hover:hover){
     #udc-rm-{{ section.id }} .udc-rm__wrap:hover .udc-rm__mq{animation-play-state:paused}
@@ -168,17 +189,20 @@
     position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;padding-left:3px;color:#fff;
     background:color-mix(in srgb, var(--udc-accent) 88%, transparent);
-    box-shadow:0 0 0 6px color-mix(in srgb, var(--udc-accent) 22%, transparent),0 0 30px color-mix(in srgb, var(--udc-accent) 60%, transparent);
-    animation:udcRmPulse 2.4s ease-in-out infinite}
-  #udc-rm-{{ section.id }} .udc-rm__card--empty .udc-rm__play{background:rgba(255,255,255,.08);box-shadow:none;animation:none;color:rgba(255,255,255,.3)}
+    box-shadow:0 0 0 6px color-mix(in srgb, var(--udc-accent) 22%, transparent),0 0 30px color-mix(in srgb, var(--udc-accent) 60%, transparent)}
+  /* El latido es un aro que crece y se apaga (solo transform y opacity): no
+     obliga a redibujar la fila en cada cuadro como animar box-shadow. */
+  #udc-rm-{{ section.id }} .udc-rm__play::after{
+    content:'';position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--udc-accent);
+    animation:udcRmRing 2.4s ease-out infinite}
+  #udc-rm-{{ section.id }} .udc-rm__card--empty .udc-rm__play{background:rgba(255,255,255,.08);box-shadow:none;color:rgba(255,255,255,.3)}
+  #udc-rm-{{ section.id }} .udc-rm__card--empty .udc-rm__play::after{display:none}
   #udc-rm-{{ section.id }} .udc-rm__hint{position:absolute;left:10px;right:10px;bottom:16px;text-align:center;font-size:11px;color:var(--udc-dim)}
   #udc-rm-{{ section.id }} .udc-rm__body{
     position:absolute;left:12px;right:12px;bottom:14px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
   #udc-rm-{{ section.id }} .udc-rm__body b{font-size:14px;line-height:1.2;color:#fff}
   #udc-rm-{{ section.id }} .udc-rm__body small{font-size:11px;color:var(--udc-muted)}
-  @keyframes udcRmPulse{
-    0%,100%{transform:scale(1);box-shadow:0 0 0 6px color-mix(in srgb, var(--udc-accent) 22%, transparent),0 0 24px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
-    50%{transform:scale(1.08);box-shadow:0 0 0 10px color-mix(in srgb, var(--udc-accent) 14%, transparent),0 0 40px color-mix(in srgb, var(--udc-accent) 75%, transparent)}}
+  @keyframes udcRmRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.6);opacity:0}}
 
   /* Reel a pantalla completa. El JS lo mueve a <body> para que el zoom de
      .udc en celular no lo afecte; por eso se escopea con su propio id. */
@@ -208,7 +232,7 @@
 
   @media (prefers-reduced-motion: reduce){
     #udc-rm-{{ section.id }} .udc-rm__edge,
-    #udc-rm-{{ section.id }} .udc-rm__play{animation:none}
+    #udc-rm-{{ section.id }} .udc-rm__play::after{animation:none;display:none}
     /* Sin movimiento la fila queda quieta: que al menos se pueda deslizar. */
     #udc-rm-{{ section.id }} .udc-rm__wrap{overflow-x:auto;scrollbar-width:none}
     #udc-rm-lb-{{ section.id }}{transition:none}
