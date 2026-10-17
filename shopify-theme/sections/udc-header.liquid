@@ -5,11 +5,16 @@
   udc-brand-bar.liquid, estilo caffi.com.ar) como sección suelta, para
   usarlo en la landing u otras plantillas. Oculta el header y el footer
   blancos de Horizon (udc-hide-chrome, full: true) — pedido del usuario:
-  "mismo estilo, NO en blanco".
+  "mismo estilo, NO en blanco". Arriba puede llevar la barra animada
+  (snippets/udc-ticker.liquid): va dentro de esta sección y no como sección
+  aparte porque la landing ya está en el máximo de 25 secciones de Shopify.
 {%- endcomment -%}
 
 {% render 'udc-base' %}
 {% render 'udc-hide-chrome', full: true %}
+{%- if section.settings.bar_text != blank -%}
+  {% render 'udc-ticker', sid: section.id, text: section.settings.bar_text, speed: section.settings.bar_speed, bg: section.settings.bar_bg, fg: section.settings.bar_fg %}
+{%- endif -%}
 {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height, menu: section.settings.brand_menu, show_cart: section.settings.brand_cart %}
 
 {% schema %}
@@ -17,6 +22,12 @@
   "name": "UDC · Header",
   "tag": "div",
   "settings": [
+    { "type": "header", "content": "Barra animada de arriba" },
+    { "type": "textarea", "id": "bar_text", "label": "Texto (una frase por línea, vacío = sin barra)", "default": "OFERTA ESPECIAL" },
+    { "type": "range", "id": "bar_speed", "label": "Duración de una vuelta", "min": 10, "max": 80, "step": 2, "unit": "s", "default": 40 },
+    { "type": "color", "id": "bar_bg", "label": "Fondo de la barra", "default": "#0F0E11" },
+    { "type": "color", "id": "bar_fg", "label": "Texto de la barra", "default": "#FFFFFF" },
+    { "type": "header", "content": "Header" },
     { "type": "image_picker", "id": "brand_logo", "label": "Logo", "info": "Vacío = logo de Configuración del tema." },
     { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
     { "type": "link_list", "id": "brand_menu", "label": "Menú del botón ☰ (izquierda)", "default": "main-menu" },

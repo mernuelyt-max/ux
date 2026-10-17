@@ -13,11 +13,6 @@
       "type": "udc-01-temporizador",
       "settings": {}
     },
-    "udc_02": {
-      "type": "udc-02-nav",
-      "settings": {},
-      "disabled": true
-    },
     "udc_03": {
       "type": "udc-03-hero",
       "settings": {
@@ -1029,24 +1024,17 @@
       "type": "udc-reels",
       "settings": {}
     },
-    "barra": {
-      "type": "udc-barra",
-      "settings": {
-        "text": "OFERTA ESPECIAL"
-      }
-    },
     "header": {
       "type": "udc-header",
       "settings": {
-        "brand_logo": "shopify://shop_images/udc-logo.png"
+        "brand_logo": "shopify://shop_images/udc-logo.png",
+        "bar_text": "OFERTA ESPECIAL"
       }
     }
   },
   "order": [
-    "barra",
     "header",
     "udc_01",
-    "udc_02",
     "udc_03",
     "udc_04",
     "udc_05",

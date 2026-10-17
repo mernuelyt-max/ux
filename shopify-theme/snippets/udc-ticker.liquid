@@ -1,0 +1,41 @@
+{%- comment -%}
+  UDC — Barra animada (franja fina, texto en mayúsculas con ✦ que corre a la
+  izquierda). La usan sections/udc-barra.liquid y sections/udc-header.liquid.
+    render 'udc-ticker', sid: section.id, text: ..., speed: 40, bg: '#0F0E11', fg: '#FFFFFF'
+  text: una frase por línea.
+{%- endcomment -%}
+{%- assign lines = text | newline_to_br | split: '<br />' -%}
+
+<div class="udc-ab" id="udc-ab-{{ sid }}" role="marquee" aria-label="{{ lines | join: ' · ' | strip_newlines | escape }}">
+  <div class="udc-marquee udc-ab__mq" style="animation-duration:{{ speed | default: 40 }}s" aria-hidden="true">
+    {%- for pass in (1..2) -%}
+      <div class="udc-marquee__row udc-ab__row">
+        {%- for rep in (1..8) -%}
+          {%- for line in lines -%}
+            {%- assign t = line | strip -%}
+            {%- if t != blank -%}
+              <span class="udc-ab__item">{{ t }}</span><span class="udc-ab__star">✦</span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  #udc-ab-{{ sid }}{
+    position:relative;overflow:hidden;background:{{ bg | default: '#0F0E11' }};color:{{ fg | default: '#FFFFFF' }};
+    border-bottom:1px solid rgba(255,255,255,.06)}
+  #udc-ab-{{ sid }} .udc-ab__mq{
+    animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-ab-{{ sid }} .udc-ab__row{gap:22px;padding:13px 22px 13px 0;align-items:center}
+  #udc-ab-{{ sid }} .udc-ab__item{
+    font-family:var(--udc-sans);font-weight:500;font-size:14px;line-height:1;
+    letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+  #udc-ab-{{ sid }} .udc-ab__star{font-size:15px;line-height:1}
+  @media (max-width:749px){ #udc-ab-{{ sid }}{zoom:.85} }
+  @media (prefers-reduced-motion: reduce){
+    #udc-ab-{{ sid }} .udc-ab__mq{animation:none}
+  }
+</style>
