@@ -13,10 +13,12 @@
   Diseño "marquesina" (el de por defecto; pedido del usuario, igual que en
   facturación): la fila corre sola y sin parar hacia la izquierda, a lo
   ancho de toda la pantalla, con las tarjetas duplicadas para que el loop
-  sea continuo (udcMarquee de udc-base) y el mismo glow negro en los
-  costados. Se reproducen solo los reels que están a la vista. Al activar el
-  sonido de un reel la marquesina se frena para poder verlo, y sigue al
-  silenciarlo; con el mouse encima también se frena. El diseño "fila"
+  sea continuo y el mismo glow negro en los costados. Se mueve corriendo el
+  scroll por JS (no con animación CSS: en iPhone los videos se salían de su
+  tarjeta), así que también se puede deslizar con el dedo. Se reproducen
+  solo los reels que están a la vista. Al activar el sonido de un reel la
+  marquesina se frena para poder verlo, y sigue al silenciarlo; con el
+  mouse o el dedo encima también se frena. El diseño "fila"
   (deslizar con el dedo + avance automático) sigue disponible en "Diseño".
 
   Es la versión "en fila" de sections/udc-reels.liquid (que es coverflow y
@@ -98,13 +100,14 @@
     {%- assign rf_n = section.blocks.size -%}
     {%- if rf_n == 0 -%}{%- assign rf_n = 5 -%}{%- endif -%}
     {%- assign rf_reps = 8 | plus: rf_n | minus: 1 | divided_by: rf_n -%}
-    {%- assign rf_total = rf_n | times: rf_reps -%}
-    <div class="udc-marquee udc-rf__mq" data-udc-rf-mq style="animation-duration:{{ rf_total | times: section.settings.interval }}s">
-      {%- for pass in (1..2) -%}
-        <div class="udc-marquee__row udc-rf__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
-          {%- for r in (1..rf_reps) -%}{{ rf_cards }}{%- endfor -%}
-        </div>
-      {%- endfor -%}
+    <div class="udc-rf__scroller" data-udc-rf-scroller>
+      <div class="udc-marquee udc-rf__mq" data-udc-rf-mq data-interval="{{ section.settings.interval }}">
+        {%- for pass in (1..2) -%}
+          <div class="udc-marquee__row udc-rf__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+            {%- for r in (1..rf_reps) -%}{{ rf_cards }}{%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
     </div>
   {%- else -%}
   <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
@@ -137,14 +140,16 @@
     #udc-rf-{{ section.id }} .udc-rf__track{padding-right:clamp(20px,5vw,72px)}
   }
 
-  /* Marquesina: de borde a borde de la pantalla (anula el padding de .udc). */
+  /* Marquesina: de borde a borde de la pantalla (anula el padding de .udc).
+     No se mueve con una animación CSS de transform: en iPhone (Safari) los
+     <video> dentro de una capa animada quedan dibujados fuera de lugar y se
+     salen de su tarjeta. Se mueve desplazando el scroll por JS, que Safari
+     maneja bien con videos, y además se puede deslizar con el dedo. */
   #udc-rf-{{ section.id }} .udc-rf__wrap--mq{
-    max-width:none;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0 !important;overflow:hidden}
-  #udc-rf-{{ section.id }} .udc-rf__mq{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
-  #udc-rf-{{ section.id }} .udc-rf__wrap--mq.is-held .udc-rf__mq{animation-play-state:paused}
-  @media (hover:hover){
-    #udc-rf-{{ section.id }} .udc-rf__wrap--mq:hover .udc-rf__mq{animation-play-state:paused}
-  }
+    max-width:none;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0 !important}
+  #udc-rf-{{ section.id }} .udc-rf__scroller{
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  #udc-rf-{{ section.id }} .udc-rf__scroller::-webkit-scrollbar{display:none}
   #udc-rf-{{ section.id }} .udc-rf__row{gap:12px;padding:14px 12px 30px 0}
   #udc-rf-{{ section.id }} .udc-rf__row .udc-rf__card{flex-basis:clamp(150px,40vw,240px)}
 
@@ -164,6 +169,8 @@
   #udc-rf-{{ section.id }} .udc-rf__card{
     position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
     isolation:isolate;cursor:pointer;
+    /* Fuerza el recorte redondeado del video en Safari. */
+    -webkit-mask-image:-webkit-radial-gradient(white,black);transform:translateZ(0);
     background:radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 32%, transparent), transparent 62%),linear-gradient(180deg,#161111,#070707);
     border:1px solid var(--udc-border);
     transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease}
@@ -171,7 +178,7 @@
     border-color:rgba(255,255,255,.16);
     box-shadow:0 0 0 1px rgba(0,0,0,.9),0 16px 48px 6px rgba(0,0,0,.95)}
   #udc-rf-{{ section.id }} .udc-rf__video,
-  #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
   #udc-rf-{{ section.id }} .udc-rf__cover{z-index:1;transition:opacity .4s ease}
   #udc-rf-{{ section.id }} .udc-rf__card.is-playing .udc-rf__cover{opacity:0}
   #udc-rf-{{ section.id }} .udc-rf__empty{
@@ -199,8 +206,6 @@
   @media (prefers-reduced-motion: reduce){
     #udc-rf-{{ section.id }} .udc-rf__card{transition:none}
     #udc-rf-{{ section.id }} .udc-rf__edge{animation:none;opacity:.8}
-    /* Sin animación la marquesina queda quieta: que al menos se pueda deslizar. */
-    #udc-rf-{{ section.id }} .udc-rf__wrap--mq{overflow-x:auto;scrollbar-width:none}
   }
 </style>
 
@@ -260,6 +265,48 @@
       measure();
       setInterval(measure, 300);
       window.addEventListener('scroll', measure, { passive: true });
+
+      // Movimiento: corre el scroll a velocidad constante (un reel cada
+      // `interval` segundos) y al pasar una vuelta entera vuelve atrás una
+      // vuelta, que se ve idéntica (la fila está duplicada). Se frena con el
+      // dedo encima (y 2,5 s después de soltar), con el mouse encima, con un
+      // reel con sonido o fuera de pantalla. Con "reducir movimiento" no se
+      // mueve sola, pero se puede deslizar.
+      var scroller = root.querySelector('[data-udc-rf-scroller]');
+      var row = mq.querySelector('.udc-rf__row');
+      var secs = parseFloat(mq.getAttribute('data-interval')) || 6;
+      var reduceMq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var pos = 0, last = 0, touchingMq = false, hoverMq = false, holdMq = 0;
+      var visibleMq = function () {
+        var r = scroller.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.height > 0 && r.bottom > 0 && r.top < vh;
+      };
+      scroller.addEventListener('touchstart', function () { touchingMq = true; }, { passive: true });
+      scroller.addEventListener('touchend', function () { touchingMq = false; holdMq = Date.now() + 2500; }, { passive: true });
+      scroller.addEventListener('touchcancel', function () { touchingMq = false; holdMq = Date.now() + 2500; }, { passive: true });
+      scroller.addEventListener('wheel', function () { holdMq = Date.now() + 2500; }, { passive: true });
+      scroller.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hoverMq = true; });
+      scroller.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hoverMq = false; });
+      var step = function (ts) {
+        var dt = last ? Math.min(0.1, (ts - last) / 1000) : 0;
+        last = ts;
+        var period = row.offsetWidth;
+        var paused = reduceMq || document.hidden || touchingMq || hoverMq || Date.now() < holdMq ||
+                     wrap.classList.contains('is-held') || !visibleMq() || !period;
+        if (paused) {
+          // Seguir desde donde lo dejó la mano; si se pasó de una vuelta, volver una.
+          pos = scroller.scrollLeft;
+          if (!touchingMq && period && pos >= period) { pos -= period; scroller.scrollLeft = pos; }
+        } else {
+          var card = cards[0];
+          pos += ((card ? card.offsetWidth : 200) + 12) / secs * dt;
+          if (pos >= period) pos -= period;
+          scroller.scrollLeft = pos;
+        }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
     } else if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { ratios[cards.indexOf(e.target)] = e.intersectionRatio; });
