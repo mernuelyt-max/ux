@@ -204,14 +204,43 @@
     var track = root.querySelector('[data-udc-rf-track]');
     var autoSec = parseFloat(track.getAttribute('data-auto')) || 0;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (autoSec > 0 && !reduce && cards.length > 1) {
-      var timer = null, holdUntil = 0, onScreen = false;
+    if (autoSec > 0 && cards.length > 1) {
+      var holdUntil = 0, onScreen = false, animating = false;
+      // Posición de cada reel dentro de la fila (offsetLeft no se ve afectado
+      // por el zoom de .udc en celular, a diferencia de getBoundingClientRect).
+      var posOf = function (i) { return cards[i].offsetLeft - cards[0].offsetLeft; };
+      var current = function () {
+        var x = track.scrollLeft, best = 0, d = Infinity;
+        cards.forEach(function (c, i) { var dd = Math.abs(posOf(i) - x); if (dd < d) { d = dd; best = i; } });
+        return best;
+      };
+      // Animación propia cuadro a cuadro: en iPhone, scrollTo({behavior:'smooth'})
+      // sobre una fila con scroll-snap no se mueve (o vuelve al mismo lugar).
+      // Durante el movimiento se apaga el snap y al terminar se restaura.
+      var animateTo = function (to) {
+        var from = track.scrollLeft, dist = to - from;
+        if (Math.abs(dist) < 1) return;
+        var dur = reduce ? 0 : 650, t0 = null;
+        animating = true;
+        track.style.scrollSnapType = 'none';
+        var frame = function (ts) {
+          if (t0 === null) t0 = ts;
+          var p = dur ? Math.min(1, (ts - t0) / dur) : 1;
+          var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          track.scrollLeft = from + dist * e;
+          if (p < 1) { requestAnimationFrame(frame); return; }
+          animating = false;
+          track.style.scrollSnapType = '';
+        };
+        requestAnimationFrame(frame);
+      };
       var step = function () {
-        if (!onScreen || Date.now() < holdUntil) return;
-        var cardW = cards[0].getBoundingClientRect().width + 12;
+        if (!onScreen || animating || Date.now() < holdUntil) return;
         var max = track.scrollWidth - track.clientWidth;
-        var next = track.scrollLeft + cardW;
-        track.scrollTo({ left: next > max - 4 ? 0 : next, behavior: 'smooth' });
+        if (max <= 2) return;
+        var next = current() + 1;
+        var to = (next >= cards.length || track.scrollLeft >= max - 4) ? 0 : Math.min(posOf(next), max);
+        animateTo(to);
       };
       var hold = function (ms) { holdUntil = Date.now() + (ms || 5000); };
       ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
@@ -222,9 +251,9 @@
       track.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold(1e9); });
       track.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hold(1500); });
       if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; }, { threshold: 0.4 }).observe(track);
+        new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; }, { threshold: 0.25 }).observe(track);
       } else { onScreen = true; }
-      timer = setInterval(step, autoSec * 1000);
+      setInterval(step, autoSec * 1000);
     }
 
     root.addEventListener('click', function (e) {
