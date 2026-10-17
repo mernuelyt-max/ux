@@ -1040,9 +1040,16 @@
         "g1"
       ],
       "settings": {}
+    },
+    "barra": {
+      "type": "udc-barra",
+      "settings": {
+        "text": "OFERTA ESPECIAL"
+      }
     }
   },
   "order": [
+    "barra",
     "main",
     "reels_fila",
     "acordeon",

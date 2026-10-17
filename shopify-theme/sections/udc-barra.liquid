@@ -1,0 +1,61 @@
+{%- comment -%}
+  UDC — Barra animada (arriba de todo)
+
+  Copia de la barra del video de referencia del usuario: franja fina casi
+  negra, texto blanco en mayúsculas con mucho espaciado entre letras,
+  separado por estrellas ✦ blancas, que corre sin parar hacia la izquierda.
+  El texto es una frase por línea (por defecto solo "OFERTA ESPECIAL"), y
+  se repite las veces necesarias para cubrir el ancho; la fila va duplicada
+  para que el loop sea continuo (udcMarquee de udc-base).
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign lines = section.settings.text | newline_to_br | split: '<br />' -%}
+
+<div class="udc udc-ab" id="udc-ab-{{ section.id }}" role="marquee" aria-label="{{ lines | join: ' · ' | strip_newlines | escape }}">
+  <div class="udc-marquee udc-ab__mq" style="animation-duration:{{ section.settings.speed }}s" aria-hidden="true">
+    {%- for pass in (1..2) -%}
+      <div class="udc-marquee__row udc-ab__row">
+        {%- for rep in (1..8) -%}
+          {%- for line in lines -%}
+            {%- assign t = line | strip -%}
+            {%- if t != blank -%}
+              <span class="udc-ab__item">{{ t }}</span><span class="udc-ab__star">✦</span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<style>
+  #udc-ab-{{ section.id }}{
+    padding:0;overflow:hidden;background:{{ section.settings.bg }};color:{{ section.settings.fg }};
+    border-bottom:1px solid rgba(255,255,255,.06)}
+  #udc-ab-{{ section.id }} .udc-ab__mq{
+    animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-ab-{{ section.id }} .udc-ab__row{gap:22px;padding:13px 22px 13px 0;align-items:center}
+  #udc-ab-{{ section.id }} .udc-ab__item{
+    font-family:var(--udc-sans);font-weight:500;font-size:14px;line-height:1;
+    letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+  #udc-ab-{{ section.id }} .udc-ab__star{font-size:15px;line-height:1}
+  @media (prefers-reduced-motion: reduce){
+    #udc-ab-{{ section.id }} .udc-ab__mq{animation:none}
+  }
+</style>
+
+{% schema %}
+{
+  "name": "UDC · Barra animada",
+  "tag": "div",
+  "settings": [
+    { "type": "textarea", "id": "text", "label": "Texto (una frase por línea)", "default": "OFERTA ESPECIAL" },
+    { "type": "range", "id": "speed", "label": "Duración de una vuelta", "min": 10, "max": 80, "step": 2, "unit": "s", "default": 40 },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#0F0E11" },
+    { "type": "color", "id": "fg", "label": "Texto y estrellas", "default": "#FFFFFF" }
+  ],
+  "presets": [{ "name": "UDC · Barra animada" }]
+}
+{% endschema %}
