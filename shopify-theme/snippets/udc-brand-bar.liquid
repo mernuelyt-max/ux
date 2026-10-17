@@ -1,18 +1,39 @@
 {%- comment -%}
-  UDC — Barra mínima con el logo, para las páginas donde el header nativo
+  UDC — Barra de arriba con el logo, para las páginas donde el header nativo
   está oculto (udc-hide-chrome, full: true): producto y carrito.
 
-  Usa la imagen que se le pase (logo), si no el logo de la configuración
-  del tema (settings.logo) y, si tampoco hay, el nombre de la tienda como
-  texto. Enlaza a la home.
+  Como el header de caffi.com.ar (referencia del usuario):
+   · izquierda: botón ☰ que abre un panel lateral con el menú de la tienda
+     (link_list "menu", por defecto main-menu — se edita en Tienda online →
+     Navegación) y un acceso al carrito;
+   · centro: el logo (imagen que se le pase, si no settings.logo, si no el
+     nombre de la tienda), enlazado a la home;
+   · derecha: ícono del carrito con la cantidad de productos.
 
-    render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height
+    render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo,
+           height: section.settings.brand_height, menu: section.settings.brand_menu,
+           show_cart: section.settings.brand_cart
 {%- endcomment -%}
 
 {%- assign brand_logo = logo | default: settings.logo -%}
 {%- assign brand_h = height | default: 72 -%}
+{%- comment -%} menu puede llegar como objeto (setting link_list) o como handle. {%- endcomment -%}
+{%- if menu.links -%}
+  {%- assign menu_list = menu -%}
+{%- else -%}
+  {%- assign menu_handle = menu | default: 'main-menu' -%}
+  {%- assign menu_list = linklists[menu_handle] -%}
+{%- endif -%}
 
 <header class="udc udc-brand" id="udc-brand-{{ sid }}">
+  <div class="udc-brand__side">
+    {%- if menu_list.links.size > 0 -%}
+      <button type="button" class="udc-brand__btn" data-udc-brand-open aria-label="Abrir menú" aria-expanded="false" aria-controls="udc-brand-drawer-{{ sid }}">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    {%- endif -%}
+  </div>
+
   <a href="{{ routes.root_url }}" class="udc-brand__link">
     {%- if brand_logo != blank -%}
       <img src="{{ brand_logo | image_url: height: 240 }}" alt="{{ brand_logo.alt | default: shop.name | escape }}"
@@ -21,11 +42,58 @@
       <span class="udc-brand__name">{{ shop.name }}</span>
     {%- endif -%}
   </a>
+
+  <div class="udc-brand__side udc-brand__side--r">
+    {%- unless show_cart == false -%}
+      <a href="{{ routes.cart_url }}" class="udc-brand__btn udc-brand__cart" aria-label="Carrito ({{ cart.item_count }})">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        {%- if cart.item_count > 0 -%}<span class="udc-brand__count">{{ cart.item_count }}</span>{%- endif -%}
+      </a>
+    {%- endunless -%}
+  </div>
+
+  {%- if menu_list.links.size > 0 -%}
+    <div class="udc-brand__overlay" data-udc-brand-close hidden></div>
+    <nav class="udc-brand__drawer" id="udc-brand-drawer-{{ sid }}" aria-label="Menú" hidden>
+      <div class="udc-brand__drawerhead">
+        {%- if brand_logo != blank -%}
+          <img src="{{ brand_logo | image_url: height: 120 }}" alt="" width="{{ brand_logo.width }}" height="{{ brand_logo.height }}" class="udc-brand__drawerlogo">
+        {%- else -%}
+          <span class="udc-brand__name">{{ shop.name }}</span>
+        {%- endif -%}
+        <button type="button" class="udc-brand__btn" data-udc-brand-close aria-label="Cerrar menú">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <ul class="udc-brand__menu">
+        {%- for link in menu_list.links -%}
+          <li>
+            <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>
+              <span>{{ link.title }}</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+            </a>
+            {%- if link.links.size > 0 -%}
+              <ul>
+                {%- for child in link.links -%}
+                  <li><a href="{{ child.url }}"><span>{{ child.title }}</span></a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- unless show_cart == false -%}
+        <a href="{{ routes.cart_url }}" class="udc-btn udc-brand__drawercart">Ver carrito{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
+      {%- endunless -%}
+    </nav>
+  {%- endif -%}
 </header>
 
 <style>
   #udc-brand-{{ sid }}{
-    display:flex;justify-content:center;align-items:center;padding:18px 20px}
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:14px clamp(14px,4vw,40px)}
+  #udc-brand-{{ sid }} .udc-brand__side{display:flex;align-items:center}
+  #udc-brand-{{ sid }} .udc-brand__side--r{justify-content:flex-end}
   #udc-brand-{{ sid }} .udc-brand__link{display:inline-flex;align-items:center;color:var(--udc-text);text-decoration:none}
   #udc-brand-{{ sid }} .udc-brand__img{
     display:block;width:auto;height:{{ brand_h | times: 0.8 | round }}px;object-fit:contain}
@@ -34,4 +102,78 @@
   }
   #udc-brand-{{ sid }} .udc-brand__name{
     font-family:var(--udc-anton);font-size:20px;letter-spacing:.06em;text-transform:uppercase}
+
+  #udc-brand-{{ sid }} .udc-brand__btn{
+    position:relative;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;color:var(--udc-text);text-decoration:none;
+    transition:color .2s ease,background .2s ease}
+  #udc-brand-{{ sid }} .udc-brand__btn:hover{color:var(--udc-accent);background:rgba(255,255,255,.04)}
+  #udc-brand-{{ sid }} .udc-brand__count{
+    position:absolute;top:4px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;line-height:1;
+    color:#fff;background:var(--udc-accent);box-shadow:0 0 12px color-mix(in srgb, var(--udc-accent) 70%, transparent)}
+
+  /* Panel lateral del menú */
+  #udc-brand-{{ sid }} .udc-brand__overlay{
+    position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.6);
+    backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .3s ease}
+  #udc-brand-{{ sid }} .udc-brand__drawer{
+    position:fixed;top:0;bottom:0;left:0;z-index:91;width:min(330px,86vw);overflow-y:auto;
+    display:flex;flex-direction:column;gap:8px;padding:18px 20px 28px;
+    background:#0B0B0B;border-right:1px solid var(--udc-border);
+    box-shadow:30px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .38s cubic-bezier(.2,.7,.2,1)}
+  #udc-brand-{{ sid }}.is-open .udc-brand__overlay{opacity:1}
+  #udc-brand-{{ sid }}.is-open .udc-brand__drawer{transform:none}
+  #udc-brand-{{ sid }} .udc-brand__drawerhead{
+    display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--udc-line)}
+  #udc-brand-{{ sid }} .udc-brand__drawerlogo{display:block;height:44px;width:auto}
+  #udc-brand-{{ sid }} .udc-brand__menu,
+  #udc-brand-{{ sid }} .udc-brand__menu ul{list-style:none;margin:0;padding:0}
+  #udc-brand-{{ sid }} .udc-brand__menu > li{border-bottom:1px solid var(--udc-line)}
+  #udc-brand-{{ sid }} .udc-brand__menu a{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 2px;
+    font-family:var(--udc-sans);font-weight:700;font-size:18px;color:var(--udc-text);text-decoration:none;
+    transition:color .2s ease,padding .2s ease}
+  #udc-brand-{{ sid }} .udc-brand__menu a svg{color:var(--udc-dim);transition:color .2s ease,transform .2s ease}
+  #udc-brand-{{ sid }} .udc-brand__menu a:hover,
+  #udc-brand-{{ sid }} .udc-brand__menu a[aria-current]{color:var(--udc-accent)}
+  #udc-brand-{{ sid }} .udc-brand__menu a:hover svg{color:var(--udc-accent);transform:translateX(3px)}
+  #udc-brand-{{ sid }} .udc-brand__menu ul a{padding:10px 2px 10px 14px;font-size:15px;font-weight:500;color:var(--udc-muted)}
+  #udc-brand-{{ sid }} .udc-brand__drawercart{margin-top:auto;width:100%;font-size:15px;padding:16px 24px}
+  @media (prefers-reduced-motion: reduce){
+    #udc-brand-{{ sid }} .udc-brand__drawer,
+    #udc-brand-{{ sid }} .udc-brand__overlay{transition:none}
+  }
 </style>
+
+{%- if menu_list.links.size > 0 -%}
+<script>
+  (function () {
+    var bar = document.getElementById('udc-brand-{{ sid }}');
+    if (!bar) return;
+    var drawer = bar.querySelector('.udc-brand__drawer');
+    var overlay = bar.querySelector('.udc-brand__overlay');
+    var openBtn = bar.querySelector('[data-udc-brand-open]');
+    var t = null;
+    var open = function () {
+      clearTimeout(t);
+      drawer.hidden = false; overlay.hidden = false;
+      requestAnimationFrame(function () { bar.classList.add('is-open'); });
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      var first = drawer.querySelector('a, button');
+      if (first) first.focus({ preventScroll: true });
+    };
+    var close = function () {
+      bar.classList.remove('is-open');
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      t = setTimeout(function () { drawer.hidden = true; overlay.hidden = true; }, 400);
+      openBtn.focus({ preventScroll: true });
+    };
+    openBtn.addEventListener('click', open);
+    bar.querySelectorAll('[data-udc-brand-close]').forEach(function (el) { el.addEventListener('click', close); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bar.classList.contains('is-open')) close(); });
+  })();
+</script>
+{%- endif -%}

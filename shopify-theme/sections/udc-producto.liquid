@@ -76,7 +76,7 @@
 {%- endcase -%}
 
 {%- if section.settings.show_brand -%}
-  {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height %}
+  {% render 'udc-brand-bar', sid: section.id, logo: section.settings.brand_logo, height: section.settings.brand_height, menu: section.settings.brand_menu, show_cart: section.settings.brand_cart %}
 {%- endif -%}
 
 <section class="udc udc-top udc-pp" id="udc-pp-{{ section.id }}">
@@ -672,6 +672,8 @@
     { "type": "checkbox", "id": "show_brand", "label": "Mostrar logo arriba", "default": true, "info": "El header y el footer del tema están ocultos en esta página. El logo sale de Configuración del tema → Logo; si no hay, se muestra el nombre de la tienda." },
     { "type": "image_picker", "id": "brand_logo", "label": "Logo", "info": "Vacío = logo de Configuración del tema." },
     { "type": "range", "id": "brand_height", "label": "Alto del logo", "min": 24, "max": 120, "step": 4, "unit": "px", "default": 72, "info": "En celular se muestra al 80%." },
+    { "type": "link_list", "id": "brand_menu", "label": "Menú del botón ☰ (izquierda)", "default": "main-menu" },
+    { "type": "checkbox", "id": "brand_cart", "label": "Mostrar carrito arriba a la derecha", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "U del Closer" },
 
     { "type": "header", "content": "Calificación bajo el título" },
