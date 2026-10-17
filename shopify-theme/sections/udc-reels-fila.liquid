@@ -3,7 +3,7 @@
 
   Copia del bloque "Caffi en acción" de caffi.com.ar (video de referencia
   del usuario): título con un rayo rojo a la izquierda y una fila de reels
-  9:16 que se desliza con el dedo (scroll-snap), con la tarjeta siguiente
+  9:16 que se desliza con el dedo (alineado por JS), con la tarjeta siguiente
   asomando a la derecha. Cada reel se reproduce solo, muteado e inline,
   mientras está visible en pantalla; botón de sonido abajo a la derecha.
   Glow negro (sombra profunda) en el reel más visible, glow negro en los
@@ -94,7 +94,7 @@
   #udc-rf-{{ section.id }} .udc-rf__wrap{position:relative;max-width:1080px;margin:20px auto 0}
   #udc-rf-{{ section.id }} .udc-rf__track{
     display:flex;gap:12px;margin:0;
-    overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:0;
+    overflow-x:auto;
     padding:14px 2px 22px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   #udc-rf-{{ section.id }} .udc-rf__track::-webkit-scrollbar{display:none}
   /* Como en Caffi: la fila llega hasta el borde derecho de la pantalla y el
@@ -119,7 +119,7 @@
 
   #udc-rf-{{ section.id }} .udc-rf__card{
     position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
-    scroll-snap-align:start;isolation:isolate;cursor:pointer;
+    isolation:isolate;cursor:pointer;
     background:radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 32%, transparent), transparent 62%),linear-gradient(180deg,#161111,#070707);
     border:1px solid var(--udc-border);
     transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease}
@@ -197,63 +197,77 @@
       update();
     }
 
-    // Deslizamiento automático: avanza un reel cada `data-auto` segundos y al
-    // llegar al final vuelve al principio. Se frena mientras la persona toca,
-    // arrastra o tiene el mouse encima, y retoma tras unos segundos quieta.
-    // Solo corre con la fila en pantalla.
+    // Deslizamiento automático + alineado al soltar, todo en JS.
+    // No se usa scroll-snap nativo ni IntersectionObserver para esto: en
+    // iPhone (WebKit) el snap nativo tira la fila de vuelta a cada paso de
+    // la animación y el observer puede informar mal dentro del zoom de .udc,
+    // y así la fila nunca avanzaba. Con esto se comporta igual en todos lados:
+    //  · cada `data-auto` segundos pasa al reel siguiente (y del último vuelve
+    //    al primero), solo si la fila está en pantalla y nadie la está tocando;
+    //  · al soltar después de deslizar a mano, se alinea al reel más cercano;
+    //  · con "reducir movimiento" salta sin animar.
     var track = root.querySelector('[data-udc-rf-track]');
     var autoSec = parseFloat(track.getAttribute('data-auto')) || 0;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var posOf = function (i) { return cards[i].offsetLeft - cards[0].offsetLeft; };
+    var maxScroll = function () { return track.scrollWidth - track.clientWidth; };
+    var current = function () {
+      var x = track.scrollLeft, best = 0, d = Infinity;
+      cards.forEach(function (c, i) { var dd = Math.abs(posOf(i) - x); if (dd < d) { d = dd; best = i; } });
+      return best;
+    };
+    var anim = 0, animating = false, touching = false, holdUntil = 0, settleT = null;
+    var animateTo = function (to) {
+      to = Math.max(0, Math.min(to, maxScroll()));
+      var from = track.scrollLeft, dist = to - from;
+      if (Math.abs(dist) < 1) return;
+      var id = ++anim, dur = reduce ? 0 : 650, t0 = null;
+      animating = true;
+      var frame = function (ts) {
+        if (id !== anim) return;
+        if (t0 === null) t0 = ts;
+        var p = dur ? Math.min(1, (ts - t0) / dur) : 1;
+        var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        track.scrollLeft = from + dist * e;
+        if (p < 1) requestAnimationFrame(frame); else animating = false;
+      };
+      requestAnimationFrame(frame);
+    };
+    var stopAnim = function () { anim++; animating = false; };
+    var hold = function (ms) { holdUntil = Date.now() + ms; };
+
+    track.addEventListener('touchstart', function () { touching = true; stopAnim(); hold(6000); }, { passive: true });
+    track.addEventListener('touchend', function () { touching = false; hold(6000); }, { passive: true });
+    track.addEventListener('touchcancel', function () { touching = false; }, { passive: true });
+    track.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse') { stopAnim(); hold(6000); } });
+    track.addEventListener('wheel', function () { stopAnim(); hold(6000); }, { passive: true });
+    // Alinear al reel más cercano cuando el deslizamiento a mano (y la inercia) termina.
+    track.addEventListener('scroll', function () {
+      if (animating) return;
+      clearTimeout(settleT);
+      settleT = setTimeout(function () {
+        if (touching || animating) return;
+        animateTo(posOf(current()));
+      }, 140);
+    }, { passive: true });
+
     if (autoSec > 0 && cards.length > 1) {
-      var holdUntil = 0, onScreen = false, animating = false;
-      // Posición de cada reel dentro de la fila (offsetLeft no se ve afectado
-      // por el zoom de .udc en celular, a diferencia de getBoundingClientRect).
-      var posOf = function (i) { return cards[i].offsetLeft - cards[0].offsetLeft; };
-      var current = function () {
-        var x = track.scrollLeft, best = 0, d = Infinity;
-        cards.forEach(function (c, i) { var dd = Math.abs(posOf(i) - x); if (dd < d) { d = dd; best = i; } });
-        return best;
-      };
-      // Animación propia cuadro a cuadro: en iPhone, scrollTo({behavior:'smooth'})
-      // sobre una fila con scroll-snap no se mueve (o vuelve al mismo lugar).
-      // Durante el movimiento se apaga el snap y al terminar se restaura.
-      var animateTo = function (to) {
-        var from = track.scrollLeft, dist = to - from;
-        if (Math.abs(dist) < 1) return;
-        var dur = reduce ? 0 : 650, t0 = null;
-        animating = true;
-        track.style.scrollSnapType = 'none';
-        var frame = function (ts) {
-          if (t0 === null) t0 = ts;
-          var p = dur ? Math.min(1, (ts - t0) / dur) : 1;
-          var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-          track.scrollLeft = from + dist * e;
-          if (p < 1) { requestAnimationFrame(frame); return; }
-          animating = false;
-          track.style.scrollSnapType = '';
-        };
-        requestAnimationFrame(frame);
-      };
-      var step = function () {
-        if (!onScreen || animating || Date.now() < holdUntil) return;
-        var max = track.scrollWidth - track.clientWidth;
-        if (max <= 2) return;
-        var next = current() + 1;
-        var to = (next >= cards.length || track.scrollLeft >= max - 4) ? 0 : Math.min(posOf(next), max);
-        animateTo(to);
-      };
-      var hold = function (ms) { holdUntil = Date.now() + (ms || 5000); };
-      ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
-        track.addEventListener(ev, function () { hold(6000); }, { passive: true });
-      });
       // Pausa por hover solo con mouse real (en iPhone un toque dispara
       // mouseenter sin su mouseleave y la frenaría para siempre).
       track.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold(1e9); });
       track.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hold(1500); });
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; }, { threshold: 0.25 }).observe(track);
-      } else { onScreen = true; }
-      setInterval(step, autoSec * 1000);
+      var onScreen = function () {
+        var r = track.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.height > 0 && r.bottom > 0 && r.top < vh;
+      };
+      setInterval(function () {
+        if (document.hidden || touching || animating || Date.now() < holdUntil || !onScreen()) return;
+        var max = maxScroll();
+        if (max <= 2) return;
+        var next = current() + 1;
+        animateTo((next >= cards.length || track.scrollLeft >= max - 4) ? 0 : posOf(next));
+      }, autoSec * 1000);
     }
 
     root.addEventListener('click', function (e) {
