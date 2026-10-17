@@ -1,0 +1,358 @@
+{%- comment -%}
+  UDC — Reels en marquesina (9:16)
+
+  La fila de reels "⚡ La U en acción" de la página de producto, en diseño
+  marquesina (pedido del usuario, igual que la de facturación): las portadas
+  9:16 corren solas y sin parar hacia la izquierda, de borde a borde de la
+  pantalla, con glow negro en los costados y un ▶ rojo que late en cada una.
+  Al tocar un reel se abre a pantalla completa y se reproduce con sonido,
+  con flechas (o deslizando) para pasar al siguiente; al terminar pasa solo.
+
+  Por qué portadas y no videos corriendo dentro de la fila: en iPhone
+  (Safari) varios <video> reproduciéndose dentro de algo que se mueve se
+  dibujan fuera de lugar (quedaba un "fantasma" de un reel detrás de otro) y
+  la fila se trababa; además, con Ahorro de energía el iPhone no deja que
+  los videos arranquen solos. Las imágenes se mueven fluidas en todos lados
+  y el video se reproduce solo cuando la persona lo pide, que siempre está
+  permitido.
+
+  La fila sale una sola vez del Liquid; el JS agrega solo las copias que
+  hacen falta para cubrir el ancho de la pantalla y una copia de la fila para
+  que el loop sea continuo (en celular cada reel aparece una vez por vuelta).
+
+  Bloques "reel": video subido a Shopify o link directo al MP4 + portada
+  (imagen, o link de portada, o la vista previa del video), título y detalle
+  opcionales. Sin videos se muestran marcos vacíos (solo un ▶); show_empty
+  los oculta en la tienda hasta el primer video. La versión para deslizar
+  con el dedo sigue en sections/udc-reels-fila.liquid.
+{%- endcomment -%}
+
+{% render 'udc-base' %}
+
+{%- assign reel_count = 0 -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.video != blank or block.settings.video_src != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
+<section class="udc udc-rm" id="udc-rm-{{ section.id }}">
+  <h2 class="udc-rm__title" data-udc-reveal>
+    <span class="udc-rm__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
+    {{ section.settings.title }}
+  </h2>
+
+  <div class="udc-rm__wrap" data-udc-rm-wrap>
+    <span class="udc-rm__edge udc-rm__edge--l" aria-hidden="true"></span>
+    <span class="udc-rm__edge udc-rm__edge--r" aria-hidden="true"></span>
+    <div class="udc-marquee udc-rm__mq" data-udc-rm-mq data-interval="{{ section.settings.interval }}">
+      <div class="udc-marquee__row udc-rm__row">
+        {%- assign rm_i = 0 -%}
+        {%- if reel_count > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.settings.video == blank and block.settings.video_src == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign rm_poster = '' -%}
+            {%- if block.settings.cover != blank -%}
+              {%- assign rm_poster = block.settings.cover | image_url: width: 540 -%}
+            {%- elsif block.settings.poster_src != blank -%}
+              {%- assign rm_poster = block.settings.poster_src -%}
+            {%- elsif block.settings.video != blank -%}
+              {%- assign rm_poster = block.settings.video.preview_image | image_url: width: 540 -%}
+            {%- endif -%}
+            {%- assign rm_src = block.settings.video_src -%}
+            {%- if block.settings.video != blank -%}
+              {%- assign rm_src = '' -%}
+              {%- for s in block.settings.video.sources -%}
+                {%- if s.format == 'mp4' and rm_src == blank -%}{%- assign rm_src = s.url -%}{%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            <button type="button" class="udc-rm__card" data-udc-rm-card data-i="{{ rm_i }}"
+                    data-src="{{ rm_src | escape }}" data-poster="{{ rm_poster | escape }}"
+                    aria-label="Ver reel {{ rm_i | plus: 1 }}{% if block.settings.title != blank %}: {{ block.settings.title | escape }}{% endif %}"
+                    {{ block.shopify_attributes }}>
+              {%- if rm_poster != blank -%}
+                <img class="udc-rm__img" src="{{ rm_poster }}" alt="" loading="lazy" width="540" height="960">
+              {%- endif -%}
+              <span class="udc-rm__shade" aria-hidden="true"></span>
+              <span class="udc-rm__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+              {%- if block.settings.title != blank or block.settings.caption != blank -%}
+                <span class="udc-rm__body">
+                  {%- if block.settings.title != blank -%}<b>{{ block.settings.title }}</b>{%- endif -%}
+                  {%- if block.settings.caption != blank -%}<small>{{ block.settings.caption }}</small>{%- endif -%}
+                </span>
+              {%- endif -%}
+            </button>
+            {%- assign rm_i = rm_i | plus: 1 -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..5) -%}
+            <span class="udc-rm__card udc-rm__card--empty">
+              <span class="udc-rm__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+              {%- if request.design_mode -%}<small class="udc-rm__hint">Agregá bloques "Reel" con video</small>{%- endif -%}
+            </span>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if reel_count > 0 -%}
+    <div class="udc-rm__lb" id="udc-rm-lb-{{ section.id }}" data-udc-rm-lb role="dialog" aria-modal="true" aria-label="{{ section.settings.title | escape }}" hidden>
+      <div class="udc-rm__lbbg" data-udc-rm-close></div>
+      <div class="udc-rm__lbbox">
+        <video class="udc-rm__lbvid" playsinline controls preload="none"></video>
+      </div>
+      <button type="button" class="udc-rm__lbbtn udc-rm__lbclose" data-udc-rm-close aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      {%- if reel_count > 1 -%}
+        <button type="button" class="udc-rm__lbbtn udc-rm__lbprev" data-udc-rm-prev aria-label="Reel anterior">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="udc-rm__lbbtn udc-rm__lbnext" data-udc-rm-next aria-label="Reel siguiente">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <span class="udc-rm__lbcount" data-udc-rm-count aria-live="polite"></span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<style>
+  #udc-rm-{{ section.id }}{padding-top:clamp(28px,5vw,48px);padding-bottom:clamp(28px,5vw,48px);overflow-x:clip}
+  #udc-rm-{{ section.id }} .udc-rm__title{
+    margin:0 auto;max-width:1080px;display:flex;align-items:center;gap:10px;
+    font-family:var(--udc-sans);font-weight:700;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;color:var(--udc-text)}
+  #udc-rm-{{ section.id }} .udc-rm__bolt{
+    display:inline-flex;color:var(--udc-accent);
+    filter:drop-shadow(0 0 10px color-mix(in srgb, var(--udc-accent) 70%, transparent))}
+  #udc-rm-{{ section.id }} .udc-rm__bolt svg{fill:var(--udc-accent)}
+
+  /* De borde a borde de la pantalla (anula el padding lateral de .udc). */
+  #udc-rm-{{ section.id }} .udc-rm__wrap{
+    position:relative;overflow:hidden;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0}
+  #udc-rm-{{ section.id }} .udc-rm__mq.is-running{animation-name:udcMarquee;animation-timing-function:linear;animation-iteration-count:infinite}
+  #udc-rm-{{ section.id }} .udc-rm__wrap.is-held .udc-rm__mq{animation-play-state:paused}
+  @media (hover:hover){
+    #udc-rm-{{ section.id }} .udc-rm__wrap:hover .udc-rm__mq{animation-play-state:paused}
+  }
+  #udc-rm-{{ section.id }} .udc-rm__row{gap:12px;padding:16px 12px 30px 0}
+
+  /* Glow negro en los costados: funde la fila con el fondo y late suave. */
+  #udc-rm-{{ section.id }} .udc-rm__edge{
+    position:absolute;top:0;bottom:8px;width:clamp(36px,10vw,90px);z-index:5;pointer-events:none;
+    animation:udcRmEdge 2.8s ease-in-out infinite}
+  #udc-rm-{{ section.id }} .udc-rm__edge--l{left:0;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,.75) 35%,transparent)}
+  #udc-rm-{{ section.id }} .udc-rm__edge--r{right:0;background:linear-gradient(270deg,#000 0%,rgba(0,0,0,.75) 35%,transparent);animation-delay:1.4s}
+  @keyframes udcRmEdge{0%,100%{opacity:.8}50%{opacity:1}}
+
+  #udc-rm-{{ section.id }} .udc-rm__card{
+    position:relative;flex:0 0 clamp(150px,40vw,240px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
+    display:block;padding:0;margin:0;cursor:pointer;font:inherit;color:#fff;text-align:left;
+    background:radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 32%, transparent), transparent 62%),linear-gradient(180deg,#161111,#070707);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 0 0 1px rgba(0,0,0,.9),0 16px 44px 4px rgba(0,0,0,.9);
+    transition:border-color .3s ease,box-shadow .3s ease}
+  #udc-rm-{{ section.id }} .udc-rm__card:hover,
+  #udc-rm-{{ section.id }} .udc-rm__card:focus-visible{
+    border-color:var(--udc-accent);outline:none;
+    box-shadow:0 0 0 1px var(--udc-accent),0 0 34px color-mix(in srgb, var(--udc-accent) 45%, transparent),0 16px 44px 4px rgba(0,0,0,.9)}
+  #udc-rm-{{ section.id }} .udc-rm__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  #udc-rm-{{ section.id }} .udc-rm__shade{
+    position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,transparent 30%,transparent 55%,rgba(0,0,0,.75) 100%)}
+  #udc-rm-{{ section.id }} .udc-rm__play{
+    position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;padding-left:3px;color:#fff;
+    background:color-mix(in srgb, var(--udc-accent) 88%, transparent);
+    box-shadow:0 0 0 6px color-mix(in srgb, var(--udc-accent) 22%, transparent),0 0 30px color-mix(in srgb, var(--udc-accent) 60%, transparent);
+    animation:udcRmPulse 2.4s ease-in-out infinite}
+  #udc-rm-{{ section.id }} .udc-rm__card--empty .udc-rm__play{background:rgba(255,255,255,.08);box-shadow:none;animation:none;color:rgba(255,255,255,.3)}
+  #udc-rm-{{ section.id }} .udc-rm__hint{position:absolute;left:10px;right:10px;bottom:16px;text-align:center;font-size:11px;color:var(--udc-dim)}
+  #udc-rm-{{ section.id }} .udc-rm__body{
+    position:absolute;left:12px;right:12px;bottom:14px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+  #udc-rm-{{ section.id }} .udc-rm__body b{font-size:14px;line-height:1.2;color:#fff}
+  #udc-rm-{{ section.id }} .udc-rm__body small{font-size:11px;color:var(--udc-muted)}
+  @keyframes udcRmPulse{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 6px color-mix(in srgb, var(--udc-accent) 22%, transparent),0 0 24px color-mix(in srgb, var(--udc-accent) 50%, transparent)}
+    50%{transform:scale(1.08);box-shadow:0 0 0 10px color-mix(in srgb, var(--udc-accent) 14%, transparent),0 0 40px color-mix(in srgb, var(--udc-accent) 75%, transparent)}}
+
+  /* Reel a pantalla completa. El JS lo mueve a <body> para que el zoom de
+     .udc en celular no lo afecte; por eso se escopea con su propio id. */
+  #udc-rm-lb-{{ section.id }}{
+    position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .25s ease}
+  #udc-rm-lb-{{ section.id }}[hidden]{display:none}
+  #udc-rm-lb-{{ section.id }}.is-open{opacity:1}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbbg{
+    position:absolute;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbbox{
+    position:relative;height:min(86vh,calc(92vw * 16 / 9));height:min(86dvh,calc(92vw * 16 / 9));aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;
+    box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 60px color-mix(in srgb, var(--udc-accent, #E50914) 30%, transparent)}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbvid{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbbtn{
+    position:absolute;z-index:2;width:46px;height:46px;border-radius:50%;padding:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    background:rgba(20,20,20,.7);border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbbtn:hover{background:var(--udc-accent, #E50914);border-color:var(--udc-accent, #E50914)}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbclose{top:max(14px,env(safe-area-inset-top));right:14px}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbprev{left:max(10px,calc(50% - 46vh * 9 / 16 - 70px));top:50%;margin-top:-23px}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbnext{right:max(10px,calc(50% - 46vh * 9 / 16 - 70px));top:50%;margin-top:-23px}
+  #udc-rm-lb-{{ section.id }} .udc-rm__lbcount{
+    position:absolute;z-index:2;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);
+    font:600 12px/1 system-ui,sans-serif;letter-spacing:.12em;color:rgba(255,255,255,.7)}
+
+  @media (prefers-reduced-motion: reduce){
+    #udc-rm-{{ section.id }} .udc-rm__edge,
+    #udc-rm-{{ section.id }} .udc-rm__play{animation:none}
+    /* Sin movimiento la fila queda quieta: que al menos se pueda deslizar. */
+    #udc-rm-{{ section.id }} .udc-rm__wrap{overflow-x:auto;scrollbar-width:none}
+    #udc-rm-lb-{{ section.id }}{transition:none}
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('udc-rm-{{ section.id }}');
+    if (!root) return;
+    var wrap = root.querySelector('[data-udc-rm-wrap]');
+    var mq = root.querySelector('[data-udc-rm-mq]');
+    var row = mq.querySelector('.udc-rm__row');
+    var originals = Array.prototype.slice.call(row.children);
+    if (!originals.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var secs = parseFloat(mq.getAttribute('data-interval')) || 6;
+
+    var mute = function (el) {
+      el.setAttribute('aria-hidden', 'true');
+      if (el.matches('button')) el.tabIndex = -1;
+      Array.prototype.forEach.call(el.querySelectorAll('button'), function (b) { b.tabIndex = -1; });
+    };
+
+    // Arma la marquesina: copias dentro de la fila solo si no llega a cubrir
+    // el ancho, y una copia de la fila entera para que el loop no tenga corte.
+    var build = function () {
+      mq.classList.remove('is-running');
+      Array.prototype.slice.call(mq.children, 1).forEach(function (el) { el.remove(); });
+      Array.prototype.slice.call(row.children, originals.length).forEach(function (el) { el.remove(); });
+      if (reduce) return;
+      var guard = 0;
+      while (row.offsetWidth < wrap.clientWidth + 40 && guard++ < 12) {
+        originals.forEach(function (c) { var k = c.cloneNode(true); mute(k); row.appendChild(k); });
+      }
+      var copy = row.cloneNode(true);
+      mute(copy);
+      mq.appendChild(copy);
+      mq.style.animationDuration = (row.children.length * secs) + 's';
+      void mq.offsetWidth;
+      mq.classList.add('is-running');
+    };
+    build();
+    var lastW = wrap.clientWidth, rt = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { if (wrap.clientWidth !== lastW) { lastW = wrap.clientWidth; build(); } }, 200);
+    });
+
+    // Reel a pantalla completa, con sonido.
+    var lb = document.getElementById('udc-rm-lb-{{ section.id }}');
+    if (!lb) return;
+    document.body.appendChild(lb);
+    var vid = lb.querySelector('video');
+    var count = lb.querySelector('[data-udc-rm-count]');
+    var items = originals.map(function (c) { return { src: c.getAttribute('data-src'), poster: c.getAttribute('data-poster') }; });
+    var current = 0, opener = null, hideT = null;
+
+    var show = function (i) {
+      current = (i + items.length) % items.length;
+      var it = items[current];
+      vid.pause();
+      if (it.poster) vid.setAttribute('poster', it.poster); else vid.removeAttribute('poster');
+      vid.src = it.src;
+      vid.muted = false;
+      var p = vid.play();
+      if (p && p.catch) p.catch(function () {});
+      if (count) count.textContent = (current + 1) + ' / ' + items.length;
+    };
+    var open = function (i, from) {
+      clearTimeout(hideT);
+      opener = from || null;
+      lb.hidden = false;
+      wrap.classList.add('is-held');
+      document.documentElement.style.overflow = 'hidden';
+      requestAnimationFrame(function () { lb.classList.add('is-open'); });
+      show(i);
+      lb.querySelector('.udc-rm__lbclose').focus({ preventScroll: true });
+    };
+    var close = function () {
+      lb.classList.remove('is-open');
+      vid.pause();
+      vid.removeAttribute('src');
+      vid.load();
+      wrap.classList.remove('is-held');
+      document.documentElement.style.overflow = '';
+      hideT = setTimeout(function () { lb.hidden = true; }, reduce ? 0 : 260);
+      if (opener) opener.focus({ preventScroll: true });
+    };
+
+    mq.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-udc-rm-card]');
+      if (!card) return;
+      var i = parseInt(card.getAttribute('data-i'), 10) || 0;
+      open(i, originals[i]);
+    });
+    Array.prototype.forEach.call(lb.querySelectorAll('[data-udc-rm-close]'), function (b) { b.addEventListener('click', close); });
+    var prev = lb.querySelector('[data-udc-rm-prev]');
+    var next = lb.querySelector('[data-udc-rm-next]');
+    if (prev) prev.addEventListener('click', function () { show(current - 1); });
+    if (next) next.addEventListener('click', function () { show(current + 1); });
+    vid.addEventListener('ended', function () { if (items.length > 1) show(current + 1); else { vid.currentTime = 0; vid.play(); } });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft' && items.length > 1) show(current - 1);
+      else if (e.key === 'ArrowRight' && items.length > 1) show(current + 1);
+    });
+    // Deslizar a los costados para cambiar de reel.
+    var x0 = null, y0 = null;
+    lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    lb.addEventListener('touchend', function (e) {
+      if (x0 === null || items.length < 2) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "UDC · Reels marquesina",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Título", "default": "La U en acción" },
+    { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true },
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "info": "Lo que tarda cada reel en pasar.", "min": 2, "max": 10, "step": 1, "default": 6 }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "Reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video (vertical 9:16)" },
+        { "type": "text", "id": "video_src", "label": "O link directo al MP4", "info": "Se usa si no elegís un video arriba. Ej: el link de Contenido → Archivos." },
+        { "type": "text", "id": "poster_src", "label": "Link de portada (opcional)" },
+        { "type": "image_picker", "id": "cover", "label": "Portada (opcional)" },
+        { "type": "text", "id": "title", "label": "Título (opcional)" },
+        { "type": "text", "id": "caption", "label": "Detalle (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "UDC · Reels marquesina" }]
+}
+{% endschema %}

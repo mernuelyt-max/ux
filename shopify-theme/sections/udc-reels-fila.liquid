@@ -10,17 +10,6 @@
   dos costados de la fila y deslizamiento automático (un reel cada
   `interval` segundos, en loop; se frena al tocar o con el mouse encima).
 
-  Diseño "marquesina" (el de por defecto; pedido del usuario, igual que en
-  facturación): la fila corre sola y sin parar hacia la izquierda, a lo
-  ancho de toda la pantalla, con las tarjetas duplicadas para que el loop
-  sea continuo y el mismo glow negro en los costados. Se mueve corriendo el
-  scroll por JS (no con animación CSS: en iPhone los videos se salían de su
-  tarjeta), así que también se puede deslizar con el dedo. Se reproducen
-  solo los reels que están a la vista. Al activar el sonido de un reel la
-  marquesina se frena para poder verlo, y sigue al silenciarlo; con el
-  mouse o el dedo encima también se frena. El diseño "fila"
-  (deslizar con el dedo + avance automático) sigue disponible en "Diseño".
-
   Es la versión "en fila" de sections/udc-reels.liquid (que es coverflow y
   sigue en la landing). Mismos bloques: video subido a Shopify + portada,
   título y detalle opcionales. Sin videos se muestran marcos vacíos (solo un
@@ -34,21 +23,24 @@
   {%- if block.settings.video != blank or block.settings.video_src != blank -%}{%- assign reel_count = reel_count | plus: 1 -%}{%- endif -%}
 {%- endfor -%}
 
-{%- assign is_mq = true -%}
-{%- if section.settings.layout == 'fila' -%}{%- assign is_mq = false -%}{%- endif -%}
-{%- comment -%} En la marquesina los videos cargan recién al quedar a la vista (hay copias duplicadas). {%- endcomment -%}
-{%- assign rf_preload = 'metadata' -%}
-{%- if is_mq -%}{%- assign rf_preload = 'none' -%}{%- endif -%}
-
 {%- if reel_count > 0 or request.design_mode or section.settings.show_empty -%}
-{%- capture rf_cards -%}
+<section class="udc udc-rf" id="udc-rf-{{ section.id }}">
+  <h2 class="udc-rf__title" data-udc-reveal>
+    <span class="udc-rf__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
+    {{ section.settings.title }}
+  </h2>
+
+  <div class="udc-rf__wrap">
+  <span class="udc-rf__edge udc-rf__edge--l" aria-hidden="true"></span>
+  <span class="udc-rf__edge udc-rf__edge--r" aria-hidden="true"></span>
+  <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
     {%- if section.blocks.size > 0 -%}
       {%- for block in section.blocks -%}
         <div class="udc-rf__card" data-udc-rf-card {{ block.shopify_attributes }}>
           {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: rf_preload, class: 'udc-rf__video', image_size: '540x' }}
+            {{ block.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'metadata', class: 'udc-rf__video', image_size: '540x' }}
           {%- elsif block.settings.video_src != blank -%}
-            <video class="udc-rf__video" src="{{ block.settings.video_src }}" muted loop playsinline preload="{{ rf_preload }}"
+            <video class="udc-rf__video" src="{{ block.settings.video_src }}" muted loop playsinline preload="metadata"
                    {% if block.settings.poster_src != blank %}poster="{{ block.settings.poster_src }}"{% endif %}></video>
           {%- endif -%}
           {%- if block.settings.cover != blank -%}
@@ -85,35 +77,7 @@
         </div>
       {%- endfor -%}
     {%- endif -%}
-{%- endcapture -%}
-<section class="udc udc-rf" id="udc-rf-{{ section.id }}">
-  <h2 class="udc-rf__title" data-udc-reveal>
-    <span class="udc-rf__bolt" aria-hidden="true">{% render 'udc-icon', name: 'bolt', size: 26 %}</span>
-    {{ section.settings.title }}
-  </h2>
-
-  <div class="udc-rf__wrap{% if is_mq %} udc-rf__wrap--mq{% endif %}">
-  <span class="udc-rf__edge udc-rf__edge--l" aria-hidden="true"></span>
-  <span class="udc-rf__edge udc-rf__edge--r" aria-hidden="true"></span>
-  {%- if is_mq -%}
-    {%- comment -%} Cada fila repite los reels hasta tener ~8 tarjetas, para cubrir pantallas anchas. {%- endcomment -%}
-    {%- assign rf_n = section.blocks.size -%}
-    {%- if rf_n == 0 -%}{%- assign rf_n = 5 -%}{%- endif -%}
-    {%- assign rf_reps = 8 | plus: rf_n | minus: 1 | divided_by: rf_n -%}
-    <div class="udc-rf__scroller" data-udc-rf-scroller>
-      <div class="udc-marquee udc-rf__mq" data-udc-rf-mq data-interval="{{ section.settings.interval }}">
-        {%- for pass in (1..2) -%}
-          <div class="udc-marquee__row udc-rf__row"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
-            {%- for r in (1..rf_reps) -%}{{ rf_cards }}{%- endfor -%}
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- else -%}
-  <div class="udc-rf__track" data-udc-rf-track data-auto="{% if section.settings.autoplay %}{{ section.settings.interval }}{% else %}0{% endif %}">
-{{ rf_cards }}
   </div>
-  {%- endif -%}
   </div>
 </section>
 
@@ -140,19 +104,6 @@
     #udc-rf-{{ section.id }} .udc-rf__track{padding-right:clamp(20px,5vw,72px)}
   }
 
-  /* Marquesina: de borde a borde de la pantalla (anula el padding de .udc).
-     No se mueve con una animación CSS de transform: en iPhone (Safari) los
-     <video> dentro de una capa animada quedan dibujados fuera de lugar y se
-     salen de su tarjeta. Se mueve desplazando el scroll por JS, que Safari
-     maneja bien con videos, y además se puede deslizar con el dedo. */
-  #udc-rf-{{ section.id }} .udc-rf__wrap--mq{
-    max-width:none;margin:20px calc(-1 * clamp(20px,5vw,72px)) 0 !important}
-  #udc-rf-{{ section.id }} .udc-rf__scroller{
-    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
-  #udc-rf-{{ section.id }} .udc-rf__scroller::-webkit-scrollbar{display:none}
-  #udc-rf-{{ section.id }} .udc-rf__row{gap:12px;padding:14px 12px 30px 0}
-  #udc-rf-{{ section.id }} .udc-rf__row .udc-rf__card{flex-basis:clamp(150px,40vw,240px)}
-
   /* Glow negro en los costados (pedido del usuario, antes era rojo): un
      degradé negro en cada borde de la fila que funde los reels con el fondo
      y late suave. */
@@ -169,8 +120,6 @@
   #udc-rf-{{ section.id }} .udc-rf__card{
     position:relative;flex:0 0 clamp(150px,42vw,250px);aspect-ratio:9/16;border-radius:18px;overflow:hidden;
     isolation:isolate;cursor:pointer;
-    /* Fuerza el recorte redondeado del video en Safari. */
-    -webkit-mask-image:-webkit-radial-gradient(white,black);transform:translateZ(0);
     background:radial-gradient(120% 60% at 50% 100%, color-mix(in srgb, var(--udc-accent) 32%, transparent), transparent 62%),linear-gradient(180deg,#161111,#070707);
     border:1px solid var(--udc-border);
     transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease}
@@ -178,7 +127,7 @@
     border-color:rgba(255,255,255,.16);
     box-shadow:0 0 0 1px rgba(0,0,0,.9),0 16px 48px 6px rgba(0,0,0,.95)}
   #udc-rf-{{ section.id }} .udc-rf__video,
-  #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+  #udc-rf-{{ section.id }} .udc-rf__cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   #udc-rf-{{ section.id }} .udc-rf__cover{z-index:1;transition:opacity .4s ease}
   #udc-rf-{{ section.id }} .udc-rf__card.is-playing .udc-rf__cover{opacity:0}
   #udc-rf-{{ section.id }} .udc-rf__empty{
@@ -224,9 +173,6 @@
       v.addEventListener('pause', function () { cards[i].classList.remove('is-playing'); });
     });
 
-    var mq = root.querySelector('[data-udc-rf-mq]');
-    var wrap = root.querySelector('.udc-rf__wrap');
-
     // El reel más visible lleva el glow; todos los que están en pantalla (>=60%) se reproducen.
     var update = function () {
       var best = -1, bestR = 0;
@@ -236,78 +182,11 @@
         var v = vids[i];
         if (!v) return;
         if (ratios[i] >= 0.6 && !c.classList.contains('is-paused')) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-        else if (!v.paused) v.pause();
+        else v.pause();
       });
     };
 
-    if (mq) {
-      // Marquesina: las tarjetas se mueven solas, así que la visibilidad se
-      // mide cada 300 ms con getBoundingClientRect (recortada al ancho de la
-      // fila y a la pantalla). El glow va al reel más cerca del centro.
-      Array.prototype.forEach.call(mq.querySelectorAll('[aria-hidden="true"] button'), function (b) { b.tabIndex = -1; });
-      var measure = function () {
-        if (document.hidden) return;
-        var w = wrap.getBoundingClientRect();
-        var vh = window.innerHeight || document.documentElement.clientHeight;
-        var cx = (w.left + w.right) / 2, best = -1, bestD = Infinity;
-        cards.forEach(function (c, i) {
-          var r = c.getBoundingClientRect();
-          if (!r.width) { ratios[i] = 0; return; }
-          var vw = Math.max(0, Math.min(r.right, w.right) - Math.max(r.left, w.left));
-          var vv = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-          ratios[i] = (vw / r.width) * (vv / r.height);
-          var d = Math.abs((r.left + r.right) / 2 - cx);
-          if (ratios[i] >= 0.6 && d < bestD) { bestD = d; best = i; }
-        });
-        update();
-        cards.forEach(function (c, i) { c.classList.toggle('is-live', i === best); });
-      };
-      measure();
-      setInterval(measure, 300);
-      window.addEventListener('scroll', measure, { passive: true });
-
-      // Movimiento: corre el scroll a velocidad constante (un reel cada
-      // `interval` segundos) y al pasar una vuelta entera vuelve atrás una
-      // vuelta, que se ve idéntica (la fila está duplicada). Se frena con el
-      // dedo encima (y 2,5 s después de soltar), con el mouse encima, con un
-      // reel con sonido o fuera de pantalla. Con "reducir movimiento" no se
-      // mueve sola, pero se puede deslizar.
-      var scroller = root.querySelector('[data-udc-rf-scroller]');
-      var row = mq.querySelector('.udc-rf__row');
-      var secs = parseFloat(mq.getAttribute('data-interval')) || 6;
-      var reduceMq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var pos = 0, last = 0, touchingMq = false, hoverMq = false, holdMq = 0;
-      var visibleMq = function () {
-        var r = scroller.getBoundingClientRect();
-        var vh = window.innerHeight || document.documentElement.clientHeight;
-        return r.height > 0 && r.bottom > 0 && r.top < vh;
-      };
-      scroller.addEventListener('touchstart', function () { touchingMq = true; }, { passive: true });
-      scroller.addEventListener('touchend', function () { touchingMq = false; holdMq = Date.now() + 2500; }, { passive: true });
-      scroller.addEventListener('touchcancel', function () { touchingMq = false; holdMq = Date.now() + 2500; }, { passive: true });
-      scroller.addEventListener('wheel', function () { holdMq = Date.now() + 2500; }, { passive: true });
-      scroller.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hoverMq = true; });
-      scroller.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hoverMq = false; });
-      var step = function (ts) {
-        var dt = last ? Math.min(0.1, (ts - last) / 1000) : 0;
-        last = ts;
-        var period = row.offsetWidth;
-        var paused = reduceMq || document.hidden || touchingMq || hoverMq || Date.now() < holdMq ||
-                     wrap.classList.contains('is-held') || !visibleMq() || !period;
-        if (paused) {
-          // Seguir desde donde lo dejó la mano; si se pasó de una vuelta, volver una.
-          pos = scroller.scrollLeft;
-          if (!touchingMq && period && pos >= period) { pos -= period; scroller.scrollLeft = pos; }
-        } else {
-          var card = cards[0];
-          pos += ((card ? card.offsetWidth : 200) + 12) / secs * dt;
-          if (pos >= period) pos -= period;
-          scroller.scrollLeft = pos;
-        }
-        requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    } else if ('IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { ratios[cards.indexOf(e.target)] = e.intersectionRatio; });
         update();
@@ -328,7 +207,6 @@
     //  · al soltar después de deslizar a mano, se alinea al reel más cercano;
     //  · con "reducir movimiento" salta sin animar.
     var track = root.querySelector('[data-udc-rf-track]');
-    if (track) {
     var autoSec = parseFloat(track.getAttribute('data-auto')) || 0;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var posOf = function (i) { return cards[i].offsetLeft - cards[0].offsetLeft; };
@@ -391,7 +269,6 @@
         animateTo((next >= cards.length || track.scrollLeft >= max - 4) ? 0 : posOf(next));
       }, autoSec * 1000);
     }
-    }
 
     root.addEventListener('click', function (e) {
       var card = e.target.closest('[data-udc-rf-card]');
@@ -407,8 +284,6 @@
           if (vids[j]) vids[j].muted = !(on && j === i);
         });
         card.querySelector('[data-udc-rf-sound]').setAttribute('aria-label', on ? 'Silenciar' : 'Activar sonido');
-        // Con sonido, la marquesina se frena para poder ver ese reel.
-        if (mq) wrap.classList.toggle('is-held', on);
         if (on && v.paused) { card.classList.remove('is-paused'); v.play(); }
         return;
       }
@@ -425,16 +300,9 @@
   "tag": "div",
   "settings": [
     { "type": "text", "id": "title", "label": "Título", "default": "La U en acción" },
-    {
-      "type": "select", "id": "layout", "label": "Diseño", "default": "marquee",
-      "options": [
-        { "value": "marquee", "label": "Marquesina" },
-        { "value": "fila", "label": "Fila para deslizar" }
-      ]
-    },
     { "type": "checkbox", "id": "show_empty", "label": "Mostrar marcos vacíos sin videos", "default": true },
-    { "type": "checkbox", "id": "autoplay", "label": "Avance automático (diseño fila)", "default": true },
-    { "type": "range", "id": "interval", "label": "Segundos por reel", "info": "En la marquesina, lo que tarda cada reel en pasar.", "min": 2, "max": 10, "step": 1, "default": 3 }
+    { "type": "checkbox", "id": "autoplay", "label": "Deslizamiento automático", "default": true },
+    { "type": "range", "id": "interval", "label": "Segundos por reel", "min": 2, "max": 10, "step": 1, "default": 3 }
   ],
   "blocks": [
     {

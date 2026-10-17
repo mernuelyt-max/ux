@@ -971,10 +971,9 @@
       }
     },
     "reels_fila": {
-      "type": "udc-reels-fila",
+      "type": "udc-reels-marquesina",
       "settings": {
         "title": "La U en acción",
-        "autoplay": true,
         "interval": 6
       },
       "blocks": {
